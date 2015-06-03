@@ -90,5 +90,5 @@ module.exports = (robot) ->
   ]
 
   robot.hear /rekt/i, (res) ->
-    res.send unchecked + " Not rekt", checked + " " + res.random rekts
+    res.send "#{unchecked} Not rekt", "#{checked} #{res.random rekts}"
 
