@@ -9,9 +9,8 @@
     "hubot-bro": "^0.1.1",
     "hubot-diagnostics": "0.0.1",
     "hubot-eyebleach": "0.0.6",
-    "hubot-fliptable": "^1.2.0",
     "hubot-google-images": "^0.1.4",
-    "hubot-groupme-webhook": "1.0.1",
+    "hubot-groupme-webhook": "1.0.2",
     "hubot-help": "^0.1.1",
     "hubot-humanity": "^0.1.3",
     "hubot-meowme": "0.0.1",
@@ -23,7 +22,8 @@
     "hubot-shipit": "^0.2.0",
     "hubot-xkcd": "0.0.3",
     "hubot-youtube": "^0.1.2",
-    "mumble": "^0.1.4"
+    "mumble": "^0.1.4",
+    "flip": "0.1.1"
   },
   "engines": {
     "node": "0.10.x"
