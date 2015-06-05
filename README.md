@@ -32,6 +32,21 @@ Then you can interact with donkeybot by typing `donkeybot help`.
     donkeybot help - Displays all of the help commands that donkeybot knows about.
     ...
 
+### Deploying donkeybot to docker
+
+Fill in your environment's settings and run the start script
+
+    cp env.cfg.sample env.cfg
+    vim env.cfg
+
+Build the Docker image
+  
+    docker build -t donkeybot .
+
+Run the bot script
+
+    ./start_bot.sh
+
 ### Configuration
 
 A few scripts (including some installed by default) require environment
