@@ -1,8 +1,15 @@
-Mumble = require('mumble')
+mumble = require('mumble')
+fs = require('fs')
 
 module.exports = (robot) ->
-  Mumble.connect process.env.HUBOT_MUMBLE_URL, {}, (error, cli) ->
-    cli.authenticate 'DonkeyBot2', process.env.HUBOT_MUMBLE_PASSWORD
+  options =
+    key: fs.readFileSync './certs/private_key.pem'
+    cert: fs.readFileSync './certs/cert.pem'
+
+  mumble.connect process.env.HUBOT_MUMBLE_URL, options, (error, cli) ->
+    robot.logger.error error if error
+
+    cli.authenticate 'DonkeyBot', process.env.HUBOT_MUMBLE_PASSWORD
 
     cli.on 'ready', ->
       cli.user.moveToChannel 'Fappin'

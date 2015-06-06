@@ -28,3 +28,6 @@ node_modules
 
 # Configuration secrets file
 env.cfg
+
+# Mumble certs
+certs
