@@ -3,9 +3,9 @@ module.exports = (robot) ->
     type: 'GET'
     dataType: 'json'
     success: (data, textStatus, jqXHR) ->
-        json = data.data.children
+        json = data
         
 
 robot.hear/!jerk/i, (res) ->
-    post = res.data.children.random
+    post = json.data.children.random
     res.send "#{post.title}", "#{post.selftext}"
