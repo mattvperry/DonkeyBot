@@ -1,5 +1,5 @@
 module.exports = (robot) ->
-robot.hear/!jerk/i, (res) ->
+robot.hear /!jerk/i, (res) ->
     $.ajax 'https://www.reddit.com/r/circlejerk/.json?count=25?domain=self.circlejerk',
     type: 'GET'
     dataType: 'json'
