@@ -8,4 +8,4 @@ module.exports = (robot) ->
 
 robot.hear/!jerk/i, (res) ->
     post = json.data.children.random
-    res.send "#{post.title}", "#{post.selftext}"
+    res.send "#{post.data.title}", "#{post.data.selftext}"
