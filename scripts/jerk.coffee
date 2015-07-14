@@ -4,5 +4,5 @@ robot.hear/!jerk/i, (res) ->
     type: 'GET'
     dataType: 'json'
     success: (data, textStatus, jqXHR) ->
-        post = data.data.children.random
+        post = res.random data.data.children
         res.send "#{post.data.title}", "#{post.data.selftext}"
