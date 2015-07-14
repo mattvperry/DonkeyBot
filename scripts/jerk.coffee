@@ -1,5 +1,6 @@
 module.exports = (robot) ->
-  robot.hear /^!jerk/i, (msg) ->
+  robot.respond /(jerk)( me)?/i, (msg) ->
+    console.log(msg)
     msg
       .http("https://www.reddit.com/r/circlejerk/.json")
       .query
