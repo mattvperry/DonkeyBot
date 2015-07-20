@@ -25,24 +25,24 @@ module.exports = (robot) ->
     deferred = Q.defer()
     
     msg
-    .http("#{baseURL}guild/#{realm}/#{guild}")
-    .query
-      fields: "members"
-      locale: locale
-      apikey: key
-    .get() (err, res, body) ->
-      if err
-        deferred.reject err
-      else
-        resp = JSON.parse body
-        Q.all((getILvl msg, member.character.name for member in resp.members))
-          .then (data) ->
-            deferred.resolve data
+      .http("#{baseURL}guild/#{realm}/#{guild}")
+      .query
+        fields: "members"
+        locale: locale
+        apikey: key
+      .get() (err, res, body) ->
+        if err
+          deferred.reject err
+        else
+          resp = JSON.parse body
+          Q.all((getIlvl msg, member.character.name for member in resp.members))
+            .then (data) ->
+              deferred.resolve data
 
     return deferred.promise
         
   # HTTP GET item level of a character
-  getILvl = (msg, name) ->
+  getIlvl = (msg, name) ->
     deferred = Q.defer()
 
     msg
