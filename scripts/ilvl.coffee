@@ -1,46 +1,63 @@
+Q = require('q')
+
 module.exports = (robot) ->
-  @key     = process.env.HUBOT_WOW_API_KEY
-  @locale  = "en_us"
-  @realm   = "Azuremyst"
-  @guild   = "Such Tilt"
-  @baseURL = "https://us.api.battle.net/wow/"
+  key     = process.env.HUBOT_WOW_API_KEY
+  locale  = "en_us"
+  realm   = "Azuremyst"
+  guild   = "Such Tilt"
+  baseURL = "https://us.api.battle.net/wow/"
   
   robot.respond /(suchtilt)( me)?/i, (msg) ->
     getRoster(msg)
+      .then (data) ->
+        chars = data
+          .sort (a, b) ->
+            return -1 if a.ilvl > b.ilvl
+            return 1 if a.ilvl < b.ilvl
+            return 0
+          .map (char) ->
+            "#{char.name}: #{char.ilvl}"
+        msg.send chars...
+      .done()
 
   # HTTP GET guild roster
   getRoster = (msg) ->
+    deferred = Q.defer()
+    
     msg
-    .http(baseURL + "guild/" + realm + "/" + guild)
+    .http("#{baseURL}guild/#{realm}/#{guild}")
     .query
       fields: "members"
       locale: locale
       apikey: key
     .get() (err, res, body) ->
-      resp = ""
-      members = JSON.parse(body).members
-      if members.error
-        members.error.errors.forEach (err) ->
-        resp += err.message
-        return resp
+      if err
+        deferred.reject err
       else
-        getILvl(msg, member) for member in members
+        resp = JSON.parse body
+        Q.all((getILvl msg, member.character.name for member in resp.members))
+          .then (data) ->
+            deferred.resolve data
+
+    return deferred.promise
         
   # HTTP GET item level of a character
-  getILvl = (msg, member) ->
+  getILvl = (msg, name) ->
+    deferred = Q.defer()
+
     msg
-      .http(baseURL + "character/" + realm + "/" + member.character.name)
+      .http("#{baseURL}character/#{realm}/#{name}")
       .query
         fields: "items"
         locale: locale
         apikey: key
       .get() (err, res, body) ->
-        resp = ""
-        ilvl = JSON.parse(body).items.averageItemLevel
-        charData = member.character.name + ": " + ilvl + "\r\n"
-        if ilvl.error
-          ilvl.error.errors.forEach (err) ->
-          resp += err.message
-          return resp
+        if err
+          deferred.reject err
         else
-          msg.send charData
+          resp = JSON.parse body
+          deferred.resolve
+            name: name
+            ilvl: resp.items.averageItemLevel
+
+    return deferred.promise
