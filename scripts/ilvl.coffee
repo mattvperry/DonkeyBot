@@ -7,7 +7,7 @@ module.exports = (robot) ->
   guild   = "Such Tilt"
   baseURL = "https://us.api.battle.net/wow/"
   
-  robot.respond /(suchtilt)( me)?/i, (msg) ->
+  robot.respond /(guild)( me)?/i, (msg) ->
     getRoster(msg)
       .then (data) ->
         chars = data
