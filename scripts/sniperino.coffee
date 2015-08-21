@@ -1,3 +1,5 @@
+#Does not work.
+###
 # coffeelint: disable=max_line_length
 module.exports = (robot) ->
   dongerOutcome = ['alive','dead']
