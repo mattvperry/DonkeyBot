@@ -2,10 +2,15 @@ Q = require('q')
 
 module.exports = (robot) ->
   key     = process.env.HUBOT_WOW_API_KEY
-  locale  = "en_us"
-  realm   = "Azuremyst"
-  guild   = "Such Tilt"
   baseURL = "https://us.api.battle.net/wow/"
+  locale = "en_us"
+  users = [
+    {name:"Xiara", realm:"Azuremyst"},
+    {name:"Titanuus", realm:"Thrall"},
+    {name:"Trudgling", realm:"Azuremyst"},
+    {name:"Zarpidon", realm:"Azuremyst"},
+    {name:"Vashen", realm:"Azuremyst"}
+    ]
   
   robot.respond /(suchtilt)( me)?/i, (msg) ->
     getRoster(msg)
@@ -19,34 +24,24 @@ module.exports = (robot) ->
             "#{char.name}: #{char.ilvl}"
         msg.send chars...
       .done()
-
-  # HTTP GET guild roster
+      
+ 
+  # Call GetIlvl with guild roster
   getRoster = (msg) ->
     deferred = Q.defer()
-    
-    msg
-      .http("#{baseURL}guild/#{realm}/#{guild}")
-      .query
-        fields: "members"
-        locale: locale
-        apikey: key
-      .get() (err, res, body) ->
-        if err
-          deferred.reject err
-        else
-          resp = JSON.parse body
-          Q.all((getIlvl msg, member.character.name for member in resp.members))
-            .then (data) ->
-              deferred.resolve data
+
+    Q.all((getIlvl msg, char for char in users))
+      .then (data) ->
+        deferred.resolve data
 
     return deferred.promise
         
   # HTTP GET item level of a character
-  getIlvl = (msg, name) ->
+  getIlvl = (msg, user) ->
     deferred = Q.defer()
 
     msg
-      .http("#{baseURL}character/#{realm}/#{name}")
+      .http("#{baseURL}character/#{user.realm}/#{user.name}")
       .query
         fields: "items"
         locale: locale
@@ -57,7 +52,7 @@ module.exports = (robot) ->
         else
           resp = JSON.parse body
           deferred.resolve
-            name: name
+            name: user.name
             ilvl: resp.items.averageItemLevel
 
     return deferred.promise
