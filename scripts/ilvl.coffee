@@ -5,14 +5,15 @@ module.exports = (robot) ->
   baseURL = "https://us.api.battle.net/wow/"
   locale = "en_us"
   users = [
-    {name:"Xiara", realm:"Azuremyst"},
-    {name:"Titanuus", realm:"Thrall"},
-    {name:"Trudgling", realm:"Azuremyst"},
-    {name:"Zarpidon", realm:"Azuremyst"},
-    {name:"Vashen", realm:"Azuremyst"}
-    ]
+    { name: "Xiara", realm: "Azuremyst" },
+    { name: "Titanuus", realm: "Thrall" },
+    { name: "Trudgling", realm: "Azuremyst" },
+    { name: "Zarpidon", realm: "Azuremyst" },
+    { name: "Vashen", realm: "Azuremyst" },
+    { name: "Amordos", realm: "Azuremyst" },
+  ]
   
-  robot.respond /(suchtilt)( me)?/i, (msg) ->
+  robot.respond /(ilvl)( me)?/i, (msg) ->
     getRoster(msg)
       .then (data) ->
         chars = data
@@ -27,14 +28,7 @@ module.exports = (robot) ->
       
  
   # Call GetIlvl with guild roster
-  getRoster = (msg) ->
-    deferred = Q.defer()
-
-    Q.all((getIlvl msg, char for char in users))
-      .then (data) ->
-        deferred.resolve data
-
-    return deferred.promise
+  getRoster = (msg) -> Q.all((getIlvl msg, char for char in users))
         
   # HTTP GET item level of a character
   getIlvl = (msg, user) ->
