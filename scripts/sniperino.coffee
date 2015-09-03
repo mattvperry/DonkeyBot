@@ -1,6 +1,4 @@
-#Does not work.
 ###
-# coffeelint: disable=max_line_length
 module.exports = (robot) ->
   dongerOutcome = ['alive','dead']
   gameOutcome = ['winning against', 'losing to']
@@ -63,3 +61,4 @@ module.exports = (robot) ->
   # Generate a random number between 1 and 100 inclusive
   rng = () ->
     return (Math.floor(Math.random() * 100) + 1)
+###
