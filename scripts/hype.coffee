@@ -11,7 +11,7 @@ resetHype ->
     if total < 0
         total = 0
 
-obot.hear /rekt/i, (res) ->
+obot.hear /hype/i, (res) ->
     
     resetHype
     if hype < 100
