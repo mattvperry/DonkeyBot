@@ -10,8 +10,9 @@
     overHyped = "ヽヽ༼༼ຈຈل͜ل͜ຈຈ༽༽ﾉﾉ TOO MUCH HYPE TO HANDLE! ヽヽ༼༼ຈຈل͜ل͜ຈຈ༽༽ﾉﾉ"
 
     resetHype ->
-        total = total - ((Date.now() - lastTime)%timeDecay)*hypeIncrement
-        lastTime = Date.now()
+        curTime = Date.now()
+        total = total - ((curTime - lastTime)%timeDecay)*hypeIncrement
+        lastTime = curTime
         total = 0 if total < 0
 
     robot.hear /hype/i, (res) ->
