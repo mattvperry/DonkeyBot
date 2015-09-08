@@ -20,7 +20,7 @@ module.exports = (robot) ->
     cli.on 'user-move', (user) ->
       if user.channel.name == 'Games'
         currentTime = Date.now()
-        if timeMap[user.name] && (currentTime - timeMap[user.name]) > 300000
+        if !timeMap[user.name] || (currentTime - timeMap[user.name]) > 300000
             timeMap[user.name] = currentTime
             robot.adapter.send {}, "#{user.name} wants to play games!"
 
