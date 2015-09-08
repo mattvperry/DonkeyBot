@@ -2,9 +2,7 @@ mumble = require('mumble')
 fs = require('fs')
 
 module.exports = (robot) ->
-
   timeMap = {}
-
   options =
     key: fs.readFileSync './certs/private_key.pem'
     cert: fs.readFileSync './certs/cert.pem'
@@ -20,7 +18,7 @@ module.exports = (robot) ->
     cli.on 'user-move', (user) ->
       if user.channel.name == 'Games'
         currentTime = Date.now()
-        if !timeMap[user.name] || (currentTime - timeMap[user.name]) > 300000
+        if !timeMap[user.name] || (currentTime - timeMap[user.name]) > 60000
             timeMap[user.name] = currentTime
             robot.adapter.send {}, "#{user.name} wants to play games!"
 
