@@ -7,16 +7,16 @@
   gettingHyped = "༼ʘ̚ل͜ʘ̚༽ Hype level rising: "
   overHyped = "ヽヽ༼༼ຈຈل͜ل͜ຈຈ༽༽ﾉﾉ TOO MUCH HYPE TO HANDLE! ヽヽ༼༼ຈຈل͜ل͜ຈຈ༽༽ﾉﾉ"
 
-  resetHype ->
+  resetHype = () ->
     curTime = Date.now()
     total = total - ((curTime - lastTime)%timeDecay)*hypeIncrement
     lastTime = curTime
     total = 0 if total < 0
 
-  robot.hear /hype/i, (res) ->   
+  robot.hear /hype/i, (res) ->
     resetHype
-    if hype < maxHype
-      hype += hypeIncrement
+    if total < maxHype
+      total += hypeIncrement
       res.send "#{gettingHyped} : #{total}%"
     else
       res.send "#{overHyped}"
