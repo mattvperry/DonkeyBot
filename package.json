@@ -22,7 +22,7 @@
     "hubot-shipit": "^0.2.0",
     "hubot-xkcd": "0.0.3",
     "hubot-youtube": "^0.1.2",
-    "mumble": "mattvperry/node-mumble#master",
+    "mumble": "^0.3.4",
     "flip": "0.1.1",
     "q": "0.9.x"
   },
