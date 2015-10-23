@@ -14,7 +14,7 @@
     total = 0 if total < 0
 
   robot.hear /hype/i, (res) ->
-    resetHype
+    resetHype()
     if total < maxHype
       total += hypeIncrement
       res.send "#{gettingHyped} : #{total}%"
