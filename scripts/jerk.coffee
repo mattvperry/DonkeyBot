@@ -8,7 +8,7 @@ module.exports = (robot) ->
         results = JSON.parse(body)
         post = msg.random results.data.children
         msg.send post.data.title
-        if (post.data.domain is "self.circlejerk")
+        if post.data.domain is "self.circlejerk"
           if post.data.selftext isnt ""
             msg.send post.data.selftext
         else
