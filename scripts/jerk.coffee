@@ -7,7 +7,8 @@ module.exports = (robot) ->
       .get() (err, res, body) ->
         results = JSON.parse(body)
         post = msg.random results.data.children
+        msg.send post.data.title
         if (post.data.domain == "self.circlejerk")
-          msg.send post.data.title, post.data.selftext
+          msg.send post.data.selftext
         else
-          msg.send post.data.title, post.data.url
+          msg.send post.data.url
