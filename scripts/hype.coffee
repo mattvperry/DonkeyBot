@@ -1,5 +1,5 @@
 ﻿module.exports = (robot) ->
-  timeDecay = 60000
+  timeDecay = 5 * 60 * 1000
   hypeIncrement = 15
   maxHype = 100
   total = 0
