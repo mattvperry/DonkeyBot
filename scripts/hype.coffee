@@ -4,12 +4,12 @@
   maxHype = 100
   total = 0
   lastTime = Date.now()
-  gettingHyped = "༼ʘ̚ل͜ʘ̚༽ Hype level rising: "
+  gettingHyped = "༼ʘ̚ل͜ʘ̚༽ Hype level rising"
   overHyped = "ヽヽ༼༼ຈຈل͜ل͜ຈຈ༽༽ﾉﾉ TOO MUCH HYPE TO HANDLE! ヽヽ༼༼ຈຈل͜ل͜ຈຈ༽༽ﾉﾉ"
 
   resetHype = () ->
     curTime = Date.now()
-    total = total - ((curTime - lastTime)%timeDecay)*hypeIncrement
+    total = total - (Math.floor((curTime - lastTime) / timeDecay) * hypeIncrement)
     lastTime = curTime
     total = 0 if total < 0
 
