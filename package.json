@@ -5,7 +5,7 @@
   "author": "Matthew Perry <muffinman616@gmail.com>",
   "description": "A chatbot for Donkeys",
   "dependencies": {
-    "hubot": "^2.16.0",
+    "hubot": "^2.18.0",
     "hubot-bro": "^0.1.1",
     "hubot-diagnostics": "^0.0.1",
     "hubot-eyebleach": "^0.0.6",
@@ -22,7 +22,7 @@
     "hubot-shipit": "^0.2.0",
     "hubot-xkcd": "0.0.3",
     "hubot-youtube": "^0.1.2",
-    "mumble": "^0.3.4",
+    "mumble": "^0.3.8",
     "flip": "0.1.1",
     "q": "0.9.x"
   },

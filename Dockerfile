@@ -1,5 +1,9 @@
 FROM node:latest
 
+ADD package.json /bot/package.json
+
+RUN cd /bot && npm install
+
 ADD . /bot/
 
 WORKDIR /bot
