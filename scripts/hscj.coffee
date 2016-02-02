@@ -12,7 +12,7 @@ module.exports = (robot) ->
         msg.send data.body
         return googl.shorten(data.permalink)
       .then (url) ->
-        msg.send url
+        msg.send "> " + url
     
 reddit = (msg, sub) ->
   deferred = Q.defer()
