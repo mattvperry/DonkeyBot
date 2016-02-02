@@ -1,18 +1,18 @@
 Q = require('q')
+googl = require('goo.gl')
+
+googl.setKey(process.env.HUBOT_GOOGLE_CSE_KEY)
 
 module.exports = (robot) ->
-  ans_route = "/hubot/hscj"
-  last_link = ""
-
-  robot.router.get ans_route, (req, res) =>
-    res.redirect last_link
-    res.end()
-
   robot.respond /(hscj)( me)?/i, (msg) ->
     sub = msg.random ["hearthstone", "hearthstonecirclejerk"]
-    reddit(msg, sub).then (data) ->
-      last_link = data.permalink
-      msg.send data.title, data.body, process.env.HUBOT_DOMAIN + ans_route
+    reddit(msg, sub)
+      .then (data) ->
+        msg.send data.title
+        msg.send data.body
+        return googl.shorten(data.permalink)
+      .then (url) ->
+        msg.send url
     
 reddit = (msg, sub) ->
   deferred = Q.defer()
