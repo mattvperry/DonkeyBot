@@ -1,29 +1,99 @@
-mumble = require('mumble')
-fs = require('fs')
+Promise     = require('bluebird')
+Queue       = require('promise-queue')
+wav         = require('wav')
+youtubedl   = require('youtube-dl')
+ffmpeg      = require('fluent-ffmpeg')
+mumble      = require('mumble')
+fs          = require('fs')
 
-module.exports = (robot) ->
-  timeMap = {}
-  options =
-    key: fs.readFileSync './certs/private_key.pem'
-    cert: fs.readFileSync './certs/cert.pem'
+class Player
+  constructor: (@cli) ->
+    @playing = false
+    @gain = .1
+    @queue = new Queue(1)
 
-  mumble.connect process.env.HUBOT_MUMBLE_URL, options, (error, cli) ->
-    robot.logger.error error if error
+  getInfoAsync: Promise.promisify youtubedl.getInfo
 
-    cli.authenticate 'DonkeyBot', process.env.HUBOT_MUMBLE_PASSWORD
+  add: (url) -> @queue.add () => this._stream(url)
 
-    cli.on 'ready', ->
-      cli.user.moveToChannel 'Fappin'
+  pause: ->
+    if @cmd and @playing
+      @cmd.kill 'SIGSTOP'
+      @playing = false
 
-    cli.on 'user-move', (user) ->
-      if user.channel.name == 'Games'
-        currentTime = Date.now()
-        if !timeMap[user.name] || (currentTime - timeMap[user.name]) > 60000
-            timeMap[user.name] = currentTime
-            robot.adapter.send {}, "#{user.name} wants to play games!"
+  resume: ->
+    if @cmd and !@playing
+      @cmd.kill 'SIGCONT'
+      @playing = true
 
-    robot.respond /who (.*)/i, (res) ->
-      channel = cli.channelByName res.match[1]
+  skip: ->
+    if @cmd and @playing
+      @cmd.kill()
+      @playing = false
+
+  _stream: (url) ->
+    @playing = true
+    this.getInfoAsync(url, []).then (info) =>
+      @cmd = ffmpeg(info.url)
+        .noVideo()
+        .format('wav')
+        .audioBitrate(128)
+        .audioChannels(1)
+        .audioFrequency(48000)
+      @cmd
+        .pipe(new wav.Reader())
+        .pipe(@cli.inputStream({ gain: @gain }))
+      new Promise (resolve, reject) =>
+        @cmd.on 'error', reject
+        @cmd.on 'end', resolve
+
+class MumbleBot
+  constructor: (@robot) ->
+    @name = 'DonkeyBot'
+    @timemap = {}
+    @options =
+      key: fs.readFileSync './certs/private_key.pem'
+      cert: fs.readFileSync './certs/cert.pem'
+  
+  connect: (url, pass) ->
+    this._connectAsync(url, @options)
+      .then (cli) =>
+        cli.authenticate @name, pass
+
+        @player = new Player cli
+        cli.on 'ready', () => this._ready cli
+        cli.on 'user-move', this._userMove.bind(this)
+        cli.on 'message', (msg) =>
+          this._message(msg.replace(/<[^>]+>/ig, ""))
+        this._addResponder cli
+      .catch (err) =>
+        @robot.logger.error err
+
+  _message: (msg) ->
+    commands = [
+      { regex: /!pause/, fn: () => @player.pause() }
+      { regex: /!resume/, fn: () => @player.resume() }
+      { regex: /!skip/, fn: () => @player.skip() }
+      { regex: /!add ([^\s]+)/, fn: (match) => @player.add(match[1]) }
+    ]
+
+    c.fn(msg.match(c.regex)) for c in commands when c.regex.test(msg)
+  
+  _connectAsync: Promise.promisify mumble.connect
+
+  _ready: (cli) ->
+    cli.user.moveToChannel 'Games'
+
+  _userMove: (user) ->
+    if user.channel.name == 'Games' and user.name != @name
+      currentTime = Date.now()
+      if !@timeMap[user.name] || (currentTime - @timeMap[user.name]) > 60000
+          @timeMap[user.name] = currentTime
+          @robot.adapter.send {}, "#{user.name} wants to play games!"
+
+  _addResponder: (cli) ->
+    @robot.respond /who (.*)/i, (res) ->
+      channel = @cli.channelByName res.match[1]
       if channel?
         user_names = (user.name for user in channel.users)
         if user_names.length > 0
@@ -32,3 +102,8 @@ module.exports = (robot) ->
           res.send "Nobody is in #{res.match[1]}"
       else
         res.send "No channel with name #{res.match[1]}"
+
+
+module.exports = (robot) ->
+  mumbleBot = new MumbleBot(robot)
+  mumbleBot.connect process.env.HUBOT_MUMBLE_URL, process.env.HUBOT_MUMBLE_PASSWORD

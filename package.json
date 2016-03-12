@@ -25,7 +25,11 @@
     "mumble": "^0.3.9",
     "flip": "0.1.1",
     "bluebird": "^3.3.4",
-    "goo.gl": "^0.1.4"
+    "goo.gl": "^0.1.4",
+    "promise-queue": "^2.2.3",
+    "youtube-dl": "https://github.com/fent/node-youtube-dl",
+    "wav": "1.0.0",
+    "fluent-ffmpeg": "2.0.1"
   },
   "engines": {
     "node": "0.10.x"
