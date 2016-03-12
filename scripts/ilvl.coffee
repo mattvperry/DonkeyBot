@@ -1,4 +1,4 @@
-Q = require('q')
+Promise = require('bluebird')
 
 module.exports = (robot) ->
   key     = process.env.HUBOT_WOW_API_KEY
@@ -28,25 +28,22 @@ module.exports = (robot) ->
       
  
   # Call GetIlvl with guild roster
-  getRoster = (msg) -> Q.all((getIlvl msg, char for char in users))
+  getRoster = (msg) -> Promise.all((getIlvl msg, char for char in users))
         
   # HTTP GET item level of a character
   getIlvl = (msg, user) ->
-    deferred = Q.defer()
-
-    msg
-      .http("#{baseURL}character/#{user.realm}/#{user.name}")
-      .query
-        fields: "items"
-        locale: locale
-        apikey: key
-      .get() (err, res, body) ->
-        if err
-          deferred.reject err
-        else
-          resp = JSON.parse body
-          deferred.resolve
-            name: user.name
-            ilvl: resp.items.averageItemLevel
-
-    return deferred.promise
+    return new Promise (resolve, reject) ->
+      msg
+        .http("#{baseURL}character/#{user.realm}/#{user.name}")
+        .query
+          fields: "items"
+          locale: locale
+          apikey: key
+        .get() (err, res, body) ->
+          if err
+            reject err
+          else
+            resp = JSON.parse body
+            resolve
+              name: user.name
+              ilvl: resp.items.averageItemLevel

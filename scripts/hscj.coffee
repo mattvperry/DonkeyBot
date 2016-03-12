@@ -1,4 +1,4 @@
-Q = require('q')
+Promise = require('bluebird')
 googl = require('goo.gl')
 
 googl.setKey(process.env.HUBOT_GOOGLE_CSE_KEY)
@@ -15,21 +15,18 @@ module.exports = (robot) ->
         msg.send "> " + url
     
 reddit = (msg, sub) ->
-  deferred = Q.defer()
-  
-  msg
-    .http("https://www.reddit.com/r/" + sub + ".json")
-    .query
-      count: 25
-    .get() (err, res, body) ->
-      if err
-        deferred.reject err
-      else
-        results = JSON.parse body
-        data = msg.random(results.data.children).data
-        deferred.resolve
-          permalink: "https://reddit.com" + data.permalink
-          title: data.title
-          body: if data.domain.match(/^self\./) then data.selftext else data.url
-        
-  return deferred.promise
+  return new Promise (resolve, reject) ->
+    msg
+      .http("https://www.reddit.com/r/" + sub + ".json")
+      .query
+        count: 25
+      .get() (err, res, body) ->
+        if err
+          reject err
+        else
+          results = JSON.parse body
+          data = msg.random(results.data.children).data
+          resolve
+            permalink: "https://reddit.com" + data.permalink
+            title: data.title
+            body: if data.domain.match(/^self\./) then data.selftext else data.url
