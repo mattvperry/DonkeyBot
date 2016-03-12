@@ -50,7 +50,7 @@ class Player
 class MumbleBot
   constructor: (@robot) ->
     @name = 'DonkeyBot'
-    @timemap = {}
+    @timeMap = {}
     @options =
       key: fs.readFileSync './certs/private_key.pem'
       cert: fs.readFileSync './certs/cert.pem'
