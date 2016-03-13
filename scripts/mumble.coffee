@@ -95,7 +95,7 @@ class MumbleBot
   _connectAsync: Promise.promisify mumble.connect
 
   _ready: (cli) ->
-    cli.user.moveToChannel 'Chillen'
+    cli.user.moveToChannel 'Games'
 
   _userMove: (user) ->
     if user.channel.name == 'Games' and user.name != @name
