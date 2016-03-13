@@ -82,12 +82,12 @@ class MumbleBot
 
   _message: (msg) ->
     commands = [
-      { regex: /!p(ause)?/, fn: () => @player.pause() },
-      { regex: /!r(esume)?/, fn: () => @player.resume() },
-      { regex: /!s(kip)?/, fn: () => @player.skip() },
-      { regex: /!a(dd)? ([^\s]+)/, fn: (match) => @player.add(match[2]) },
-      { regex: /!c(lear)?/, fn: () => @player.clear() },
-      { regex: /!vol(ume)? ([^\s]+)/, fn: (match) => @player.volume(match[2]) }
+      { regex: /^!p(ause)?$/, fn: () => @player.pause() },
+      { regex: /^!r(esume)?$/, fn: () => @player.resume() },
+      { regex: /^!s(kip)?$/, fn: () => @player.skip() },
+      { regex: /^!a(dd)? ([^\s]+)$/, fn: (match) => @player.add(match[2]) },
+      { regex: /^!c(lear)?$/, fn: () => @player.clear() },
+      { regex: /^!v(ol|olume)? ([^\s]+)$/, fn: (match) => @player.volume(match[2]) }
     ]
 
     c.fn(msg.match(c.regex)) for c in commands when c.regex.test(msg)
