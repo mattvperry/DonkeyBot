@@ -12,8 +12,6 @@ class Player
     @gain = .1
     @queue = new Queue(1)
 
-  getInfoAsync: Promise.promisify youtubedl.getInfo
-
   add: (url) -> @queue.add () => this._stream(url)
 
   pause: ->
@@ -31,9 +29,20 @@ class Player
       @cmd.kill()
       @playing = false
 
+  clear: ->
+    @queue.queue = []
+    this.skip()
+
+  volume: (vol) ->
+    gain = parseInt(vol) * .01
+    if @cmd and @output and gain > 0 and gain <= 1
+      @gain = gain
+      @output.setGain @gain
+
   _stream: (url) ->
     @playing = true
-    this.getInfoAsync(url, []).then (info) =>
+    this._getInfoAsync(url, []).then (info) =>
+      @output = @cli.inputStream gain: @gain
       @cmd = ffmpeg(info.url)
         .noVideo()
         .format('wav')
@@ -42,10 +51,12 @@ class Player
         .audioFrequency(48000)
       @cmd
         .pipe(new wav.Reader())
-        .pipe(@cli.inputStream({ gain: @gain }))
+        .pipe(@output)
       new Promise (resolve, reject) =>
         @cmd.on 'error', reject
         @cmd.on 'end', resolve
+
+  _getInfoAsync: Promise.promisify youtubedl.getInfo
 
 class MumbleBot
   constructor: (@robot) ->
@@ -71,10 +82,12 @@ class MumbleBot
 
   _message: (msg) ->
     commands = [
-      { regex: /!pause/, fn: () => @player.pause() }
-      { regex: /!resume/, fn: () => @player.resume() }
-      { regex: /!skip/, fn: () => @player.skip() }
-      { regex: /!add ([^\s]+)/, fn: (match) => @player.add(match[1]) }
+      { regex: /!p(ause)?/, fn: () => @player.pause() },
+      { regex: /!r(esume)?/, fn: () => @player.resume() },
+      { regex: /!s(kip)?/, fn: () => @player.skip() },
+      { regex: /!a(dd)? ([^\s]+)/, fn: (match) => @player.add(match[2]) },
+      { regex: /!c(lear)?/, fn: () => @player.clear() },
+      { regex: /!vol(ume)? ([^\s]+)/, fn: (match) => @player.volume(match[2]) }
     ]
 
     c.fn(msg.match(c.regex)) for c in commands when c.regex.test(msg)
@@ -82,7 +95,7 @@ class MumbleBot
   _connectAsync: Promise.promisify mumble.connect
 
   _ready: (cli) ->
-    cli.user.moveToChannel 'Games'
+    cli.user.moveToChannel 'Chillen'
 
   _userMove: (user) ->
     if user.channel.name == 'Games' and user.name != @name
