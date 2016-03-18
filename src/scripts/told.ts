@@ -1,7 +1,8 @@
-module.exports = (robot) ->
-  unchecked = "☐"
-  checked = "☑"
-  tolds = [
+/// <reference path="..\typings\index.d.ts" />
+
+let unchecked = "☐";
+let checked = "☑";
+let tolds = [
     "24 carat told",
     "2001: A Space Toldyssey",
     "3D Dot Told Heroes",
@@ -185,8 +186,12 @@ module.exports = (robot) ->
     "Toldclub",
     "The Told and the Textless",
     "Tolden Caulfield"
-  ]
+];
 
-  robot.hear /told/i, (res) ->
-    res.send "#{unchecked} Not told", "#{checked} #{res.random tolds}"
+let told = (robot: Hubot.Robot) => {
+    robot.hear(/told/i, (res) => {
+       res.send(`${unchecked} Not told`, `${checked} ${res.random(tolds)}`);
+    });
+};
 
+export = told
