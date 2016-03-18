@@ -32,5 +32,10 @@ env.cfg
 # Mumble certs
 certs
 
-#sniperino
-scripts/sniperino.coffee
+# Hubot history
+.hubot_history
+
+# Typescript collateral
+maps/*
+scripts/*.js
+typings/*

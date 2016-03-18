@@ -1,7 +1,8 @@
-module.exports = (robot) ->
-  unchecked = "☐"
-  checked = "☑"
-  rekts = [
+/// <reference path="..\typings\index.d.ts" />
+
+let unchecked = "☐"
+let checked = "☑"
+let rekts = [
     "REKTangle",
     "SHREKT",
     "The Good, the Bad, and the REKT",
@@ -87,8 +88,12 @@ module.exports = (robot) ->
     "Rektium for a Dream",
     "www.Trekt.tv",
     "Erektile Dysfunction"
-  ]
+]
 
-  robot.hear /rekt/i, (res) ->
-    res.send "#{unchecked} Not rekt", "#{checked} #{res.random rekts}"
+let rekt = (robot: Hubot.Robot) => {
+    robot.hear(/rekt/i, (res) => {
+        res.send(`${unchecked} Not rekt`, `${checked} ${res.random(rekts)}`);
+    });
+};
 
+export = rekt
