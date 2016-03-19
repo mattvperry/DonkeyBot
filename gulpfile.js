@@ -23,7 +23,7 @@ gulp.task('typings', function() {
 
 gulp.task('scripts', ['typings'], function() {
     return gulp
-        .src('src/**/*.ts')
+        .src(['src/**/*.ts', '!src/typings/**/*.d.ts'])
         .pipe(sourcemaps.init())
         .pipe(tsc({
             module: 'commonjs',
