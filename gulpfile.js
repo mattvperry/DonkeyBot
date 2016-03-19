@@ -25,11 +25,7 @@ gulp.task('scripts', ['typings'], function() {
     return gulp
         .src(['src/**/*.ts', '!src/typings/**/*.d.ts'])
         .pipe(sourcemaps.init())
-        .pipe(tsc({
-            module: 'commonjs',
-            removeComments: false,
-            target: 'es6'
-        }))
+        .pipe(tsc(tsc.createProject("tsconfig.json")))
         .pipe(sourcemaps.write('/maps', { sourceRoot: '../../src' }))
         .pipe(gulp.dest('.'));
 });
