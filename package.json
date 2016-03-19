@@ -5,6 +5,10 @@
   "author": "Matthew Perry <muffinman616@gmail.com>",
   "description": "A chatbot for Donkeys",
   "dependencies": {
+    "es6-promise": "^3.1.2",
+    "flip": "0.1.1",
+    "fluent-ffmpeg": "2.0.1",
+    "goo.gl": "^0.1.4",
     "hubot": "^2.18.0",
     "hubot-bro": "^0.1.1",
     "hubot-diagnostics": "^0.0.1",
@@ -23,13 +27,9 @@
     "hubot-xkcd": "0.0.3",
     "hubot-youtube": "^0.1.2",
     "mumble": "^0.3.9",
-    "flip": "0.1.1",
-    "bluebird": "^3.3.4",
-    "goo.gl": "^0.1.4",
     "promise-queue": "^2.2.3",
-    "youtube-dl": "https://github.com/fent/node-youtube-dl",
     "wav": "1.0.0",
-    "fluent-ffmpeg": "2.0.1"
+    "youtube-dl": "https://github.com/fent/node-youtube-dl"
   },
   "devDependencies": {
     "typescript": "^1.8.9",

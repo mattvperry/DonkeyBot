@@ -1,5 +1,6 @@
 {
   "ambientDependencies": {
+    "goo.gl": "file:src/typings/goo.gl.d.ts",
     "hubot": "file:src/typings/hubot.d.ts",
     "node": "registry:dt/node#4.0.0+20160317120654",
     "node-scoped-http-client": "file:src/typings/node-scoped-http-client.d.ts"
