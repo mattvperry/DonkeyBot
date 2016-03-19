@@ -1,4 +1,6 @@
-/// <reference path="..\typings\index.d.ts" />
+/// <reference path="..\..\typings\main.d.ts" />
+
+import { Robot, Response } from "hubot";
 
 let unchecked = "☐";
 let checked = "☑";
@@ -188,8 +190,8 @@ let tolds = [
     "Tolden Caulfield"
 ];
 
-let told = (robot: Hubot.Robot) => {
-    robot.hear(/told/i, (res) => {
+let told = (robot: Robot) => {
+    robot.hear(/told/i, (res: Response) => {
        res.send(`${unchecked} Not told`, `${checked} ${res.random(tolds)}`);
     });
 };
