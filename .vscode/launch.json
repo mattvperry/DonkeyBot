@@ -17,7 +17,9 @@
 				"NODE_ENV": "development",
                 "FFMPEG_PATH": "",
                 "HUBOT_MUMBLE_URL": "",
-                "HUBOT_MUMBLE_PASSWORD": ""
+                "HUBOT_MUMBLE_PASSWORD": "",
+                "HUBOT_GOOGLE_CSE_KEY": "",
+                "HUBOT_WOW_API_KEY": ""
 			},
 			"externalConsole": true,
 			"sourceMaps": true,
