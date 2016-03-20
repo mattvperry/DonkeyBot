@@ -11,11 +11,7 @@ ADD package.json /bot/package.json
 
 RUN cd /bot && npm install --production
 
-ADD certs /bot/certs
-ADD bin /bot/bin
-ADD scripts /bot/scripts
-ADD external-scripts.json /bot/external-scripts.json
-ADD hubot-scripts.json /bot/hubot-scripts.json
+ADD . /bot/
 
 WORKDIR /bot
 
