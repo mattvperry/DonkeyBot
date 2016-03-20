@@ -1,6 +1,6 @@
 /// <reference path="..\..\typings\main.d.ts" />
 
-import { Robot, Response } from "hubot";
+import { Robot } from "hubot";
 
 let timeDecay: number = 5 * 60 * 1000;
 let hypeIncrement: number = 15;
@@ -20,7 +20,7 @@ let resetHype = () => {
 };
 
 let hype = (robot: Robot) => {
-    robot.hear(/hype/i, (res: Response) => {
+    robot.hear(/hype/i, (res) => {
         resetHype();
         if (total < maxHype) {
             total += Math.min(hypeIncrement, maxHype - total);

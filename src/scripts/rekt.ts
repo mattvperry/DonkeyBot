@@ -1,6 +1,6 @@
 /// <reference path="..\..\typings\main.d.ts" />
 
-import { Robot, Response } from "hubot";
+import { Robot } from "hubot";
 
 let unchecked = "☐";
 let checked = "☑";
@@ -93,7 +93,7 @@ let rekts = [
 ];
 
 let rekt = (robot: Robot) => {
-    robot.hear(/rekt/i, (res: Response) => {
+    robot.hear(/rekt/i, (res) => {
         res.send(`${unchecked} Not rekt`, `${checked} ${res.random(rekts)}`);
     });
 };

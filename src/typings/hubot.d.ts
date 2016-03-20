@@ -1,26 +1,24 @@
 /// <reference path="..\..\typings\main\ambient\node\index.d.ts" />
 /// <reference path="node-scoped-http-client.d.ts" />
 
-
 declare module "hubot" {
     import * as scoped from "scoped";
 
+    type Matcher = (message: Message) => any;
+    type ResponseCallback = (response: Response) => void;
+    type ListenerCallback = (matcher: boolean) => void;
+
+    interface Logger {
+        debug: Function;
+        info: Function;
+        warning: Function;
+        error: Function;
+    }
+
     interface Envelope {
-        message: Message;
-        user: User;
+        message?: Message;
+        user?: User;
         room?: string;
-    }
-
-    interface Matcher {
-        (message: Message): any;
-    }
-
-    interface ResponseCallback {
-        (response: Response): void;
-    }
-
-    interface ListenerCallback {
-        (matched: boolean): void;
     }
 
     export interface User extends Object {
@@ -48,6 +46,12 @@ declare module "hubot" {
     }
 
     export interface Robot extends NodeJS.EventEmitter {
+        name: string;
+        brain: Brain;
+        alias: string;
+        adapter: Adapter;
+        logger: Logger;
+
         new(adapterPath: string, adapter: string, http: boolean, name?: string, alias?: boolean): Robot;
         hear(regex: RegExp, callback: ResponseCallback): void;
         hear(regex: RegExp, options: any, callback: ResponseCallback): void;
@@ -86,7 +90,10 @@ declare module "hubot" {
     }
 
     export interface Response {
+        robot: Robot;
         message: Message;
+        match: RegExpMatchArray;
+
         new(robot: Robot, message: Message, match: RegExpMatchArray): Response;
         send(...strings: string[]): void;
         emote(...strings: string[]): void;
