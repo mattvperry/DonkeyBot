@@ -1,8 +1,13 @@
 {
   "ambientDependencies": {
+    "es6-promisify": "file:src/typings/es6-promisify.d.ts",
+    "fluent-ffmpeg": "file:src/typings/fluent-ffmpeg.d.ts",
     "goo.gl": "file:src/typings/goo.gl.d.ts",
     "hubot": "file:src/typings/hubot.d.ts",
+    "mumble": "file:src/typings/mumble.d.ts",
     "node": "registry:dt/node#4.0.0+20160317120654",
-    "node-scoped-http-client": "file:src/typings/node-scoped-http-client.d.ts"
+    "node-scoped-http-client": "file:src/typings/node-scoped-http-client.d.ts",
+    "promise-queue": "file:src/typings/promise-queue.d.ts",
+    "youtube-dl": "file:src/typings/youtube-dl.d.ts"
   }
 }

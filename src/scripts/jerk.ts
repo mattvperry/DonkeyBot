@@ -1,14 +1,13 @@
 /// <reference path="..\..\typings\main.d.ts" />
 
-import { Robot, Response } from "hubot";
-import { ServerResponse } from "http";
+import { Robot } from "hubot";
 
 let jerk = (robot: Robot) => {
-    robot.respond(/(jerk)( me)?/i, (res: Response) => {
+    robot.respond(/(jerk)( me)?/i, (res) => {
         res
             .http("https://www.reddit.com/r/circlejerk.json")
             .query({ count: 25 })
-            .get()((err: any, response: ServerResponse, body: string) => {
+            .get()((err, response, body) => {
                 let results: any = JSON.parse(body);
                 let post: any = res.random(results.data.children);
                 res.send(post.data.title);

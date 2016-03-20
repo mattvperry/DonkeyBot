@@ -3,15 +3,9 @@
 declare module "scoped" {
     import { Agent, RequestOptions, ServerResponse } from "http";
 
-    interface RequestMethod {
-        (err: any, response: ServerResponse, body: string): void;
-    }
+    type RequestCallback = (cb: (err: any, response: ServerResponse, body: string) => void) => ScopedClient;
 
-    interface RequestCallback {
-        (cb: RequestMethod): ScopedClient;
-    }
-
-    export interface Options extends RequestOptions {
+    interface Options extends RequestOptions {
         encoding: string;
         httpAgent: Agent|boolean;
         httpsAgent: Agent|boolean;
@@ -21,7 +15,7 @@ declare module "scoped" {
         hash: string;
     }
 
-    export interface ScopedClient {
+    interface ScopedClient {
         new(url: string, options: Options): ScopedClient;
         fullPath(p: string): string;
         scope(callback: Function): ScopedClient;
