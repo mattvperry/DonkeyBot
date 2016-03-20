@@ -33,7 +33,7 @@ class Player {
     }
 
     public resume(): void {
-        if (this._playing) {
+        if (!this._playing) {
             this._cmd.kill("SIGCONT");
         }
     }
@@ -66,8 +66,11 @@ class Player {
             .audioBitrate(128)
             .audioChannels(1)
             .audioFrequency(48000)
-            .pipe(this._output)
-            .on("start", () => this._playing = true);
+            .on("start", () => {
+                this._playing = true;
+            });
+        this._cmd.pipe(this._output);
+
         return new Promise((resolve, reject) => {
             this._cmd.on("error", (err) => {
                 this._playing = false;

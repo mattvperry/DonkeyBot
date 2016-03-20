@@ -280,9 +280,9 @@ interface FfmpegRecipes {
     saveToFile(output: string): this;
     save(output: string): this;
 
-    writeToStream(stream: NodeJS.WritableStream, options?: any);
-    pipe(stream: NodeJS.WritableStream, options?: any);
-    stream(stream: NodeJS.WritableStream, options?: any);
+    writeToStream(stream: NodeJS.WritableStream, options?: any): NodeJS.WritableStream;
+    pipe(stream: NodeJS.WritableStream, options?: any): NodeJS.WritableStream;
+    stream(stream: NodeJS.WritableStream, options?: any): NodeJS.WritableStream;
 
     mergeToFile(target: output, options?: any): this;
     concatenate(target: output, options?: any): this;
