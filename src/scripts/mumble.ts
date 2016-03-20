@@ -27,21 +27,15 @@ class Player {
     }
 
     public pause(): void {
-        if (this._playing) {
-            this._cmd.kill("SIGSTOP");
-        }
+        this._switchState(false, "SIGSTOP");
     }
 
     public resume(): void {
-        if (!this._playing) {
-            this._cmd.kill("SIGCONT");
-        }
+        this._switchState(true, "SIGCONT");
     }
 
     public skip(): void {
-        if (this._playing) {
-            this._cmd.kill();
-        }
+        this._switchState(false, "SIGKILL");
     }
 
     public clear(): void {
@@ -57,6 +51,13 @@ class Player {
         }
     }
 
+    private _switchState(newState: boolean, signal: string): void {
+        if (this._playing !== newState) {
+            this._cmd.kill(signal);
+            this._playing = newState;
+        }
+    }
+
     private async _stream(url: string): Promise<any> {
         let info = await promisify<VideoInfo, string, string[]>(youtubedl.getInfo)(url, []);
         this._output = this._cli.inputStream({ gain: this._gain });
@@ -66,20 +67,14 @@ class Player {
             .audioBitrate(128)
             .audioChannels(1)
             .audioFrequency(48000)
-            .on("start", () => {
-                this._playing = true;
-            });
+            .on("start", () => this._playing = true)
+            .on("error", () => this._playing = false)
+            .on("end", () => this._playing = false);
         this._cmd.pipe(this._output);
 
         return new Promise((resolve, reject) => {
-            this._cmd.on("error", (err) => {
-                this._playing = false;
-                reject(err);
-            });
-            this._cmd.on("end", () => {
-                this._playing = false;
-                resolve();
-            });
+            this._cmd.on("error", reject);
+            this._cmd.on("end", resolve);
         });
     }
 }
