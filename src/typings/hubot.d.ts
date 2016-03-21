@@ -69,6 +69,10 @@ declare module "hubot" {
         run(): void;
         shutdown(): void;
         http(url: string, options: scoped.Options): scoped.ScopedClient;
+        
+        on(event: string, listener: Function): this;
+        on(event: "error", listener: (err: any) => void): this;
+        on(event: "running", listener: () => void);
     }
 
     export interface Adapter extends NodeJS.EventEmitter {

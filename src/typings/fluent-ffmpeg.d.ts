@@ -299,6 +299,13 @@ interface FfmpegCommand
     ffprobe<T>(index: number, callback: ffmpegCallback<FfprobeData, T>): T;
     ffprobe<T>(options: string[], callback: ffmpegCallback<FfprobeData, T>): T;
     ffprobe<T>(index: number, options: string[], callback: ffmpegCallback<FfprobeData, T>): T;
+    
+    on(event: string, listener: Function): this;
+    on(event: "start", listener: (commandLine: string) => void): this;
+    on(event: "codecData", listener: (data: any) => void): this;
+    on(event: "progress", listener: (data: any) => void): this;
+    on(event: "error", listener: (err: any, stdout: any, stderr: any) => void): this;
+    on(event: "end", listener: () => void): this;
 }
 
 interface FfmpegCommandStatic extends FfmpegCapabilities<void> {
