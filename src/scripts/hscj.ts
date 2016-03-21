@@ -1,3 +1,12 @@
+// Description:
+//  /r/hearthstone or /r/hearthstonecirclejerk ?
+//
+// Commands:
+//  hubot hscj me - returns a post from either /r/hs or /r/hscj and a masked url to guess
+//
+// Author:
+//  Matt Perry
+
 /// <reference path="..\..\typings\main.d.ts" />
 
 import { Robot, Response } from "hubot";

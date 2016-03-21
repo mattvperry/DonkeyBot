@@ -1,3 +1,12 @@
+// Description:
+//  Wow ilvl commands for our friends
+//
+// Commands:
+//  hubot ilvl me - take out the measuring stick
+//
+// Author:
+//  Matt Perry
+
 /// <reference path="..\..\typings\main.d.ts"" />
 
 import { Robot, Response } from "hubot";

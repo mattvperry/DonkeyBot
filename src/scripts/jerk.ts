@@ -1,3 +1,12 @@
+// Description:
+//  Random post from /r/circlejerk
+//
+// Commands:
+//  hubot jerk me - grab a random post from /r/circlejerk
+//
+// Author:
+//  Matt Perry
+
 /// <reference path="..\..\typings\main.d.ts" />
 
 import { Robot, Response } from "hubot";

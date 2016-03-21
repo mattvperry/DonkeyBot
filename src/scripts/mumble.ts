@@ -1,3 +1,12 @@
+// Description:
+//  Mumble channel announcements and youtube player
+//
+// Commands:
+//  hubot who <channel> - return all users currently in the given channel
+//
+// Author:
+//  Matt Perry
+
 /// <reference path="..\..\typings\main.d.ts" />
 
 import { ConnectionOptions } from "tls";

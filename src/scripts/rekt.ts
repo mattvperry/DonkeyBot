@@ -1,3 +1,12 @@
+// Description:
+//  Hype man for a savage burn
+//
+// Commands:
+//  rekt - show the checklist to let them know
+//
+// Author:
+//  Matt Perry
+
 /// <reference path="..\..\typings\main.d.ts" />
 
 import { Robot } from "hubot";
