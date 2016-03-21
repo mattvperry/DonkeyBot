@@ -63,6 +63,16 @@ declare module "mumble" {
         inputStream(): MumbleInputStream;
         canTalk(): boolean;
         canHear(): boolean;
+        
+        on(event: string, listener: Function): this;
+        on(event: "mute", listener: (mute: boolean) => void): this;
+        on(event: "self-mute", listener: (selfMute: boolean) => void): this;
+        on(event: "self-deaf", listener:  (selfDeaf: boolean) => void): this;
+        on(event: "suppress", listener: (status: boolean) => void): this;
+        on(event: "recording", listener: (status: boolean) => void): this;
+        on(event: "priority-speaker", listener: (status: boolean) => void): this;
+        on(event: "disconnect", listener: () => void): this;
+        on(event: "move", listener: (oldChannel: Channel, newChannel: Channel, actor: User) => void): this;
     }
 
     interface ChannelData {
@@ -90,6 +100,13 @@ declare module "mumble" {
         getPermissions(callback: Function): void;
         addSubChannel(name: string, options?: { temporary: boolean }): void;
         remove(): void;
+        
+        on(event: string, listener: Function): this;
+        on(event: "permissions-update", listener: (permissions: any) => void): this;
+        on(event: "links-add", listener: (newChannels: Channel[]) => void): this;
+        on(event: "links-remove", listener: (channels: Channel[]) => void): this;
+        on(event: "move", listener: (oldParent: Channel, newParent: Channel) => void): this;
+        on(event: "remove", listener: () => void): this;
     }
 
     interface MumbleInputStream extends NodeJS.WritableStream {
@@ -129,6 +146,32 @@ declare module "mumble" {
         joinPath(path: string): void;
         sendVoice(chunk: Buffer): void;
         disconnect(): void;
+        
+        on(event: string, listener: Function): this;
+        on(event: "message", listener: (message: string, user: User, scope: string) => void): this;
+        on(event: "user-connect", listener: (user: User) => void): this;
+        on(event: "user-mute", listener: (user: User, mute: boolean) => void): this;
+        on(event: "user-self-mute", listener: (user: User, selfMute: boolean) => void): this;
+        on(event: "user-self-deaf", listener:  (user: User, selfDeaf: boolean) => void): this;
+        on(event: "user-suppress", listener: (user: User, status: boolean) => void): this;
+        on(event: "user-recording", listener: (user: User, status: boolean) => void): this;
+        on(event: "user-priority-speaker", listener: (user: User, status: boolean) => void): this;
+        on(event: "user-disconnect", listener: (user: User) => void): this;
+        on(event: "user-move", listener: (user: User, oldChannel: Channel, newChannel: Channel) => void): this;
+        on(event: "channel-create", listener: (channel: Channel) => void): this;
+        on(event: "channel-permissions-update", listener: (channel: Channel, permissions: any) => void): this;
+        on(event: "channel-links-add", listener: (channel: Channel, newChannels: Channel[]) => void): this;
+        on(event: "channel-links-remove", listener: (channel: Channel, channels: Channel[]) => void): this;
+        on(event: "channel-move", listener: (channel: Channel, oldParent: Channel, newParent: Channel) => void): this;
+        on(event: "channel-remove", listener: (channel: Channel) => void): this;
+        on(event: "error", listener: (err: any) => void): this;
+        on(event: "ready", listener: () => void): this;
+        on(event: "disconnect", listener: () => void): this;
+        on(event: "initialized", listener: (conn: MumbleConnection) => void): this;
+        on(event: "permission-denied", listener: (data: any) => void): this;
+        on(event: "voice-start", listener: (data: any) => void): this;
+        on(event: "voice-end", listener: (data: any) => void): this;
+        on(event: "voice", listener: (audio: any) => void): this;
     }
 
     export class MumbleConnection extends EventEmitter {
@@ -145,6 +188,15 @@ declare module "mumble" {
         sendVoiceFrame(frame: Buffer, whisperTarget?: number, voiceSequence?: number): void;
         sendEncodedFrame(packet: Buffer|Buffer[], codec: number, whisperTarget?: number, voiceSequence?: number): void;
         disconnect(): void;
+        
+        on(event: string, listener: Function): this;
+        on(event: "error", listener: (err: any) => void): this;
+        on(event: "disconnect", listener: () => void): this;
+        on(event: "initialized", listener: (conn: MumbleConnection) => void): this;
+        on(event: "permission-denied", listener: (data: any) => void): this;
+        on(event: "voice-start", listener: (data: any) => void): this;
+        on(event: "voice-end", listener: (data: any) => void): this;
+        on(event: "voice", listener: (audio: any) => void): this;
     }
 
     export class MumbleConnectionManager {

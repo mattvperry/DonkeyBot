@@ -98,7 +98,7 @@ class MumbleBot {
             this._player = new Player(cli);
             cli.on("ready", () => this._ready(cli));
             cli.on("user-move", this._userMove.bind(this));
-            cli.on("message", (msg: string) => {
+            cli.on("message", (msg) => {
                 this._message(msg.replace(/<[^>]+>/ig, ""));
             });
             this._addResponder(cli);
@@ -120,8 +120,8 @@ class MumbleBot {
         cli.user.moveToChannel("Games");
     }
 
-    private _userMove(user: mumble.User): void {
-        if (user.channel.name === "Games" && user.name !== this._name) {
+    private _userMove(user: mumble.User, oldChannel: mumble.Channel, newChannel: mumble.Channel): void {
+        if (newChannel.name === "Games" && user.name !== this._name) {
             let currentTime = Date.now();
             if (!this._timeMap[user.name] || (currentTime - this._timeMap[user.name]) > 60000) {
                 this._timeMap[user.name] = currentTime;
