@@ -1,3 +1,12 @@
+// Description:
+//  Hype meter
+//
+// Commands:
+//  hype - add to the hype!
+//
+// Author:
+//  Matt Perry
+
 /// <reference path="..\..\typings\main.d.ts" />
 
 import { Robot } from "hubot";

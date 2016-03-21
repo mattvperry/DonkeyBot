@@ -1,3 +1,12 @@
+// Description:
+//  They need to know, so make sure they know
+//
+// Commands:
+//  told - show the checklist to let them know
+//
+// Author:
+//  Matt Perry
+
 /// <reference path="..\..\typings\main.d.ts" />
 
 import { Robot } from "hubot";
