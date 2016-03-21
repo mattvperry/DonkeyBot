@@ -164,5 +164,9 @@ class MumbleBot {
 }
 
 export = async (robot: Robot) => {
-    await (new MumbleBot(robot)).connect(process.env.HUBOT_MUMBLE_URL, process.env.HUBOT_MUMBLE_PASSWORD);
+    try {
+        await (new MumbleBot(robot)).connect(process.env.HUBOT_MUMBLE_URL, process.env.HUBOT_MUMBLE_PASSWORD);
+    } catch (e) {
+        robot.logger.error(e);
+    }
 };

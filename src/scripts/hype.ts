@@ -2,13 +2,13 @@
 
 import { Robot } from "hubot";
 
-let timeDecay: number = 5 * 60 * 1000;
-let hypeIncrement: number = 15;
-let maxHype: number = 100;
-let total: number  = 0;
-let lastTime: number = Date.now();
-let gettingHyped: string = "༼ʘ̚ل͜ʘ̚༽ Hype level rising";
-let overHyped: string = "ヽヽ༼༼ຈຈل͜ل͜ຈຈ༽༽ﾉﾉ TOO MUCH HYPE TO HANDLE! ヽヽ༼༼ຈຈل͜ل͜ຈຈ༽༽ﾉﾉ";
+let timeDecay: number       = 5 * 60 * 1000;
+let hypeIncrement: number   = 15;
+let maxHype: number         = 100;
+let total: number           = 0;
+let lastTime: number        = Date.now();
+let gettingHyped: string    = "༼ʘ̚ل͜ʘ̚༽ Hype level rising";
+let overHyped: string       = "ヽヽ༼༼ຈຈل͜ل͜ຈຈ༽༽ﾉﾉ TOO MUCH HYPE TO HANDLE! ヽヽ༼༼ຈຈل͜ل͜ຈຈ༽༽ﾉﾉ";
 
 let resetHype = () => {
     let curTime: number = Date.now();
