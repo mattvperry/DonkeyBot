@@ -201,7 +201,7 @@ let tolds = [
 
 let told = (robot: Robot) => {
     robot.hear(/told/i, (res) => {
-        res.send(`${unchecked} Not told`, `${checked} ${res.random(tolds)}`);
+        res.send(`${unchecked} Not told\n${checked} ${res.random(tolds)}`);
     });
 };
 
