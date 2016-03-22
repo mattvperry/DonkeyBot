@@ -1,9 +1,11 @@
 /// <reference path="..\..\typings\main\ambient\node\index.d.ts" />
+/// <reference path="..\..\typings\main\ambient\express-serve-static-core\index.d.ts" />
 /// <reference path="node-scoped-http-client.d.ts" />
 
 declare module "hubot" {
     import * as scoped from "scoped";
     import * as events from "events";
+    import * as express from "express-serve-static-core";
 
     type Matcher = (message: Message) => any;
     type ResponseCallback = (response: Response) => void;
@@ -28,8 +30,8 @@ declare module "hubot" {
         room?: string;
     }
 
-    export interface Brain {
-        new(robot: Robot): Brain;
+    export class Brain {
+        constructor(robot: Robot);
         set(key: any): void;
         set(key: string, value: any): void;
         get(key: any): any;
@@ -46,14 +48,15 @@ declare module "hubot" {
         usersForFuzzyName(fuzzyName: string): User[];
     }
 
-    export interface Robot extends NodeJS.EventEmitter {
+    export class Robot extends events.EventEmitter {
         name: string;
         brain: Brain;
         alias: string;
         adapter: Adapter;
         logger: Logger;
+        router: express.Router;
 
-        new(adapterPath: string, adapter: string, http: boolean, name?: string, alias?: boolean): Robot;
+        constructor(adapterPath: string, adapter: string, http: boolean, name?: string, alias?: boolean);
         hear(regex: RegExp, callback: ResponseCallback): void;
         hear(regex: RegExp, options: any, callback: ResponseCallback): void;
         respond(regex: RegExp, callback: ResponseCallback): void;
@@ -77,6 +80,8 @@ declare module "hubot" {
     }
 
     export class Adapter extends events.EventEmitter {
+        robot: Robot;
+        
         constructor(robot: Robot);
         send(envelope: Envelope, ...strings: string[]): void;
         emote(envelope: Envelope, ...strings: string[]): void;
@@ -94,12 +99,12 @@ declare module "hubot" {
         http(url: string): scoped.ScopedClient;
     }
 
-    export interface Response {
+    export class Response {
         robot: Robot;
         message: Message;
         match: RegExpMatchArray;
 
-        new(robot: Robot, message: Message, match: RegExpMatchArray): Response;
+        constructor(robot: Robot, message: Message, match: RegExpMatchArray);
         send(...strings: string[]): void;
         emote(...strings: string[]): void;
         reply(...strings: string[]): void;
@@ -111,40 +116,40 @@ declare module "hubot" {
         http(url: string, options?: scoped.Options): scoped.ScopedClient;
     }
 
-    export interface Listener {
-        new(robot: Robot, matcher: Matcher, callback: ResponseCallback): Listener;
-        new(robot: Robot, matcher: Matcher, options: any, callback: ResponseCallback): Listener;
+    export class Listener {
+        constructor(robot: Robot, matcher: Matcher, callback: ResponseCallback);
+        constructor(robot: Robot, matcher: Matcher, options: any, callback: ResponseCallback);
         call(message: Message, callback: ListenerCallback): boolean;
     }
 
-    export interface TextListener extends Listener {
-        new(robot: Robot, regex: RegExp, callback: ResponseCallback): TextListener;
-        new(robot: Robot, regex: RegExp, options: any, callback: ResponseCallback): TextListener;
+    export class TextListener extends Listener {
+        constructor(robot: Robot, regex: RegExp, callback: ResponseCallback);
+        constructor(robot: Robot, regex: RegExp, options: any, callback: ResponseCallback);
     }
 
-    export interface Message {
+    export class Message {
         user: User;
         room: string;
-        new(user: User, done?: boolean): Message;
+        constructor(user: User, done?: boolean);
         finish(): void;
     }
 
-    export interface TextMessage extends Message {
-        new(user: User, text: string, id: string): TextMessage;
+    export class TextMessage extends Message {
+        constructor(user: User, text: string, id: string);
         match(regex: RegExp): RegExpMatchArray;
         toString(): string;
     }
 
-    export interface EnterMessage extends Message {
+    export class EnterMessage extends Message {
     }
 
-    export interface LeaveMessage extends Message {
+    export class LeaveMessage extends Message {
     }
 
-    export interface TopicMessage extends Message {
+    export class TopicMessage extends Message {
     }
 
-    export interface CatchAllMessage extends Message {
-        new(message: Message): CatchAllMessage;
+    export class CatchAllMessage extends Message {
+        constructor(message: Message);
     }
 }
