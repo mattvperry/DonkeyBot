@@ -3,6 +3,7 @@
 
 declare module "hubot" {
     import * as scoped from "scoped";
+    import * as events from "events";
 
     type Matcher = (message: Message) => any;
     type ResponseCallback = (response: Response) => void;
@@ -75,8 +76,8 @@ declare module "hubot" {
         on(event: "running", listener: () => void);
     }
 
-    export interface Adapter extends NodeJS.EventEmitter {
-        new(robot: Robot): Adapter;
+    export class Adapter extends events.EventEmitter {
+        constructor(robot: Robot);
         send(envelope: Envelope, ...strings: string[]): void;
         emote(envelope: Envelope, ...strings: string[]): void;
         reply(envelope: Envelope, ...strings: string[]): void;
