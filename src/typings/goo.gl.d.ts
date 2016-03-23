@@ -1,9 +1,9 @@
 declare module "goo.gl" {
-    export interface GoogleOptions {
-        uri: string;
-        qs: any;
-        encoding: string;
-        json: boolean;
+    interface GoogleOptions {
+        uri?: string;
+        qs?: any;
+        encoding?: string;
+        json?: boolean;
     }
 
     export function shorten(url: string, extraOptions?: GoogleOptions): Promise<any>;
