@@ -28,7 +28,7 @@ interface RedditResult {
     }
 };
 
-async function getSubReddit(res: Response, sub: string, count: number): Promise<RedditResult> {
+function getSubReddit(res: Response, sub: string, count: number): Promise<RedditResult> {
     return new Promise<RedditResult>((resolve, reject) => {
         res
         .http(`https://www.reddit.com/r/${sub}.json`)

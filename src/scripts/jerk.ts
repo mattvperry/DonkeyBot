@@ -25,7 +25,7 @@ interface RedditResult {
     }
 };
 
-async function getCirclejerk(res: Response, count: number): Promise<RedditResult> {
+function getCirclejerk(res: Response, count: number): Promise<RedditResult> {
     return new Promise<RedditResult>((resolve, reject) => {
         res
         .http(`https://www.reddit.com/r/circlejerk.json`)
