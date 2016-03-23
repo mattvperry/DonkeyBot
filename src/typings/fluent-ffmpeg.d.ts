@@ -1,7 +1,5 @@
 /// <reference path="..\..\typings\main\ambient\node\index.d.ts" />
 
-declare var ffmpeg: FfmpegCommandStatic;
-
 type input = NodeJS.ReadableStream|string;
 type output = NodeJS.WritableStream|string;
 type presetCallback = (cmd: FfmpegCommand) => void;
@@ -321,5 +319,6 @@ interface FfmpegCommandStatic extends FfmpegCapabilities<void> {
 }
 
 declare module "fluent-ffmpeg" {
+    let ffmpeg: FfmpegCommandStatic;
     export = ffmpeg;
 }

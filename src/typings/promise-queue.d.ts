@@ -1,5 +1,3 @@
-declare var Queue: QueueStatic;
-
 interface QueueStatic {
     new(maxConcurrent?: number, maxQueued?: number): Queue;
 }
@@ -12,5 +10,6 @@ interface Queue {
 }
 
 declare module "promise-queue" {
-    export = Queue;
+    let queue: QueueStatic;
+    export = queue;
 }

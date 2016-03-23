@@ -1,7 +1,5 @@
 /// <reference path="..\..\typings\main\ambient\node\index.d.ts" />
 
-declare var YoutubeDL: YoutubeDL;
-
 interface VideoInfo {
     url: string;
 }
@@ -18,5 +16,6 @@ interface YoutubeDL {
 }
 
 declare module "youtube-dl" {
-    export = YoutubeDL;
+    let ytdl: YoutubeDL;
+    export = ytdl;
 }

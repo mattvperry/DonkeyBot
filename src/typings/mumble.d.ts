@@ -1,5 +1,35 @@
 /// <reference path="..\..\typings\main\ambient\node\index.d.ts" />
 
+interface MumbleStreamOptions {
+    channels?: number;
+    whisperId?: number;
+    sampleRate?: number;
+    gain?: number;
+    bitDepth?: number;
+    signed?: boolean;
+    endianness?: string;
+}
+
+interface MessageRecipients {
+    session?: number[];
+    channel_id?: number[];
+}
+
+interface UserData {
+    session: number;
+    name: string;
+    user_id: number;
+    mute: boolean;
+    deaf: boolean;
+    suppress: boolean;
+    self_mute: boolean;
+    self_deaf: boolean;
+    hash: string;
+    recording: boolean;
+    priority_speaker: boolean;
+    channel_id?: number;
+}
+
 declare module "mumble" {
     import { Buffer } from "buffer";
     import { ConnectionOptions } from "tls";
@@ -7,36 +37,6 @@ declare module "mumble" {
     import { EventEmitter } from "events";
 
     type ConnectCallback = (err: any, cli: MumbleClient) => void;
-
-    interface MumbleStreamOptions {
-        channels?: number;
-        whisperId?: number;
-        sampleRate?: number;
-        gain?: number;
-        bitDepth?: number;
-        signed?: boolean;
-        endianness?: string;
-    }
-
-    interface MessageRecipients {
-        session?: number[];
-        channel_id?: number[];
-    }
-
-    interface UserData {
-        session: number;
-        name: string;
-        user_id: number;
-        mute: boolean;
-        deaf: boolean;
-        suppress: boolean;
-        self_mute: boolean;
-        self_deaf: boolean;
-        hash: string;
-        recording: boolean;
-        priority_speaker: boolean;
-        channel_id?: number;
-    }
 
     class User extends EventEmitter {
         session: number;
@@ -63,7 +63,7 @@ declare module "mumble" {
         inputStream(): MumbleInputStream;
         canTalk(): boolean;
         canHear(): boolean;
-        
+
         on(event: string, listener: Function): this;
         on(event: "mute", listener: (mute: boolean) => void): this;
         on(event: "self-mute", listener: (selfMute: boolean) => void): this;
@@ -100,7 +100,7 @@ declare module "mumble" {
         getPermissions(callback: Function): void;
         addSubChannel(name: string, options?: { temporary: boolean }): void;
         remove(): void;
-        
+
         on(event: string, listener: Function): this;
         on(event: "permissions-update", listener: (permissions: any) => void): this;
         on(event: "links-add", listener: (newChannels: Channel[]) => void): this;
@@ -146,7 +146,7 @@ declare module "mumble" {
         joinPath(path: string): void;
         sendVoice(chunk: Buffer): void;
         disconnect(): void;
-        
+
         on(event: string, listener: Function): this;
         on(event: "message", listener: (message: string, user: User, scope: string) => void): this;
         on(event: "user-connect", listener: (user: User) => void): this;
@@ -188,7 +188,7 @@ declare module "mumble" {
         sendVoiceFrame(frame: Buffer, whisperTarget?: number, voiceSequence?: number): void;
         sendEncodedFrame(packet: Buffer|Buffer[], codec: number, whisperTarget?: number, voiceSequence?: number): void;
         disconnect(): void;
-        
+
         on(event: string, listener: Function): this;
         on(event: "error", listener: (err: any) => void): this;
         on(event: "disconnect", listener: () => void): this;
