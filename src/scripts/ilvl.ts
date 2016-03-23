@@ -38,7 +38,7 @@ let users: PlayerId[]   = [
     { name: "Amordos", realm: "Azuremyst" },
 ];
 
-async function getWOWData(res: Response, id: PlayerId): Promise<WOWData> {
+function getWOWData(res: Response, id: PlayerId): Promise<WOWData> {
     return new Promise<WOWData>((resolve, reject) => {
         res
         .http(`${baseURL}character/${id.realm}/${id.name}`)
