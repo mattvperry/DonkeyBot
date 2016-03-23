@@ -3,7 +3,7 @@
 declare module "mumble" {
     import { Buffer } from "buffer";
     import { ConnectionOptions } from "tls";
-    import { Duplex, ReadableOptions, WritableOptions } from "stream";
+    import { Duplex, ReadableOptions, WritableOptions, Readable, Writable } from "stream";
     import { EventEmitter } from "events";
 
     type ConnectCallback = (err: any, cli: MumbleClient) => void;
@@ -38,7 +38,7 @@ declare module "mumble" {
         channel_id?: number;
     }
 
-    interface User extends NodeJS.EventEmitter {
+    class User extends EventEmitter {
         session: number;
         name: string;
         id: number;
@@ -52,7 +52,7 @@ declare module "mumble" {
         prioritySpeaker: boolean;
         channel: Channel;
 
-        new(data: UserData, client: MumbleClient): User;
+        constructor(data: UserData, client: MumbleClient);
         moveToChannel(channel: string|Channel): void;
         setSelfDeaf(isSelfDeaf: boolean): void;
         setSelfMute(isSelfMute: boolean): void;
@@ -84,17 +84,17 @@ declare module "mumble" {
         parent?: number;
     }
 
-    interface Channel extends NodeJS.EventEmitter {
+    class Channel extends EventEmitter {
         id: number;
         name: string;
         links: Channel[];
         temporary: boolean;
         position: number;
-        parent?: Channel;
+        parent: Channel;
         children: Channel[];
         users: User[];
 
-        new(data: ChannelData, client: MumbleClient): Channel;
+        constructor(data: ChannelData, client: MumbleClient);
         join(): void;
         sendMessage(message: string): void;
         getPermissions(callback: Function): void;
@@ -109,24 +109,24 @@ declare module "mumble" {
         on(event: "remove", listener: () => void): this;
     }
 
-    interface MumbleInputStream extends NodeJS.WritableStream {
-        new(connection: MumbleConnection, options: MumbleStreamOptions & WritableOptions): MumbleInputStream;
+    class MumbleInputStream extends Writable {
+        constructor(connection: MumbleConnection, options: MumbleStreamOptions & WritableOptions);
         close(): void;
         setGain(gain: number): void;
     }
 
-    interface MumbleOutputStream extends NodeJS.ReadableStream {
-        new(connection: MumbleConnection, sessionId: number, options: { noEmptyFrames: boolean } & ReadableOptions): MumbleOutputStream;
+    class MumbleOutputStream extends Readable {
+        constructor(connection: MumbleConnection, sessionId: number, options: { noEmptyFrames: boolean } & ReadableOptions);
         close(): void;
     }
 
-    export interface MumbleClient extends NodeJS.EventEmitter {
+    class MumbleClient extends EventEmitter {
         ready: boolean;
         connect: MumbleConnection;
         rootChannel: Channel;
         user: User;
 
-        new(connection: MumbleConnection): MumbleClient;
+        constructor(connection: MumbleConnection);
 
         authenticate(name: string, password?: string, tokens?: string[]): void;
         sendMessage(message: string, recipients: MessageRecipients): void;
