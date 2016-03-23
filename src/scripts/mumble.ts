@@ -32,7 +32,7 @@ class Player {
     }
 
     public add(url: string): void {
-        this._queue.add(() => this._stream(url));
+        this._queue.add(this._stream.bind(this, url));
     }
 
     public pause(): void {
