@@ -9,7 +9,7 @@
 
 /// <reference path="..\..\typings\main.d.ts" />
 
-import { Robot, Response } from "hubot";
+import { Robot, Response } from "tsbot";
 
 interface RedditResult {
     data: {

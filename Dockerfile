@@ -17,4 +17,4 @@ WORKDIR /bot
 
 EXPOSE 8080
 
-ENTRYPOINT ["./bin/hubot", "-a", "groupme-webhook", "-l", "db"]
+ENTRYPOINT ["./bin/tsbot", "-a", "groupme-webhook", "-l", "db"]

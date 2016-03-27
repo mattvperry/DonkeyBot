@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -e
+
+npm install --production
+export PATH="node_modules/.bin:node_modules/tsbot/node_modules/.bin:$PATH"
+
+exec node_modules/.bin/tsbot --name "donkeybot" "$@"

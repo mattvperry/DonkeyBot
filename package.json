@@ -1,15 +1,17 @@
 {
   "name": "donkeybot",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "private": true,
   "author": "Matthew Perry <muffinman616@gmail.com>",
   "description": "A chatbot for Donkeys",
+  "scripts": {
+    "postinstall": "npm uninstall hubot"  
+  },
   "dependencies": {
-    "es6-promisify": "^3.0.0",
     "flip": "0.1.1",
     "fluent-ffmpeg": "2.0.1",
     "goo.gl": "^0.1.4",
-    "hubot": "^2.18.0",
+    "tsbot": "^1.0.10",
     "hubot-bro": "^0.1.1",
     "hubot-diagnostics": "^0.0.1",
     "hubot-eyebleach": "^0.0.6",
@@ -20,7 +22,6 @@
     "hubot-meowme": "^0.0.1",
     "hubot-neige": "^1.1.1",
     "hubot-pugme": "^0.1.0",
-    "hubot-redis-brain": "0.0.2",
     "hubot-rules": "^0.1.0",
     "hubot-scripts": "^2.5.16",
     "hubot-shipit": "^0.2.0",
@@ -29,6 +30,7 @@
     "hubot-youtube": "^0.1.2",
     "mumble": "^0.3.9",
     "promise-queue": "^2.2.3",
+    "thenify": "^3.2.0",
     "youtube-dl": "https://github.com/fent/node-youtube-dl"
   },
   "devDependencies": {
@@ -40,6 +42,6 @@
     "typescript": "^1.8.9"
   },
   "engines": {
-    "node": "0.10.x"
+    "node": "5.9.1"
   }
 }
