@@ -9,7 +9,7 @@
 
 /// <reference path="..\..\typings\main.d.ts" />
 
-import { Robot } from "hubot";
+import { Robot } from "tsbot";
 
 let timeDecay: number       = 5 * 60 * 1000;
 let hypeIncrement: number   = 15;

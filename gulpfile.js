@@ -11,7 +11,7 @@ gulp.task('build', ['clean', 'typings', 'scripts']);
 
 gulp.task('clean', function() {
    return gulp
-        .src(['typings', 'maps', 'scripts/**/*.js'])
+        .src(['typings', 'scripts/**/*.js'])
         .pipe(clean()); 
 });
 
@@ -23,10 +23,10 @@ gulp.task('typings', function() {
 
 gulp.task('scripts', ['typings'], function() {
     return gulp
-        .src(['src/**/*.ts', '!src/typings/**/*.d.ts'])
+        .src('src/**/*.ts')
         .pipe(sourcemaps.init())
         .pipe(tsc(tsc.createProject("tsconfig.json")))
-        .pipe(sourcemaps.write('/maps', { sourceRoot: '../../src' }))
+        .pipe(sourcemaps.write({ sourceRoot: '../src' }))
         .pipe(gulp.dest('.'));
 });
 

@@ -9,7 +9,7 @@
 
 /// <reference path="..\..\typings\main.d.ts" />
 
-import { Robot } from "hubot";
+import { Robot } from "tsbot";
 
 let unchecked = "☐";
 let checked = "☑";
