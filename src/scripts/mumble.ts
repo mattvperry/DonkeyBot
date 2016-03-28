@@ -158,7 +158,7 @@ class MumbleBot {
         this._robot.respond(/who (.*)/i, (res) => {
             let channelName = res.match[1];
             let channel = cli.channelByName(channelName);
-            if (channel !== null) {
+            if (channel != null) {
                 let userNames = channel.users.map((user) => user.name);
                 if (userNames.length > 0) {
                     res.send(...userNames);
