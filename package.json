@@ -11,7 +11,7 @@
     "flip": "0.1.1",
     "fluent-ffmpeg": "2.0.1",
     "goo.gl": "^0.1.4",
-    "tsbot": "^1.0.11",
+    "tsbot": "^1.0.12",
     "hubot-bro": "^0.1.1",
     "hubot-diagnostics": "^0.0.1",
     "hubot-eyebleach": "^0.0.6",
