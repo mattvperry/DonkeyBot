@@ -36,7 +36,7 @@ class TwitchEmotes {
         let data = await this._getData();
         for (const key in data.emotes) {
             this._robot.hear(new RegExp(key, "i"), (res) => {
-                res.send(data.template.small.replace(
+                res.emote(data.template.small.replace(
                     "{image_id}", 
                     data.emotes[key].image_id.toString()))
             });
