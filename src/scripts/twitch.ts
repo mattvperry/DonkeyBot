@@ -62,9 +62,9 @@ class Emotes {
         let bttv = await this._getData<BTTVResponse>(Emotes.BTTV_ENDPOINT);
         for (const emote of bttv.emotes) {
             this._robot.hear(new RegExp(escapeStringRegexp(emote.code)), (res) => {
-                res.emote(`https:${bttv.urlTemplate
+                res.emote("https:" + bttv.urlTemplate
                     .replace("{{id}}", emote.id)
-                    .replace("{{image}}", `3x.${emote.imageType}`)}`);
+                    .replace("{{image}}", "3x"));
             });
         }
     }
