@@ -35,7 +35,7 @@ class TwitchEmotes {
     public async addListeners(): Promise<void> {
         let data = await this._getData();
         for (const key in data.emotes) {
-            this._robot.hear(new RegExp(key, "i"), (res) => {
+            this._robot.hear(new RegExp(key), (res) => {
                 res.emote(data.template.small.replace(
                     "{image_id}", 
                     data.emotes[key].image_id.toString()))
