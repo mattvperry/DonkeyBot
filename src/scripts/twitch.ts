@@ -10,8 +10,9 @@
 /// <reference path="..\..\typings\main.d.ts" />
 
 import { Robot, Response } from "tsbot";
+import * as escapeStringRegexp from "escape-string-regexp";
 
-interface ApiResponse {
+interface TwitchEmoteResponse {
     meta: { generated_at: string },
     template: {
         small: string,
@@ -26,27 +27,52 @@ interface ApiResponse {
     }
 }
 
-class TwitchEmotes {
-    private static ENDPOINT = "https://twitchemotes.com/api_cache/v2/global.json";
+interface BTTVResponse {
+    status: number,
+    urlTemplate: string,
+    emotes: {
+        id: string,
+        code: string,
+        channel: any,
+        restructions: {
+            channels: string[],
+            games: string[]
+        },
+        imageType: string
+    }[]
+}
+
+class Emotes {
+    private static TWITCH_ENDPOINT = "https://twitchemotes.com/api_cache/v2/global.json";
+    private static BTTV_ENDPOINT = "https://api.betterttv.net/2/emotes";
 
     constructor(private _robot: Robot) {
     }
 
     public async addListeners(): Promise<void> {
-        let data = await this._getData();
-        for (const key in data.emotes) {
-            this._robot.hear(new RegExp(key), (res) => {
-                res.emote(data.template.small.replace(
+        let twitch = await this._getData<TwitchEmoteResponse>(Emotes.TWITCH_ENDPOINT);
+        for (const key in twitch.emotes) {
+            this._robot.hear(new RegExp(escapeStringRegexp(key)), (res) => {
+                res.emote(twitch.template.large.replace(
                     "{image_id}", 
-                    data.emotes[key].image_id.toString()))
+                    twitch.emotes[key].image_id.toString()))
+            });
+        }
+        
+        let bttv = await this._getData<BTTVResponse>(Emotes.BTTV_ENDPOINT);
+        for (const emote of bttv.emotes) {
+            this._robot.hear(new RegExp(escapeStringRegexp(emote.code)), (res) => {
+                res.emote(`https:${bttv.urlTemplate
+                    .replace("{{id}}", emote.id)
+                    .replace("{{image}}", `3x.${emote.imageType}`)}`);
             });
         }
     }
 
-    private _getData(): Promise<ApiResponse> {
-        return new Promise<ApiResponse>((resolve, reject) => {
+    private _getData<T>(url: string): Promise<T> {
+        return new Promise<T>((resolve, reject) => {
             this._robot
-            .http(TwitchEmotes.ENDPOINT)
+            .http(url)
             .get()((err, data, body) => {
                 if (err) {
                     reject(err);
@@ -60,7 +86,7 @@ class TwitchEmotes {
 
 export = async (robot: Robot) => {
     try {
-        await (new TwitchEmotes(robot)).addListeners();
+        await (new Emotes(robot)).addListeners();
     } catch (e) {
         robot.logger.error(e);
     }
