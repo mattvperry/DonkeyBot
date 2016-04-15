@@ -52,7 +52,7 @@ class Emotes {
     public async addListeners(): Promise<void> {
         let twitch = await this._getData<TwitchEmoteResponse>(Emotes.TWITCH_ENDPOINT);
         for (const key in twitch.emotes) {
-            this._robot.hear(new RegExp(escapeStringRegexp(key)), (res) => {
+            this._robot.hear(this._makeRegex(key), (res) => {
                 res.emote(twitch.template.large.replace(
                     "{image_id}", 
                     twitch.emotes[key].image_id.toString()))
@@ -61,12 +61,16 @@ class Emotes {
         
         let bttv = await this._getData<BTTVResponse>(Emotes.BTTV_ENDPOINT);
         for (const emote of bttv.emotes) {
-            this._robot.hear(new RegExp(escapeStringRegexp(emote.code)), (res) => {
+            this._robot.hear(this._makeRegex(emote.code), (res) => {
                 res.emote("https:" + bttv.urlTemplate
                     .replace("{{id}}", emote.id)
                     .replace("{{image}}", "3x"));
             });
         }
+    }
+    
+    private _makeRegex(emote: string): RegExp {
+        return new RegExp(`\\b${escapeStringRegexp(emote)}\\b`);
     }
 
     private _getData<T>(url: string): Promise<T> {
