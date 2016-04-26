@@ -70,7 +70,7 @@ class Emotes {
     }
     
     private _makeRegex(emote: string): RegExp {
-        return new RegExp(`\\b${escapeStringRegexp(emote)}\\b`);
+        return new RegExp(`(?:[^\w]+|^)${escapeStringRegexp(emote)}(?:[^\w]+|$)`);
     }
 
     private _getData<T>(url: string): Promise<T> {
