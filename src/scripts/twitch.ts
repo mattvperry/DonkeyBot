@@ -45,6 +45,8 @@ interface BTTVResponse {
 class Emotes {
     private static TWITCH_ENDPOINT = "https://twitchemotes.com/api_cache/v2/global.json";
     private static BTTV_ENDPOINT = "https://api.betterttv.net/2/emotes";
+    private static BTTV_CHANNEL_ENDPOINT = "https://api.betterttv.net/2/channels/";
+    private static BTTV_CHANNELS = ["forsenlol"];
 
     constructor(private _robot: Robot) {
     }
@@ -59,10 +61,20 @@ class Emotes {
             });
         }
         
-        let bttv = await this._getData<BTTVResponse>(Emotes.BTTV_ENDPOINT);
-        for (const emote of bttv.emotes) {
+        let bttv = await this._getData<BTTVResponse>(Emotes.BTTV_ENDPOINT);        
+        let channels = await Promise.all<BTTVResponse>(Emotes.BTTV_CHANNELS.map(c => {
+            return this._getData<BTTVResponse>(Emotes.BTTV_CHANNEL_ENDPOINT + c);
+        }));
+        
+        for (const data of [bttv].concat(channels)) {
+            this._addBTTVListeners(data);
+        }
+    }
+    
+    private _addBTTVListeners(data: BTTVResponse) {
+        for (const emote of data.emotes) {
             this._robot.hear(this._makeRegex(emote.code), (res) => {
-                res.emote("https:" + bttv.urlTemplate
+                res.emote("https:" + data.urlTemplate
                     .replace("{{id}}", emote.id)
                     .replace("{{image}}", "3x"));
             });
