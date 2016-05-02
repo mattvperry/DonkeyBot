@@ -5,9 +5,6 @@ set -e
 export PATH="node_modules/.bin:node_modules/tsbot/node_modules/.bin:$PATH"
 
 node \
-    --harmony_default_parameters \
-    --harmony_rest_parameters \
-    --harmony_destructuring \
     node_modules/.bin/tsbot \
     --name "donkeybot" \
     "$@"
