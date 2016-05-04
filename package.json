@@ -28,7 +28,7 @@
     "hubot-wolfram": "mattvperry/hubot-wolfram",
     "hubot-xkcd": "0.0.3",
     "hubot-youtube": "^0.1.2",
-    "mumble": "^0.3.9",
+    "mumble": "mattvperry/node-mumble",
     "promise-queue": "^2.2.3",
     "thenify": "^3.2.0",
     "tsbot": "^1.0.15",
