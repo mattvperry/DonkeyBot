@@ -5,13 +5,16 @@
 			"name": "Launch",
 			"type": "node",
 			"request": "launch",
-			"program": "${workspaceRoot}/node_modules/coffee-script/bin/coffee",
+			"program": "${workspaceRoot}/node_modules/tsbot/bin/tsbot",
 			"stopOnEntry": false,
-			"args": ["node_modules/hubot/bin/hubot", "--name", "donkeybot", "-l", "db"],
+			"args": ["--name", "donkeybot", "-l", "db"],
 			"cwd": "${workspaceRoot}",
 			"runtimeExecutable": null,
 			"runtimeArgs": [
-				"--nolazy"
+				"--nolazy",
+                "--harmony_default_parameters",
+                "--harmony_rest_parameters",
+                "--harmony_destructuring"
 			],
 			"env": {
 				"NODE_ENV": "development",
