@@ -8,7 +8,7 @@
 // Author:
 //  Steve Shipsey
 
-import { Robot } from "hubot";
+import { Robot } from "tsbot";
 
 let is = ["", " not"];
 
