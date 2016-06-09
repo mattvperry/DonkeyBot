@@ -1,14 +1,13 @@
 {
   "ambientDependencies": {
-    "es6-promisify": "file:src/typings/es6-promisify.d.ts",
-    "express-serve-static-core": "registry:dt/express-serve-static-core#0.0.0+20160317120654",
-    "fluent-ffmpeg": "file:src/typings/fluent-ffmpeg.d.ts",
-    "goo.gl": "file:src/typings/goo.gl.d.ts",
-    "hubot": "file:src/typings/hubot.d.ts",
-    "mumble": "file:src/typings/mumble.d.ts",
-    "node": "registry:dt/node#4.0.0+20160317120654",
-    "node-scoped-http-client": "file:src/typings/node-scoped-http-client.d.ts",
-    "promise-queue": "file:src/typings/promise-queue.d.ts",
-    "youtube-dl": "file:src/typings/youtube-dl.d.ts"
+    "fluent-ffmpeg": "github:mattvperry/typed-fluent-ffmpeg#59b177d",
+    "goo.gl": "github:mattvperry/typed-googl#4f69644",
+    "mumble": "github:mattvperry/typed-mumble#98e7d69",
+    "promise-queue": "github:mattvperry/typed-promise-queue#c7854e6",
+    "youtube-dl": "github:mattvperry/typed-youtube-dl#05c9f3e"
+  },
+  "dependencies": {
+    "escape-string-regexp": "github:mattvperry/npm-escape-string-regexp#929b371",
+    "thenify": "registry:npm/thenify#3.1.0+20160211003958"
   }
 }

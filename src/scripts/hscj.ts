@@ -9,7 +9,7 @@
 
 /// <reference path="..\..\typings\main.d.ts" />
 
-import { Robot, Response } from "hubot";
+import { Robot, Response } from "tsbot";
 import * as googl from "goo.gl";
 
 googl.setKey(process.env.HUBOT_GOOGLE_CSE_KEY);
@@ -39,7 +39,7 @@ function getSubReddit(res: Response, sub: string, count: number): Promise<Reddit
             } else {
                 resolve(JSON.parse(body));
             }
-        }); 
+        });
     });
 }
 

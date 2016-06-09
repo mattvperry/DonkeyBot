@@ -10,12 +10,12 @@
 /// <reference path="..\..\typings\main.d.ts" />
 
 import { ConnectionOptions } from "tls";
-import { Robot } from "hubot";
+import { Robot } from "tsbot";
 import * as Queue from "promise-queue";
 import * as youtubedl from "youtube-dl";
 import * as ffmpeg from "fluent-ffmpeg";
 import * as mumble from "mumble";
-import * as promisify from "es6-promisify";
+import * as thenify from "thenify";
 import * as fs from "fs";
 
 class Player {
@@ -68,7 +68,7 @@ class Player {
     }
 
     private async _stream(url: string): Promise<any> {
-        let info = await promisify<VideoInfo, string, string[]>(youtubedl.getInfo)(url, []);
+        let info = await thenify<string, string[], VideoInfo>(youtubedl.getInfo)(url, []);
         this._output = this._cli.inputStream({ gain: this._gain });
         this._cmd = ffmpeg(info.url)
             .noVideo()
@@ -101,7 +101,7 @@ class MumbleBot {
     public async connect(url: string, password: string): Promise<void> {
         try {
             let options = await this._getOptions();
-            let cli = await promisify<mumble.MumbleClient, string, ConnectionOptions>(mumble.connect)(url, options);
+            let cli = await thenify<string, ConnectionOptions, mumble.MumbleClient>(mumble.connect)(url, options);
             cli.authenticate(this._name, password);
 
             this._player = new Player(cli);
@@ -119,8 +119,8 @@ class MumbleBot {
     private async _getOptions(): Promise<ConnectionOptions> {
         let opts: ConnectionOptions = {};
         if (fs.existsSync("./certs")) {
-            opts.key = await promisify(fs.readFile)("./certs/private_key.pem");
-            opts.cert = await promisify(fs.readFile)("./certs/cert.pem");
+            opts.key = await thenify(fs.readFile)("./certs/private_key.pem");
+            opts.cert = await thenify(fs.readFile)("./certs/cert.pem");
         }
         return opts;
     }
@@ -158,7 +158,7 @@ class MumbleBot {
         this._robot.respond(/who (.*)/i, (res) => {
             let channelName = res.match[1];
             let channel = cli.channelByName(channelName);
-            if (channel !== null) {
+            if (channel != null) {
                 let userNames = channel.users.map((user) => user.name);
                 if (userNames.length > 0) {
                     res.send(...userNames);

@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -e
+
+export PATH="node_modules/.bin:node_modules/tsbot/node_modules/.bin:$PATH"
+
+node \
+    node_modules/.bin/tsbot \
+    --name "donkeybot" \
+    "$@"
