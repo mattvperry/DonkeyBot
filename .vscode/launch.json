@@ -5,20 +5,25 @@
 			"name": "Launch",
 			"type": "node",
 			"request": "launch",
-			"program": "node_modules/coffee-script/bin/coffee",
+			"program": "${workspaceRoot}/node_modules/coffee-script/bin/coffee",
 			"stopOnEntry": false,
 			"args": ["node_modules/hubot/bin/hubot", "--name", "donkeybot", "-l", "db"],
-			"cwd": ".",
+			"cwd": "${workspaceRoot}",
 			"runtimeExecutable": null,
 			"runtimeArgs": [
 				"--nolazy"
 			],
 			"env": {
-				"NODE_ENV": "development"
+				"NODE_ENV": "development",
+                "FFMPEG_PATH": "",
+                "HUBOT_MUMBLE_URL": "",
+                "HUBOT_MUMBLE_PASSWORD": "",
+                "HUBOT_GOOGLE_CSE_KEY": "",
+                "HUBOT_WOW_API_KEY": ""
 			},
 			"externalConsole": true,
 			"sourceMaps": true,
-			"outDir": null
+			"outDir": "${workspaceRoot}/scripts"
 		},
 		{
 			"name": "Attach",

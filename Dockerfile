@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
 
 ADD package.json /bot/package.json
 
-RUN cd /bot && npm install
+RUN cd /bot && npm install --production
 
 ADD . /bot/
 

@@ -1,7 +1,19 @@
-module.exports = (robot) ->
-  unchecked = "☐"
-  checked = "☑"
-  rekts = [
+// Description:
+//  Hype man for a savage burn
+//
+// Commands:
+//  rekt - show the checklist to let them know
+//
+// Author:
+//  Matt Perry
+
+/// <reference path="..\..\typings\main.d.ts" />
+
+import { Robot } from "hubot";
+
+let unchecked = "☐";
+let checked = "☑";
+let rekts = [
     "REKTangle",
     "SHREKT",
     "The Good, the Bad, and the REKT",
@@ -87,8 +99,12 @@ module.exports = (robot) ->
     "Rektium for a Dream",
     "www.Trekt.tv",
     "Erektile Dysfunction"
-  ]
+];
 
-  robot.hear /rekt/i, (res) ->
-    res.send "#{unchecked} Not rekt", "#{checked} #{res.random rekts}"
+let rekt = (robot: Robot) => {
+    robot.hear(/rekt/i, (res) => {
+        res.send(`${unchecked} Not rekt\n${checked} ${res.random(rekts)}`);
+    });
+};
 
+export = rekt

@@ -1,7 +1,19 @@
-module.exports = (robot) ->
-  unchecked = "☐"
-  checked = "☑"
-  tolds = [
+// Description:
+//  They need to know, so make sure they know
+//
+// Commands:
+//  told - show the checklist to let them know
+//
+// Author:
+//  Matt Perry
+
+/// <reference path="..\..\typings\main.d.ts" />
+
+import { Robot } from "hubot";
+
+let unchecked = "☐";
+let checked = "☑";
+let tolds = [
     "24 carat told",
     "2001: A Space Toldyssey",
     "3D Dot Told Heroes",
@@ -185,8 +197,12 @@ module.exports = (robot) ->
     "Toldclub",
     "The Told and the Textless",
     "Tolden Caulfield"
-  ]
+];
 
-  robot.hear /told/i, (res) ->
-    res.send "#{unchecked} Not told", "#{checked} #{res.random tolds}"
+let told = (robot: Robot) => {
+    robot.hear(/told/i, (res) => {
+        res.send(`${unchecked} Not told\n${checked} ${res.random(tolds)}`);
+    });
+};
 
+export = told
