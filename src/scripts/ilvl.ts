@@ -7,7 +7,7 @@
 // Author:
 //  Matt Perry
 
-/// <reference path="..\..\typings\main.d.ts"" />
+/// <reference path="..\..\typings\main.d.ts" />
 
 import { Robot, Response } from "tsbot";
 
@@ -32,10 +32,9 @@ let locale: string  = "en_us";
 let users: PlayerId[]   = [
     { name: "Xiara", realm: "Azuremyst" },
     { name: "Titanuus", realm: "Thrall" },
-    { name: "Trudgling", realm: "Azuremyst" },
-    { name: "Zarpidon", realm: "Azuremyst" },
-    { name: "Vashen", realm: "Azuremyst" },
-    { name: "Amordos", realm: "Azuremyst" },
+    { name: "TitanGrowth", realm: "Thrall" },
+    { name: "TitanGlaive", realm: "Thrall" },
+    { name: "Trudgling", realm: "Thrall" },
 ];
 
 function getWOWData(res: Response, id: PlayerId): Promise<WOWData> {
@@ -69,7 +68,7 @@ async function onResponse(res: Response): Promise<void> {
     let chars = (await Promise.all<Player>(users.map((char) => getIlvl(res, char))))
         .sort((a, b) => b.ilvl - a.ilvl)
         .map((char) => `${char.name}: ${char.ilvl}`);
-    res.send(...chars);
+    res.send(chars.join("\n"));
 }
 
 export = (robot: Robot) => robot.respond(/(ilvl)( me)?/i, async (res) => {
