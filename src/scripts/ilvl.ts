@@ -30,7 +30,7 @@ let key: string     = process.env.HUBOT_WOW_API_KEY;
 let baseURL: string = "https://us.api.battle.net/wow/";
 let locale: string  = "en_us";
 let users: PlayerId[]   = [
-    { name: "Xiara", realm: "Azuremyst" },
+    { name: "Xiama", realm: "Thrall" },
     { name: "Titanuus", realm: "Thrall" },
     { name: "Trudgling", realm: "Azuremyst" },
     { name: "Zarpidon", realm: "Azuremyst" },
