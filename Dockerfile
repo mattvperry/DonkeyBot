@@ -7,7 +7,7 @@ RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
 RUN apt-get update && apt-get install -y \
     build-essential nodejs ffmpeg git python
 
-ADD package.json npm-shrinkwrap.json /bot/
+ADD package.json /bot/
 
 RUN cd /bot && npm install --production
 
