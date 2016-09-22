@@ -35,6 +35,7 @@ let users: PlayerId[]   = [
     { name: "TitanGrowth", realm: "Thrall" },
     { name: "TitanGlaive", realm: "Thrall" },
     { name: "Trudgling", realm: "Thrall" },
+    { name: "Starfailx", realm: "Illidan" }
 ];
 
 function getWOWData(res: Response, id: PlayerId): Promise<WOWData> {
