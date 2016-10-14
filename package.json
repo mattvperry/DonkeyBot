@@ -31,7 +31,8 @@
     "promise-queue": "^2.2.3",
     "thenify": "^3.2.0",
     "tsbot": "^1.0.15",
-    "youtube-dl": "https://github.com/fent/node-youtube-dl"
+    "youtube-dl": "https://github.com/fent/node-youtube-dl",
+    "hubot-jokes": "^0.0.10"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
