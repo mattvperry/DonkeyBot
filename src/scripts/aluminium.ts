@@ -46,7 +46,9 @@ let facts = ["Trippy: About 75 percent of all aluminium ever made is still in us
 "Aluminium is made in the nuclear fires of heavy stars when a proton adds to magnesium. (Magnesium is itself made in stars by nuclear fusion of two carbons.)"];
 
 let fact = (robot: Robot) => {
-    robot.hear(/alumin(i)?um( me)?/i, (res) => {
+    robot.respond(/alumin(i)?um( me)?/i, (res) => {
         res.send(`${res.random(facts)}`);
     });
 };
+
+export = fact;
