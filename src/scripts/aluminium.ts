@@ -50,3 +50,5 @@ let fact = (robot: Robot) => {
         res.send(`${res.random(facts)}`);
     });
 };
+
+export = fact;
