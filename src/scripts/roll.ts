@@ -13,7 +13,14 @@ import { Robot } from "tsbot";
 let roll = (robot: Robot) => {
     robot.respond(/roll( me)?( (\d+))?/i, (res) => {
         let max = Math.abs(Number(res.match[2])) || 100;
-        res.reply("rolls a " + Math.floor(Math.random() * max + 1) + "!");
+        let roll = Math.floor(Math.random() * max + 1);
+
+        if (max == 100) {
+            robot.emit("sniperino:roll", res, roll);
+        }
+        else {
+            res.reply("rolls a " + roll + "!");
+        }
     });
 };
 
