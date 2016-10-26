@@ -107,7 +107,7 @@ let game = (robot: Robot) => {
         let sniper = getOrCreateSniper(res.message.user, false);
        
         // If this is a valid sniperino roll and we have an active sniperino, resolve the game 
-        if (max == 100 && sniper != null && sniper.currentSnipe != null) {
+        if (max == 100 && sniper.currentSnipe) {
         
             if (roll > sniper.currentSnipe) {
                 res.send(`(◠‿◠✿) ${sniper.name}, you roll a ${roll} and the donger lives! The donger thanks you (◠‿◠✿)`);
