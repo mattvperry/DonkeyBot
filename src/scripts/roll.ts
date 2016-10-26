@@ -15,11 +15,8 @@ let roll = (robot: Robot) => {
         let max = Math.abs(Number(res.match[2])) || 100;
         let roll = Math.floor(Math.random() * max + 1);
 
-        if (max == 100) {
-            robot.emit("roll", res, roll);
-        }
-
         res.reply("rolls a " + roll + "!");
+        robot.emit("roll", res, roll, max);
     });
 };
 
