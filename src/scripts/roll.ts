@@ -16,11 +16,10 @@ let roll = (robot: Robot) => {
         let roll = Math.floor(Math.random() * max + 1);
 
         if (max == 100) {
-            robot.emit("sniperino:roll", res, roll);
+            robot.emit("roll", res, roll);
         }
-        else {
-            res.reply("rolls a " + roll + "!");
-        }
+
+        res.reply("rolls a " + roll + "!");
     });
 };
 
