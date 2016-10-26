@@ -69,7 +69,7 @@ let game = (robot: Robot) => {
     }
 
     // Respond to a stats message
-    robot.respond(/stats( me)?/i, (res) => {
+    robot.respond(/sniperino stats( me)?/i, (res) => {
         
         let stats = Object.keys(sniperino)
             .sort((a, b) => sniperino[b].getWinRate() - sniperino[a].getWinRate())
@@ -80,7 +80,7 @@ let game = (robot: Robot) => {
     });
 
     // Respond to a sniperino message
-    robot.respond(/sniperino( me)?/i, (res) => {
+    robot.respond(/sniperino( me)?$/i, (res) => {
 
         // Define instance of our Sniper object from getSniper method
         let name = res.message.user.name;
