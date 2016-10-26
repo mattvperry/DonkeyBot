@@ -55,9 +55,8 @@ let locale: string  = "en_us";
 let items: string[] = ["head", "neck", "shoulder", "back", "chest", "wrist", "hands", "waist", "legs", "feet", "finger1", "finger2", "trinket1", "trinket2", "mainHand", "offHand"];
 let users: PlayerId[]   = [
     { name: "Xiama", realm: "Thrall" },
-    { name: "Titanuus", realm: "Thrall" },
     { name: "TitanGrowth", realm: "Thrall" },
-    { name: "TitanGlaive", realm: "Thrall" },
+    { name: "Titantote", realm: "Thrall" },
     { name: "Trudgling", realm: "Thrall" },
     { name: "Starfailx", realm: "Illidan" }
 ];
