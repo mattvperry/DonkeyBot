@@ -9,7 +9,7 @@
 // Author:
 //  Steve Shipsey
 
-import { Robot } from "tsbot";
+import { Robot, User } from "tsbot";
 
 interface ISniper {
     name: string;
@@ -27,8 +27,13 @@ class Sniper implements ISniper {
     public gamesWon: number;
     public currentSnipe: number;
     
-    constructor(n: string) {
-        this.name = n.slice(0, n.indexOf(" "));
+    constructor(user: User) {
+        this.name = user.name.split(" ").length > 1 ? user.name.split(" ")[1] : user.name;
+        
+        if (this.name == "Janucik") {
+            this.name = "Guiseppe";
+        }
+        
         this.gamesPlayed = 0;
         this.gamesWon = 0;
     }
@@ -54,23 +59,23 @@ let game = (robot: Robot) => {
     let sniperino = robot.brain.get("sniperino");
 
     // Get a sniper with a given name. If one doesn't exist, create it.
-    let getOrCreateSniper = (name: string) => {
+    let getOrCreateSniper = (user: User) => {
     
         // Check for active sniper, if not, create one
-        if (sniperino[name] == null) {
-            sniperino[name] = new Sniper(name);
+        if (sniperino[user.id] == null) {
+            sniperino[user.id] = new Sniper(user);
         }
-        return sniperino[name];
+        return sniperino[user.id];
     }
 
     // Just get a sniper. Return null on failure.
-    let getSniper = (name: string) => {
-        return sniperino[name];
+    let getSniper = (user: User) => {
+        return sniperino[user.id];
     }
 
     // Respond to a stats message
     robot.respond(/sniperino stats( me)?/i, (res) => {
-        
+
         let stats = Object.keys(sniperino)
             .sort((a, b) => sniperino[b].getWinRate() - sniperino[a].getWinRate())
             .map((n) => `${sniperino[n].name}: ${sniperino[n].getWinRate()}%`);
@@ -83,8 +88,7 @@ let game = (robot: Robot) => {
     robot.respond(/sniperino( me)?$/i, (res) => {
 
         // Define instance of our Sniper object from getSniper method
-        let name = res.message.user.name;
-        let sniper = getOrCreateSniper(name);
+        let sniper = getOrCreateSniper(res.message.user);
 
         // Deny the play if someone is already actively sniping. Otheriwise, display their roll.
         if (sniper.currentSnipe == undefined) {
@@ -104,7 +108,7 @@ let game = (robot: Robot) => {
     robot.on("roll", (res, roll, max) => {
         
         // Get our currently rolling sniper
-        let sniper = getSniper(res.message.user.name);
+        let sniper = getSniper(res.message.user);
         
         if (max == 100 && sniper != null && sniper.currentSnipe != undefined) {
         
