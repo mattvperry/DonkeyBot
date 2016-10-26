@@ -15,7 +15,7 @@ interface ISniper {
     name: string;
     gamesPlayed: number;
     gamesWon: number;
-    currentSnipe?: number;
+    currentSnipe: number;
 
     getWinRate(): number;
     generateNewSnipe();
@@ -36,6 +36,7 @@ class Sniper implements ISniper {
         
         this.gamesPlayed = 0;
         this.gamesWon = 0;
+        this.currentSnipe = null;
     }
 
     public getWinRate(): number {
@@ -59,17 +60,12 @@ let game = (robot: Robot) => {
     let sniperino = robot.brain.get("sniperino");
 
     // Get a sniper with a given name. If one doesn't exist, create it.
-    let getOrCreateSniper = (user: User) => {
+    let getOrCreateSniper = (user: User, create: boolean) => {
     
         // Check for active sniper, if not, create one
-        if (sniperino[user.id] == null) {
+        if (sniperino[user.id] == null && create) {
             sniperino[user.id] = new Sniper(user);
         }
-        return sniperino[user.id];
-    }
-
-    // Just get a sniper. Return null on failure.
-    let getSniper = (user: User) => {
         return sniperino[user.id];
     }
 
@@ -88,7 +84,7 @@ let game = (robot: Robot) => {
     robot.respond(/sniperino( me)?$/i, (res) => {
 
         // Define instance of our Sniper object from getSniper method
-        let sniper = getOrCreateSniper(res.message.user);
+        let sniper = getOrCreateSniper(res.message.user, true);
 
         // Deny the play if someone is already actively sniping. Otheriwise, display their roll.
         if (sniper.currentSnipe == undefined) {
@@ -108,9 +104,10 @@ let game = (robot: Robot) => {
     robot.on("roll", (res, roll, max) => {
         
         // Get our currently rolling sniper
-        let sniper = getSniper(res.message.user);
-        
-        if (max == 100 && sniper != null && sniper.currentSnipe != undefined) {
+        let sniper = getOrCreateSniper(res.message.user, false);
+       
+        // If this is a valid sniperino roll and we have an active sniperino, resolve the game 
+        if (max == 100 && sniper != null && sniper.currentSnipe != null) {
         
             if (roll > sniper.currentSnipe) {
                 res.send(`(◠‿◠✿) ${sniper.name}, you roll a ${roll} and the donger lives! The donger thanks you (◠‿◠✿)`);
@@ -124,7 +121,7 @@ let game = (robot: Robot) => {
             }
          
             sniper.gamesPlayed += 1;
-            sniper.currentSnipe = undefined; 
+            sniper.currentSnipe = null; 
         }
     });
 };
