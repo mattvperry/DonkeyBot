@@ -30,8 +30,12 @@ class Sniper implements ISniper {
     constructor(user: User) {
         this.name = user.name.split(" ").length > 1 ? user.name.split(" ")[1] : user.name;
         
-        if (this.name == "Janucik") {
+        if (user.name == "Andrew Janucik") {
             this.name = "Guiseppe";
+        }
+
+        if (user.name == "Joe Kim") {
+            this.name = "Jow";
         }
         
         this.gamesPlayed = 0;
