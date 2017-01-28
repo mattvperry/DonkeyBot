@@ -57,7 +57,7 @@ let users: PlayerId[]   = [
     { name: "Xiama", realm: "Thrall" },
     { name: "TitanGrowth", realm: "Thrall" },
     { name: "Titantote", realm: "Thrall" },
-    { name: "Trudgling", realm: "Thrall" },
+    { name: "Xzem", realm: "Thrall" },
     { name: "Starfailx", realm: "Illidan" }
 ];
 
