@@ -56,7 +56,8 @@ let items: string[] = ["head", "neck", "shoulder", "back", "chest", "wrist", "ha
 let users: PlayerId[]   = [
     { name: "Xiama", realm: "Thrall" },
     { name: "TitanGrowth", realm: "Thrall" },
-    { name: "Titantote", realm: "Thrall" },
+    { name: "Imagrilirl", realm: "Thrall" },
+    { name: "Titanburn", realm: "Thrall" },
     { name: "Xzem", realm: "Thrall" },
     { name: "Starfailx", realm: "Illidan" },
     { name: "Titanuus", realm: "Thrall" }
