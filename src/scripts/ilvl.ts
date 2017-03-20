@@ -99,7 +99,7 @@ async function getIlvl(res: Response, id: PlayerId): Promise<Player> {
 
 async function onResponse(res: Response): Promise<void> {
     let chars = (await Promise.all<Player>(users.map((char) => getIlvl(res, char))))
-        .sort((a, b) => b.ilvl - a.ilvl)
+        .sort((a, b) => b.ilvlEquip - a.ilvlEquip)
         .map((char) => `${char.name}: ${char.ilvlEquip}${"*".repeat(char.legendaryCount)} (${char.ilvl})`);
     res.send(chars.join("\n"));
 }
