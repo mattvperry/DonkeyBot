@@ -18,6 +18,7 @@ interface WOWItem {
 interface WOWData {
     items: {
         averageItemLevel: number;
+        averageItemLevelEquipped: number;
         "head": WOWItem;
         "neck": WOWItem;
         "shoulder": WOWItem;
@@ -44,6 +45,7 @@ interface PlayerId {
 
 interface PlayerStats {
     ilvl: number;
+    ilvlEquip: number;
     legendaryCount: number;
 };
 
@@ -87,6 +89,7 @@ async function getIlvl(res: Response, id: PlayerId): Promise<Player> {
     let data = await getWOWData(res, id);
     return Object.assign({}, id, {
         ilvl: data.items.averageItemLevel,
+        ilvlEquip: data.items.averageItemLevelEquipped,
         legendaryCount: items
             .map((itemName) => data.items[itemName])
             .filter((item) => item && item.quality === 5)
@@ -97,7 +100,7 @@ async function getIlvl(res: Response, id: PlayerId): Promise<Player> {
 async function onResponse(res: Response): Promise<void> {
     let chars = (await Promise.all<Player>(users.map((char) => getIlvl(res, char))))
         .sort((a, b) => b.ilvl - a.ilvl)
-        .map((char) => `${char.name}: ${char.ilvl}${"*".repeat(char.legendaryCount)}`);
+        .map((char) => `${char.name}: ${char.ilvlEquip}${"*".repeat(char.legendaryCount)} (${char.ilvl})`);
     res.send(chars.join("\n"));
 }
 
