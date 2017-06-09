@@ -14,4 +14,5 @@ docker run \
     -e HUBOT_WOLFRAM_APPID=${HUBOT_WOLFRAM_APPID} \
     -d \
     -p 8080:8080 \
+    --name donkeybot \
     donkeybot
