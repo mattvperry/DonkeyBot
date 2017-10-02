@@ -13,17 +13,8 @@ import { Robot, Response } from "tsbot";
 import * as escapeStringRegexp from "escape-string-regexp";
 
 interface TwitchEmoteResponse {
-    meta: { generated_at: string },
-    template: {
-        small: string,
-        medium: string,
-        large: string,
-    },
-    emotes: {
-        [name: string]: {
-            description: string,
-            image_id: number
-        }
+    [name: string]: {
+        id: number
     }
 }
 
@@ -43,7 +34,8 @@ interface BTTVResponse {
 }
 
 class Emotes {
-    private static TWITCH_ENDPOINT = "https://twitchemotes.com/api_cache/v2/global.json";
+    private static TWITCH_EMOTE_TEMPLATE = "https://static-cdn.jtvnw.net/emoticons/v1/{id}/3.0";
+    private static TWITCH_ENDPOINT = "https://twitchemotes.com/api_cache/v3/global.json";
     private static BTTV_ENDPOINT = "https://api.betterttv.net/2/emotes";
     private static BTTV_CHANNEL_ENDPOINT = "https://api.betterttv.net/2/channels/";
     private static BTTV_CHANNELS = ["forsenlol"];
@@ -53,11 +45,11 @@ class Emotes {
 
     public async addListeners(): Promise<void> {
         let twitch = await this._getData<TwitchEmoteResponse>(Emotes.TWITCH_ENDPOINT);
-        for (const key in twitch.emotes) {
+        for (const key in twitch) {
             this._robot.hear(this._makeRegex(key), (res) => {
-                res.emote(twitch.template.large.replace(
-                    "{image_id}", 
-                    twitch.emotes[key].image_id.toString()))
+                res.emote(Emotes.TWITCH_EMOTE_TEMPLATE.replace(
+                    "{id}", 
+                    twitch[key].id.toString()))
             });
         }
         
