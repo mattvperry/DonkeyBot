@@ -47,6 +47,7 @@ class Emotes {
     private static BTTV_ENDPOINT = "https://api.betterttv.net/2/emotes";
     private static BTTV_CHANNEL_ENDPOINT = "https://api.betterttv.net/2/channels/";
     private static BTTV_CHANNELS = ["forsenlol"];
+    private static CUSTOM_EMOTES = {"KUPPA": "https://i.imgur.com/xqTpGLI.png",};
 
     constructor(private _robot: Robot) {
     }
@@ -58,6 +59,11 @@ class Emotes {
                 res.emote(twitch.template.large.replace(
                     "{image_id}", 
                     twitch.emotes[key].image_id.toString()))
+            });
+        }
+        for (const key in Emotes.CUSTOM_EMOTES) {
+            this._robot.hear(this._makeRegex(key), (res) => {
+                res.emote(Emotes.CUSTOM_EMOTES[key]);
             });
         }
         
