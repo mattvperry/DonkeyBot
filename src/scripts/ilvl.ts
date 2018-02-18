@@ -84,7 +84,7 @@ async function getIlvl(id: PlayerId) {
 async function onResponse(res: Response) {
     const chars = (await Promise.all(users.map(getIlvl)))
         .sort((a, b) => b.ilvlEquip - a.ilvlEquip)
-        .map(char => `${char.name}: ${char.ilvlEquip}${'*'.repeat(char.legendaryCount)} (${char.ilvl})`);
+        .map(char => `${char.name}: ${char.ilvlEquip}${'\\*'.repeat(char.legendaryCount)} (${char.ilvl})`);
     res.send(chars.join('\n'));
 }
 
