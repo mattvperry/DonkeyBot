@@ -1,4 +1,4 @@
-import { StreamDispatcher, VoiceBroadcast, VoiceChannel, VoiceConnection } from 'discord.js';
+import { StreamDispatcher, VoiceChannel, VoiceConnection } from 'discord.js';
 import { EventEmitter } from 'events';
 import * as ytdl from 'ytdl-core';
 
@@ -87,7 +87,6 @@ export class Player extends EventEmitter {
             seek: 0,
             volume: this.currentVolume / 100
         });
-
         const next = () => {
             this.queue.shift();
             this.executeQueue();
