@@ -29,7 +29,7 @@ const categories = [
 ];
 
 async function getCats(count?: number, category?: string): Promise<string[]> {
-    if (!category || categories.indexOf(category) === -1) {
+    if (categories.indexOf(category) === -1) {
         category = undefined;
     }
 
