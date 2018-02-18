@@ -197,6 +197,6 @@ let tolds = [
     "Tolden Caulfield"
 ];
 
-export default (robot: Robot) => robot.hear(/told/i, (res) => {
+export = (robot: Robot) => robot.hear(/told/i, (res) => {
     res.send(`${unchecked} Not told\n${checked} ${res.random(tolds)}`);
 });
