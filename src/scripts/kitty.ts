@@ -29,19 +29,20 @@ const categories = [
 ];
 
 async function getCats(count?: number, category?: string): Promise<string[]> {
-    category = (!category || categories.indexOf(category) === -1) ?
-        undefined :
-        category;
+    if (!category || categories.indexOf(category) === -1) {
+        category = undefined;
+    }
 
     const res = await Axios.get<string>(
         'http://thecatapi.com/api/images/get', {
-        params: {
-            api_key: key,
-            category: category,
-            format: 'xml',
-            results_per_page: count ? count > 10 ? 10 : count : 1 // Limit to 10
+            params: {
+                api_key: key,
+                category: category,
+                format: 'xml',
+                results_per_page: count ? count > 10 ? 10 : count : 1 // Limit to 10
+            }
         }
-    });
+    );
     return parseCats(res.data);
 }
 
