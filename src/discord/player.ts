@@ -1,11 +1,12 @@
-import { StreamDispatcher, VoiceChannel, VoiceConnection } from 'discord.js';
+import { VoiceChannel, VoiceConnection } from 'discord.js';
 import { EventEmitter } from 'events';
 import * as ytdl from 'ytdl-core';
 
 export class Player extends EventEmitter {
+    public readonly queue: ytdl.videoInfo[] = [];
+
     private connection?: VoiceConnection;
     private currentVolume = 50;
-    public readonly queue: ytdl.videoInfo[] = [];
 
     constructor() {
         super();
@@ -73,7 +74,7 @@ export class Player extends EventEmitter {
         }
 
         this.connection.dispatcher.resume();
-    };
+    }
 
     private executeQueue = () => {
         if (!this.connection || this.queue.length === 0) {
@@ -85,12 +86,13 @@ export class Player extends EventEmitter {
         const stream = ytdl.downloadFromInfo(video, { filter: 'audioonly' });
         const dispatcher = this.connection.playStream(stream, {
             seek: 0,
-            volume: this.currentVolume / 100
+            volume: this.currentVolume / 100,
         });
+
         const next = () => {
             this.queue.shift();
             this.executeQueue();
-        }
+        };
 
         this.connection.on('error', error => {
             console.log(error);
@@ -107,5 +109,5 @@ export class Player extends EventEmitter {
                 next();
             }
         }, 1000));
-    };
+    }
 }

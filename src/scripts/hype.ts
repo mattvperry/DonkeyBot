@@ -7,13 +7,13 @@
 // Author:
 //  Matt Perry
 
-import { Robot } from "hubot";
+import { Robot } from 'hubot';
 
 const timeDecay     = 5 * 60 * 1000;
 const hypeIncrement = 15;
 const maxHype       = 100;
-const gettingHyped  = "༼ʘ̚ل͜ʘ̚༽ Hype level rising";
-const overHyped     = "ヽヽ༼༼ຈຈل͜ل͜ຈຈ༽༽ﾉﾉ TOO MUCH HYPE TO HANDLE! ヽヽ༼༼ຈຈل͜ل͜ຈຈ༽༽ﾉﾉ";
+const gettingHyped  = '༼ʘ̚ل͜ʘ̚༽ Hype level rising';
+const overHyped     = 'ヽヽ༼༼ຈຈل͜ل͜ຈຈ༽༽ﾉﾉ TOO MUCH HYPE TO HANDLE! ヽヽ༼༼ຈຈل͜ل͜ຈຈ༽༽ﾉﾉ';
 
 let total       = 0;
 let lastTime    = Date.now();
@@ -27,7 +27,7 @@ const resetHype = () => {
 };
 
 export = (robot: Robot) => {
-    robot.hear(/hype/i, (res) => {
+    robot.hear(/hype/i, res => {
         resetHype();
         if (total < maxHype) {
             total += Math.min(hypeIncrement, maxHype - total);

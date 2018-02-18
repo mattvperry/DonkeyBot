@@ -64,19 +64,19 @@ export = (robot: Robot) => {
         }
 
         return sniperino[user.id];
-    }
+    };
 
     // Respond to a stats message
-    robot.respond(/sniperino stats( me)?/i, (res) => {
+    robot.respond(/sniperino stats( me)?/i, res => {
         const stats = Object.keys(sniperino)
             .sort((a, b) => sniperino[b].getWinRate() - sniperino[a].getWinRate())
-            .map((n) => `${sniperino[n].name}: ${sniperino[n].getWinRate()}%`);
+            .map(n => `${sniperino[n].name}: ${sniperino[n].getWinRate()}%`);
 
         res.send(stats.join('\n'));
     });
 
     // Respond to a sniperino message
-    robot.respond(/sniperino( me)?$/i, (res) => {
+    robot.respond(/sniperino( me)?$/i, res => {
         // Define instance of our Sniper object from getSniper method
         const sniper = getOrCreateSniper(res.message.user, true);
 
@@ -86,10 +86,11 @@ export = (robot: Robot) => {
             sniper.generateNewSnipe();
 
             // Send their game information
+            // tslint:disable-next-line:max-line-length
             res.send(`ヽ༼ຈل͜ຈ༽_•︻̷̿┻̿═━一 ༼ つ ಥ_ಥ ༽つ${sniper.name}, roll higher than a ${sniper.currentSnipe} or the donger gets it!`);
-        }
-        else {
+        } else {
             // Player is already playing, yell at them because they are an idiot
+            // tslint:disable-next-line:max-line-length
             res.send(`(ノಠ益ಠ)ノ彡┻━┻ YOU ARE ALREADY PLAYING SNIPERINO, ${sniper.name}. I oughtta sniperino YOU! ༼ຈل͜ຈ༽_•︻̷̿┻̿═━一`);
         }
     });
@@ -101,9 +102,11 @@ export = (robot: Robot) => {
         // If this is a valid sniperino roll and we have an active sniperino, resolve the game
         if (max === 100 && sniper.currentSnipe) {
             if (roll > sniper.currentSnipe) {
+                // tslint:disable-next-line:max-line-length
                 res.send(`(◠‿◠✿) ${sniper.name}, you roll a ${roll} and the donger lives! The donger thanks you (◠‿◠✿)`);
                 sniper.gamesWon += 1;
             } else if (roll === sniper.currentSnipe) {
+                // tslint:disable-next-line:max-line-length
                 res.send(`ヽ༼ຈل͜ຈ༽/ ${sniper.name}, you roll a ${roll} and tie! The donger is merely wounded. He will recover! ヽ༼ຈل͜ຈ༽/`);
             } else {
                 res.send(`༼ つ x_x ༽つThe donger is dead. ${sniper.name}, you did this! You MONSTER! ༼ つ x_x ༽ つ`);

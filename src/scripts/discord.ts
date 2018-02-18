@@ -15,18 +15,18 @@
 
 import { Robot } from 'hubot';
 
-import { DiscordBot, Player } from '../discord';
+import { DiscordBot } from '../discord';
 
 export = async (robot: Robot) => {
-    if ((<any>robot).adapterName !== 'discord') {
+    if ((robot as any).adapterName !== 'discord') {
         return;
     }
 
-    const client = (<any>robot).adapter.client;
+    const client = (robot as any).adapter.client;
     const bot = new DiscordBot(robot, client);
     try {
         await bot.connect();
     } catch (e) {
         console.error(e);
     }
-}
+};

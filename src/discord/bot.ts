@@ -1,10 +1,10 @@
-import { Robot, Response } from 'hubot';
-import * as Discord from 'discord.js'
+import * as Discord from 'discord.js';
+import { Response, Robot } from 'hubot';
 
 import { Player } from './player';
 
 export class DiscordBot {
-    private readonly name = "Donkeybot";
+    private readonly name = 'Donkeybot';
     private readonly timeMap: { [name: string]: number | undefined } = {};
     private readonly player: Player;
     private textChannels!: Map<string, Discord.TextChannel>;
@@ -45,7 +45,7 @@ export class DiscordBot {
             const msg = Array.isArray(sent) ? sent[0] : sent;
 
             try {
-                const info = await this.player.add(resp.match[2])
+                const info = await this.player.add(resp.match[2]);
                 await msg.edit(`Queued: ${info.title}`);
             } catch (e) {
                 await msg.edit(`Failed to queue: ${resp.match[2]}`);
@@ -73,14 +73,14 @@ export class DiscordBot {
 
         this.robot.respond(/queue( me)?$/, async resp => {
             const list = this.player.queue.map(
-                (info, index) => `${index === 0 ? 'Now playing' : index + 1}) ${info.title}`
+                (info, index) => `${index === 0 ? 'Now playing' : index + 1}) ${info.title}`,
             );
 
             if (list.length === 0) {
                 resp.send('Queue is currently empty.');
             } else {
                 await this.getChannel(resp).send(list.join('\n'), {
-                    code: true
+                    code: true,
                 });
             }
         });
@@ -121,9 +121,9 @@ export class DiscordBot {
     }
 
     private groupChannels = <T extends Discord.GuildChannel>(
-        type: 'dm' | 'group' | 'text' | 'voice' | 'category'
+        type: 'dm' | 'group' | 'text' | 'voice' | 'category',
     ): Map<string, T> => {
-        const channels = <T[]>this.client.channels.findAll('type', type);
+        const channels = this.client.channels.findAll('type', type) as T[];
         return new Map(channels.map<[string, T]>(c => [c.name, c]));
     }
 
@@ -131,7 +131,7 @@ export class DiscordBot {
         const sent = await this.getChannel(response).send(error);
         const msg = Array.isArray(sent) ? sent[0] : sent;
         await msg.delete(5000);
-    };
+    }
 
     private getChannel = (response: Response): Discord.TextChannel => {
         // @ts-ignore until typings are fixed...
@@ -145,6 +145,6 @@ export class DiscordBot {
             throw new Error('Text channel not found');
         }
 
-        return <Discord.TextChannel>channel;
-    };
+        return channel as Discord.TextChannel;
+    }
 }
