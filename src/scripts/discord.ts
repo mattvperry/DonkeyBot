@@ -69,8 +69,12 @@ class DiscordBot {
 }
 
 export = async (robot: Robot) => {
+    if (!process.env.HUBOT_DISCORD_TOKEN) {
+        return;
+    }
+
     try {
-        await (new DiscordBot(robot)).connect(process.env.HUBOT_DISCORD_TOKEN!);
+        await (new DiscordBot(robot)).connect(process.env.HUBOT_DISCORD_TOKEN);
     } catch (e) {
         console.error(e);
     }
