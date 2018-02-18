@@ -47,7 +47,7 @@ class Sniper {
     }
 }
 
-export default (robot: Robot) => {
+export = (robot: Robot) => {
     // Create a constant sniperino
     const sniperino: Snipers = robot.brain.get('sniperino');
 

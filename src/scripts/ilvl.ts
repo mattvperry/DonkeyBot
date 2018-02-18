@@ -85,7 +85,7 @@ async function onResponse(res: Response) {
     res.send(chars.join('\n'));
 }
 
-export default (robot: Robot) => robot.respond(/(ilvl)( me)?/i, async (res) => {
+export = (robot: Robot) => robot.respond(/(ilvl)( me)?/i, async (res) => {
     try {
         await onResponse(res);
     } catch (e) {
