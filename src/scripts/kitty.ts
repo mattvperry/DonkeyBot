@@ -7,8 +7,8 @@
 // Author:
 // Steve Shipsey
 
-import { Robot, Response } from 'hubot';
 import Axios from 'axios';
+import { Robot } from 'hubot';
 
 const key = process.env.HUBOT_CAT_API_KEY;
 const imageRgx = new RegExp(/<url>(.*)<\/url>/, 'g');
@@ -25,11 +25,11 @@ const categories = [
     'dream',
     'kittens',
     'sinks',
-    'clothes'
+    'clothes',
 ];
 
 async function getCats(count?: number, category?: string): Promise<string[]> {
-    if (!categories.includes(category)) {
+    if (category && !categories.includes(category)) {
         category = undefined;
     }
 
@@ -37,11 +37,11 @@ async function getCats(count?: number, category?: string): Promise<string[]> {
         'http://thecatapi.com/api/images/get', {
             params: {
                 api_key: key,
-                category: category,
+                category,
                 format: 'xml',
-                results_per_page: count ? count > 10 ? 10 : count : 1 // Limit to 10
-            }
-        }
+                results_per_page: count ? count > 10 ? 10 : count : 1, // Limit to 10
+            },
+        },
     );
     return parseCats(res.data);
 }
@@ -49,9 +49,9 @@ async function getCats(count?: number, category?: string): Promise<string[]> {
 const parseCats = (catsXml: string) => {
     return (catsXml.match(imageRgx) || [])
         .map(c => c.replace(urlRgx, ''));
-}
+};
 
-export = (robot: Robot) => robot.respond(/(kitty|cat|meow)( me)? ?(\d+)? ?(\w+)?/i, async (res) => {
+export = (robot: Robot) => robot.respond(/(kitty|cat|meow)( me)? ?(\d+)? ?(\w+)?/i, async res => {
     try {
         const parsedCats = await getCats(Number(res.match[3]), res.match[4]);
         parsedCats.map(c => res.send(c));

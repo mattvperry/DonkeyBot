@@ -7,8 +7,8 @@
 // Author:
 //  Matt Perry
 
-import { Robot, Response } from 'hubot';
 import Axios from 'axios';
+import { Response, Robot } from 'hubot';
 
 type Item
     = 'head'
@@ -36,18 +36,35 @@ interface WOWData {
     items: {
         averageItemLevel: number;
         averageItemLevelEquipped: number;
-    } & { [I in Item]: WOWItem }
+    } & { [I in Item]: WOWItem };
 }
 
 interface PlayerId {
     name: string;
     realm: string;
-};
+}
 
 const key               = process.env.HUBOT_WOW_API_KEY;
 const baseURL           = 'https://us.api.battle.net/wow/';
 const locale            = 'en_us';
-const items: Item[]     = ['head', 'neck', 'shoulder', 'back', 'chest', 'wrist', 'hands', 'waist', 'legs', 'feet', 'finger1', 'finger2', 'trinket1', 'trinket2', 'mainHand', 'offHand'];
+const items: Item[]     = [
+    'head',
+    'neck',
+    'shoulder',
+    'back',
+    'chest',
+    'wrist',
+    'hands',
+    'waist',
+    'legs',
+    'feet',
+    'finger1',
+    'finger2',
+    'trinket1',
+    'trinket2',
+    'mainHand',
+    'offHand',
+];
 const users: PlayerId[] = [
     { name: 'Xiama', realm: 'Thrall' },
     { name: 'TitanGrowth', realm: 'Thrall' },
@@ -55,15 +72,16 @@ const users: PlayerId[] = [
     { name: 'Titanburn', realm: 'Thrall' },
     { name: 'Xzem', realm: 'Thrall' },
     { name: 'Jow', realm: 'Thrall' },
+    { name: 'Starfail', realm: 'Illidan' },
 ];
 
 async function getWOWData(id: PlayerId): Promise<WOWData> {
-    var resp = await Axios.get<WOWData>(`${baseURL}character/${id.realm}/${id.name}`, {
+    const resp = await Axios.get<WOWData>(`${baseURL}character/${id.realm}/${id.name}`, {
         params: {
+           apikey: key,
            fields: 'items',
            locale,
-           apikey: key
-        }
+        },
     });
     return resp.data;
 }
@@ -77,8 +95,8 @@ async function getIlvl(id: PlayerId) {
         legendaryCount: items
             .map(itemName => data.items[itemName])
             .filter(item => item && item.quality === 5)
-            .length
-    }
+            .length,
+    };
 }
 
 async function onResponse(res: Response) {
@@ -88,7 +106,7 @@ async function onResponse(res: Response) {
     res.send(chars.join('\n'));
 }
 
-export = (robot: Robot) => robot.respond(/(ilvl)( me)?/i, async (res) => {
+export = (robot: Robot) => robot.respond(/(ilvl)( me)?/i, async res => {
     try {
         await onResponse(res);
     } catch (e) {
