@@ -7,9 +7,8 @@
 // Author:
 //  Matt Perry
 
-/// <reference path="..\..\typings\main.d.ts" />
-
-import { Robot, Response } from "tsbot";
+import { Robot, Response } from 'hubot';
+import Axios from 'axios';
 
 interface RedditResult {
     data: {
@@ -25,27 +24,17 @@ interface RedditResult {
     }
 };
 
-function getCirclejerk(res: Response, count: number): Promise<RedditResult> {
-    return new Promise<RedditResult>((resolve, reject) => {
-        res
-        .http(`https://www.reddit.com/r/circlejerk.json`)
-        .query({ count: count })
-        .get()((err, data, body) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(JSON.parse(body));
-            }
-        }); 
-    });
+async function getCirclejerk(count: number): Promise<RedditResult> {
+    const res = await Axios.get<RedditResult>('https://www.reddit.com/r/circlejerk.json');
+    return res.data;
 }
 
 async function onResponse(res: Response): Promise<void> {
-    let posts = await getCirclejerk(res, 25);
-    let post = res.random(posts.data.children).data;
+    const posts = await getCirclejerk(25);
+    const post = res.random(posts.data.children).data;
 
-    let messages = [post.title];
-    let extraField = post.domain.startsWith("self") ? post.selftext : post.url;
+    const messages = [post.title];
+    const extraField = post.domain.startsWith('self') ? post.selftext : post.url;
     if (extraField !== "") {
         messages.push(extraField);
     }
@@ -53,10 +42,10 @@ async function onResponse(res: Response): Promise<void> {
     res.send(...messages);
 }
 
-export = (robot: Robot) => robot.respond(/(jerk)( me)?/i, async (res) => {
+export default (robot: Robot) => robot.respond(/(jerk)( me)?/i, async (res) => {
     try {
         await onResponse(res);
     } catch (e) {
-        robot.logger.error(e);
+        console.error(e);
     }
 });

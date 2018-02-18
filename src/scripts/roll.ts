@@ -3,21 +3,17 @@
 //  max default to 100
 //
 // Commands:
-//  roll( \d+)? - roll a number 
+//  roll( \d+)? - roll a number
 //
 // Author:
 //  Steve Shipsey
 
-import { Robot } from "tsbot";
+import { Robot } from 'hubot';
 
-let roll = (robot: Robot) => {
-    robot.respond(/roll( me)?( (\d+))?/i, (res) => {
-        let max = Math.abs(Number(res.match[2])) || 100;
-        let roll = Math.floor(Math.random() * max + 1);
+export default (robot: Robot) => robot.respond(/roll( me)?( (\d+))?/i, (res) => {
+    const max = Math.abs(Number(res.match[2])) || 100;
+    const roll = Math.floor(Math.random() * max + 1);
 
-        res.reply("rolls a " + roll + "!");
-        robot.emit("roll", res, roll, max);
-    });
-};
-
-export = roll;
+    res.reply(`rolls a ${roll} !`);
+    robot.emit("roll", res, roll, max);
+});

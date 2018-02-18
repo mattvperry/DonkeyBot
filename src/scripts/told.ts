@@ -7,9 +7,7 @@
 // Author:
 //  Matt Perry
 
-/// <reference path="..\..\typings\main.d.ts" />
-
-import { Robot } from "tsbot";
+import { Robot } from 'hubot';
 
 let unchecked = "☐";
 let checked = "☑";
@@ -199,10 +197,6 @@ let tolds = [
     "Tolden Caulfield"
 ];
 
-let told = (robot: Robot) => {
-    robot.hear(/told/i, (res) => {
-        res.send(`${unchecked} Not told\n${checked} ${res.random(tolds)}`);
-    });
-};
-
-export = told
+export default (robot: Robot) => robot.hear(/told/i, (res) => {
+    res.send(`${unchecked} Not told\n${checked} ${res.random(tolds)}`);
+});

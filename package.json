@@ -5,9 +5,11 @@
   "author": "Matthew Perry <muffinman616@gmail.com>",
   "description": "A chatbot for Donkeys",
   "dependencies": {
+    "@types/axios": "^0.14.0",
     "@types/fluent-ffmpeg": "^2.1.6",
     "@types/hubot": "^2.19.0",
     "@types/youtube-dl": "^1.12.0",
+    "axios": "^0.17.1",
     "discord.js": "^11.3.0",
     "flip": "1.0.0",
     "fluent-ffmpeg": "2.1.2",
