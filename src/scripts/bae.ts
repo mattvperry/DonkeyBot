@@ -8,14 +8,12 @@
 // Author:
 //  Steve Shipsey
 
-import { Robot } from "tsbot";
+import { Robot } from "hubot";
 
-let is = ["", " not"];
+const is = ["", " not"];
 
-let bae = (robot: Robot) => {
+export default (robot: Robot) => {
     robot.hear(/\bmei\b/i, (res) => {
         res.send(`Mei is${res.random(is)} bae.`);
     });
 };
-
-export = bae;

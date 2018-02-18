@@ -7,20 +7,18 @@
 // Author:
 //  Matt Perry
 
-/// <reference path="..\..\typings\main.d.ts" />
+import { Robot } from "hubot";
 
-import { Robot } from "tsbot";
+const timeDecay     = 5 * 60 * 1000;
+const hypeIncrement = 15;
+const maxHype       = 100;
+const gettingHyped  = "༼ʘ̚ل͜ʘ̚༽ Hype level rising";
+const overHyped     = "ヽヽ༼༼ຈຈل͜ل͜ຈຈ༽༽ﾉﾉ TOO MUCH HYPE TO HANDLE! ヽヽ༼༼ຈຈل͜ل͜ຈຈ༽༽ﾉﾉ";
 
-let timeDecay: number       = 5 * 60 * 1000;
-let hypeIncrement: number   = 15;
-let maxHype: number         = 100;
-let total: number           = 0;
-let lastTime: number        = Date.now();
-let gettingHyped: string    = "༼ʘ̚ل͜ʘ̚༽ Hype level rising";
-let overHyped: string       = "ヽヽ༼༼ຈຈل͜ل͜ຈຈ༽༽ﾉﾉ TOO MUCH HYPE TO HANDLE! ヽヽ༼༼ຈຈل͜ل͜ຈຈ༽༽ﾉﾉ";
-
-let resetHype = () => {
-    let curTime: number = Date.now();
+let total       = 0;
+let lastTime    = Date.now();
+const resetHype = () => {
+    const curTime: number = Date.now();
     total = total - (Math.floor((curTime - lastTime) / timeDecay) * hypeIncrement);
     lastTime = curTime;
     if (total < 0) {
@@ -28,7 +26,7 @@ let resetHype = () => {
     }
 };
 
-let hype = (robot: Robot) => {
+export default (robot: Robot) => {
     robot.hear(/hype/i, (res) => {
         resetHype();
         if (total < maxHype) {
@@ -39,5 +37,3 @@ let hype = (robot: Robot) => {
         }
     });
 };
-
-export = hype;

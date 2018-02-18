@@ -7,9 +7,26 @@
 // Author:
 //  Matt Perry
 
-/// <reference path="..\..\typings\main.d.ts" />
+import { Robot, Response } from 'hubot';
+import Axios from 'axios';
 
-import { Robot, Response } from "tsbot";
+type Item
+    = 'head'
+    | 'neck'
+    | 'shoulder'
+    | 'back'
+    | 'chest'
+    | 'wrist'
+    | 'hands'
+    | 'waist'
+    | 'legs'
+    | 'feet'
+    | 'finger1'
+    | 'finger2'
+    | 'trinket1'
+    | 'trinket2'
+    | 'mainHand'
+    | 'offHand';
 
 interface WOWItem {
     quality: number;
@@ -19,23 +36,7 @@ interface WOWData {
     items: {
         averageItemLevel: number;
         averageItemLevelEquipped: number;
-        "head": WOWItem;
-        "neck": WOWItem;
-        "shoulder": WOWItem;
-        "back": WOWItem;
-        "chest": WOWItem;
-        "wrist": WOWItem;
-        "hands": WOWItem;
-        "waist": WOWItem;
-        "legs": WOWItem;
-        "feet": WOWItem;
-        "finger1": WOWItem;
-        "finger2": WOWItem;
-        "trinket1": WOWItem;
-        "trinket2": WOWItem;
-        "mainHand": WOWItem;
-        "offHand": WOWItem;
-    }
+    } & { [I in Item]: WOWItem }
 }
 
 interface PlayerId {
@@ -43,73 +44,51 @@ interface PlayerId {
     realm: string;
 };
 
-interface PlayerStats {
-    ilvl: number;
-    ilvlEquip: number;
-    legendaryCount: number;
-};
-
-type Player = PlayerId & PlayerStats;
-
-let key: string     = process.env.HUBOT_WOW_API_KEY;
-let baseURL: string = "https://us.api.battle.net/wow/";
-let locale: string  = "en_us";
-let items: string[] = ["head", "neck", "shoulder", "back", "chest", "wrist", "hands", "waist", "legs", "feet", "finger1", "finger2", "trinket1", "trinket2", "mainHand", "offHand"];
-let users: PlayerId[]   = [
-    { name: "Xiama", realm: "Thrall" },
-    { name: "TitanGrowth", realm: "Thrall" },
-    { name: "Imagrilirl", realm: "Thrall" },
-    { name: "Titanburn", realm: "Thrall" },
-    { name: "Xzem", realm: "Thrall" },
-    { name: "Starfailx", realm: "Illidan" },
-    { name: "Jow", realm: "Thrall" },
-    { name: "Starsixnine", realm: "Illidan" },
-    { name: "Demeron", realm: "Azuremyst" },
+const key               = process.env.HUBOT_WOW_API_KEY;
+const baseURL           = 'https://us.api.battle.net/wow/';
+const locale            = 'en_us';
+const items: Item[]     = ['head', 'neck', 'shoulder', 'back', 'chest', 'wrist', 'hands', 'waist', 'legs', 'feet', 'finger1', 'finger2', 'trinket1', 'trinket2', 'mainHand', 'offHand'];
+const users: PlayerId[] = [
+    { name: 'Xiama', realm: 'Thrall' },
+    { name: 'TitanGrowth', realm: 'Thrall' },
+    { name: 'Imagrilirl', realm: 'Thrall' },
+    { name: 'Titanburn', realm: 'Thrall' },
+    { name: 'Xzem', realm: 'Thrall' },
+    { name: 'Starfailx', realm: 'Illidan' },
+    { name: 'Jow', realm: 'Thrall' },
+    { name: 'Starsixnine', realm: 'Illidan' },
+    { name: 'Demeron', realm: 'Azuremyst' },
 ];
 
-function getWOWData(res: Response, id: PlayerId): Promise<WOWData> {
-    return new Promise<WOWData>((resolve, reject) => {
-        res
-        .http(`${baseURL}character/${id.realm}/${id.name}`)
-        .query({ fields: "items", locale: locale, apikey: key })
-        .get()((err, data, body) => {
-            if (err) {
-                reject(err);
-            } else {
-                let result = JSON.parse(body);
-                if (result.code !== undefined && result.code !== "200") {
-                    reject(result.detail);
-                } else {
-                    resolve(JSON.parse(body));
-                }
-            }
-        });
-    });
+async function getWOWData(id: PlayerId): Promise<WOWData> {
+    var resp = await Axios.get<WOWData>(`${baseURL}character/${id.realm}/${id.name}`);
+    return resp.data;
 }
 
-async function getIlvl(res: Response, id: PlayerId): Promise<Player> {
-    let data = await getWOWData(res, id);
-    return Object.assign({}, id, {
+async function getIlvl(id: PlayerId) {
+    const data = await getWOWData(id);
+    return {
+        ...id,
         ilvl: data.items.averageItemLevel,
         ilvlEquip: data.items.averageItemLevelEquipped,
         legendaryCount: items
-            .map((itemName) => data.items[itemName])
-            .filter((item) => item && item.quality === 5)
+            .map(itemName => data.items[itemName])
+            .filter(item => item && item.quality === 5)
             .length
-    });
+    }
 }
 
-async function onResponse(res: Response): Promise<void> {
-    let chars = (await Promise.all<Player>(users.map((char) => getIlvl(res, char))))
+async function onResponse(res: Response) {
+    const chars = (await Promise.all(users.map(getIlvl)))
         .sort((a, b) => b.ilvlEquip - a.ilvlEquip)
-        .map((char) => `${char.name}: ${char.ilvlEquip}${"*".repeat(char.legendaryCount)} (${char.ilvl})`);
-    res.send(chars.join("\n"));
+        .map(char => `${char.name}: ${char.ilvlEquip}${'*'.repeat(char.legendaryCount)} (${char.ilvl})`);
+    res.send(chars.join('\n'));
 }
 
-export = (robot: Robot) => robot.respond(/(ilvl)( me)?/i, async (res) => {
+export default (robot: Robot) => robot.respond(/(ilvl)( me)?/i, async (res) => {
     try {
         await onResponse(res);
     } catch (e) {
-        robot.logger.error(e);
+        console.error(e);
     }
 });
