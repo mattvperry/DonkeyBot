@@ -61,7 +61,13 @@ const users: PlayerId[] = [
 ];
 
 async function getWOWData(id: PlayerId): Promise<WOWData> {
-    var resp = await Axios.get<WOWData>(`${baseURL}character/${id.realm}/${id.name}`);
+    var resp = await Axios.get<WOWData>(`${baseURL}character/${id.realm}/${id.name}`, {
+        params: {
+           fields: 'items',
+           locale,
+           apikey: key
+        }
+    });
     return resp.data;
 }
 

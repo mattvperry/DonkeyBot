@@ -25,7 +25,9 @@ interface RedditResult {
 };
 
 async function getCirclejerk(count: number): Promise<RedditResult> {
-    const res = await Axios.get<RedditResult>('https://www.reddit.com/r/circlejerk.json');
+    const res = await Axios.get<RedditResult>('https://www.reddit.com/r/circlejerk.json', {
+        params: { count }
+    });
     return res.data;
 }
 
