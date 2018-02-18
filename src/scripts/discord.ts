@@ -48,7 +48,11 @@ class DiscordBot {
     private voiceStateUpdate = (oldMember: Discord.GuildMember, newMember: Discord.GuildMember) => {
         const games = this.voiceChannels.get('Games');
         const general = this.textChannels.get('general');
-        if (!games || !general || newMember.displayName === this.name || newMember.voiceChannelID !== games.id) {
+        if (!games
+            || !general
+            || newMember.displayName === this.name
+            || newMember.voiceChannelID !== games.id
+            || newMember.voiceChannelID === oldMember.voiceChannelID) {
             return;
         }
 
