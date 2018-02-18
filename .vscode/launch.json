@@ -9,7 +9,18 @@
             "request": "launch",
             "name": "Launch Program",
             "program": "${workspaceFolder}/bin\\donkeybot.js",
-            "console": "integratedTerminal"
+            "args": [
+                "--name",
+                "donkeybot",
+                "-l",
+                "db",
+                "-a",
+                "discord"
+            ],
+            "console": "integratedTerminal",
+            "env": {
+                "HUBOT_DISCORD_TOKEN": ""
+            }
         }
     ]
 }

@@ -12,6 +12,7 @@
     "coffee-script": "^1.12.7",
     "discord.js": "^11.3.0",
     "erlpack": "^0.1.2",
+    "ffmpeg-binaries": "^3.2.2-3",
     "hubot": "next",
     "hubot-diagnostics": "^0.0.2",
     "hubot-discord": "^2.1.0",
