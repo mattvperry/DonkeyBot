@@ -28,10 +28,8 @@ async function getCats(count?: number): Promise<string> {
 
 const parseCats = (catsXml: string) => {
     return (catsXml.match(imageRgx) || [])
-    .map(c =>
-        c.replace(urlRgx, '')
-    )
-    .join('\n');
+        .map(c => c.replace(urlRgx, ''))
+        .join('\n');
 }
 
 export = (robot: Robot) => robot.respond(/(kitty|cat|meow)( me)? (\d+)?/i, async (res) => {
