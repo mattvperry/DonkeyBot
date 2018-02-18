@@ -54,10 +54,7 @@ const users: PlayerId[] = [
     { name: 'Imagrilirl', realm: 'Thrall' },
     { name: 'Titanburn', realm: 'Thrall' },
     { name: 'Xzem', realm: 'Thrall' },
-    { name: 'Starfailx', realm: 'Illidan' },
     { name: 'Jow', realm: 'Thrall' },
-    { name: 'Starsixnine', realm: 'Illidan' },
-    { name: 'Demeron', realm: 'Azuremyst' },
 ];
 
 async function getWOWData(id: PlayerId): Promise<WOWData> {
