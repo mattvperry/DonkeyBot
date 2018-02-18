@@ -48,18 +48,18 @@ class Sniper {
 }
 
 export = (robot: Robot) => {
-    // Create a constant sniperino
-    const sniperino: Snipers = robot.brain.get('sniperino');
-
     // If the brain has no knowledge of sniperino, create it
-    if (sniperino === null) {
+    if (robot.brain.get('sniperino') === null) {
         robot.brain.set('sniperino', {});
     }
+
+    // Create a constant sniperino
+    const sniperino: Snipers = robot.brain.get('sniperino');
 
     // Get a sniper with a given name. If one doesn't exist, create it.
     const getOrCreateSniper = (user: User, create: boolean) => {
         // Check for active sniper, if not, create one
-        if (sniperino[user.id] === null && create) {
+        if (sniperino[user.id] === undefined && create) {
             sniperino[user.id] = new Sniper(user);
         }
 
@@ -81,7 +81,7 @@ export = (robot: Robot) => {
         const sniper = getOrCreateSniper(res.message.user, true);
 
         // Deny the play if someone is already actively sniping. Otheriwise, display their roll.
-        if (sniper.currentSnipe === undefined) {
+        if (sniper.currentSnipe === null) {
             // Player isn't playing, start a game for them
             sniper.generateNewSnipe();
 
