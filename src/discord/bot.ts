@@ -40,7 +40,7 @@ export class DiscordBot {
             await channel.send(`Now playing: ${title}`);
         });
 
-        this.robot.respond(/play( me)? ([^\s]*)$/, async resp => {
+        this.robot.respond(/play( me)? (.*)$/, async resp => {
             const sent = await this.getChannel(resp).send('Loading...');
             const msg = Array.isArray(sent) ? sent[0] : sent;
 
