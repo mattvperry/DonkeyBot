@@ -10,12 +10,8 @@ export class Player extends EventEmitter {
     private connection?: VoiceConnection;
     private currentVolume = 50;
 
-    constructor() {
+    constructor(private voiceChannel: VoiceChannel) {
         super();
-    }
-
-    public join = async (channel: VoiceChannel) => {
-        this.connection = await channel.join();
     }
 
     public add = async (search: string) => {
@@ -26,6 +22,7 @@ export class Player extends EventEmitter {
         const info = await this.getInfo(search, []);
         this.queue.push(info);
         if (this.queue.length === 1) {
+            this.connection = await this.voiceChannel.join();
             this.executeQueue();
         }
 
@@ -51,6 +48,7 @@ export class Player extends EventEmitter {
         }
 
         this.connection.dispatcher.end();
+        this.end();
     }
 
     public volume = (volume: number) => {
@@ -79,12 +77,17 @@ export class Player extends EventEmitter {
     }
 
     private executeQueue = () => {
-        if (!this.connection || this.queue.length === 0) {
+        if (!this.connection) {
+            return;
+        }
+
+        if (this.queue.length === 0) {
+            this.end();
             return;
         }
 
         const video = this.queue[0];
-        this.emit('play', video.title);
+        this.emit('play', video);
         const stream = YoutubeDL(video.url);
         const dispatcher = this.connection.playStream(stream, {
             seek: 0,
@@ -111,6 +114,16 @@ export class Player extends EventEmitter {
                 next();
             }
         }, 1000));
+    }
+
+    private end() {
+        if (!this.connection) {
+            return;
+        }
+
+        this.connection.disconnect();
+        this.voiceChannel.leave();
+        this.emit('end');
     }
 
     private getInfo = (url: string, args: string[], opts?: any) => (
