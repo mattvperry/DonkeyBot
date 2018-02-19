@@ -19,7 +19,7 @@
             ],
             "console": "integratedTerminal",
             "env": {
-                "HUBOT_DISCORD_TOKEN": "***REMOVED***"
+                "HUBOT_DISCORD_TOKEN": ""
             }
         }
     ]

@@ -1,9 +1,11 @@
 import { VoiceChannel, VoiceConnection } from 'discord.js';
 import { EventEmitter } from 'events';
-import * as ytdl from 'ytdl-core';
+import urlRegex from 'url-regex';
+import { promisify } from 'util';
+import YoutubeDL from 'youtube-dl';
 
 export class Player extends EventEmitter {
-    public readonly queue: ytdl.videoInfo[] = [];
+    public readonly queue: YoutubeDL.VideoInfo[] = [];
 
     private connection?: VoiceConnection;
     private currentVolume = 50;
@@ -16,12 +18,12 @@ export class Player extends EventEmitter {
         this.connection = await channel.join();
     }
 
-    public add = async (url: string) => {
-        if (!ytdl.validateLink(url)) {
-            throw new Error('Invalid url.');
+    public add = async (search: string) => {
+        if (!urlRegex({ exact: true }).test(search)) {
+            search = `gvsearch1: ${search}`;
         }
 
-        const info = await ytdl.getInfo(url);
+        const info = await this.getInfo(search, []);
         this.queue.push(info);
         if (this.queue.length === 1) {
             this.executeQueue();
@@ -83,7 +85,7 @@ export class Player extends EventEmitter {
 
         const video = this.queue[0];
         this.emit('play', video.title);
-        const stream = ytdl.downloadFromInfo(video, { filter: 'audioonly' });
+        const stream = YoutubeDL(video.url);
         const dispatcher = this.connection.playStream(stream, {
             seek: 0,
             volume: this.currentVolume / 100,
@@ -110,4 +112,8 @@ export class Player extends EventEmitter {
             }
         }, 1000));
     }
+
+    private getInfo = (url: string, args: string[], opts?: any) => (
+        promisify<string, string[], any, YoutubeDL.VideoInfo>(YoutubeDL.getInfo)(url, args, opts)
+    )
 }
