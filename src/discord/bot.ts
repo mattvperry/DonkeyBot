@@ -6,12 +6,10 @@ import { Player } from './player';
 export class DiscordBot {
     private readonly name = 'Donkeybot';
     private readonly timeMap: { [name: string]: number | undefined } = {};
-    private readonly player: Player;
     private textChannels!: Map<string, Discord.TextChannel>;
     private voiceChannels!: Map<string, Discord.VoiceChannel>;
 
     constructor(private robot: Robot, private client: Discord.Client) {
-        this.player = new Player();
     }
 
     public connect = async () => {
@@ -29,51 +27,55 @@ export class DiscordBot {
             return;
         }
 
-        await this.player.join(games);
+        const player = new Player(games);
 
-        this.player.on('play', async title => {
-            const channel = this.textChannels.get('general');
-            if (!channel) {
-                return;
-            }
-
-            await channel.send(`Now playing: ${title}`);
+        player.on('play', async info => {
+            await this.client.user.setActivity(info.title, {
+                type: 'LISTENING',
+                url: info.webpage_url,
+            });
         });
 
-        this.robot.respond(/play( me)? (.*)$/, async resp => {
+        player.on('end', async () => {
+            await this.client.user.setActivity('to nothing', {
+                type: 'LISTENING',
+            });
+        });
+
+        this.robot.respond(/play( me)? (.*)$/i, async resp => {
             const sent = await this.getChannel(resp).send('Loading...');
             const msg = Array.isArray(sent) ? sent[0] : sent;
 
             try {
-                const info = await this.player.add(resp.match[2]);
+                const info = await player.add(resp.match[2]);
                 await msg.edit(`Queued: ${info.title}`);
             } catch (e) {
                 await msg.edit(`Failed to queue: ${resp.match[2]}`);
             }
         });
 
-        this.robot.respond(/volume( me)? (\d*)$/, async resp => {
+        this.robot.respond(/volume( me)? (\d*)$/i, async resp => {
             const volume = +resp.match[2];
             if (volume > 200 || volume < 0) {
                 return await this.flashError(resp, 'Volume out of range!');
             }
 
-            this.player.volume(+resp.match[2]);
+            player.volume(+resp.match[2]);
             resp.reply(`Volume set to ${volume}`);
         });
 
-        this.robot.respond(/skip( me)?$/, async resp => {
-            if (this.player.queue.length === 0) {
+        this.robot.respond(/skip( me)?$/i, async resp => {
+            if (player.queue.length === 0) {
                 return await this.flashError(resp, 'Nothing to skip');
             }
 
-            this.player.skip();
+            player.skip();
             resp.reply('Skipped current song.');
         });
 
-        this.robot.respond(/queue( me)?$/, async resp => {
-            const list = this.player.queue.map(
-                (info, index) => `${index === 0 ? 'Now playing' : index + 1}) ${info.title}`,
+        this.robot.respond(/queue( me)?$/i, async resp => {
+            const list = player.queue.map(
+                (info, index) => `${index + 1}. ${info.title}${index === 0 ? ' - Now Playing' : ''}`,
             );
 
             if (list.length === 0) {
@@ -85,18 +87,18 @@ export class DiscordBot {
             }
         });
 
-        this.robot.respond(/pause( me)?$/, resp => {
-            this.player.pause();
+        this.robot.respond(/pause( me)?$/i, resp => {
+            player.pause();
             resp.reply('Playback paused.');
         });
 
-        this.robot.respond(/resume( me)?$/, resp => {
-            this.player.resume();
+        this.robot.respond(/resume( me)?$/i, resp => {
+            player.resume();
             resp.reply('Playback resumed.');
         });
 
-        this.robot.respond(/clear( me)?$/, resp => {
-            this.player.clear();
+        this.robot.respond(/clear( me)?$/i, resp => {
+            player.clear();
             resp.reply('Queue cleared!');
         });
     }
@@ -130,7 +132,7 @@ export class DiscordBot {
     private flashError = async (response: Response, error: string) => {
         const sent = await this.getChannel(response).send(error);
         const msg = Array.isArray(sent) ? sent[0] : sent;
-        await msg.delete(5000);
+        await msg.delete(2500);
     }
 
     private getChannel = (response: Response): Discord.TextChannel => {
