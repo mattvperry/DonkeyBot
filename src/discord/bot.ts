@@ -37,7 +37,7 @@ export class DiscordBot {
         });
 
         player.on('end', async () => {
-            await this.client.user.setActivity('to nothing', {
+            await this.client.user.setActivity('nothing', {
                 type: 'LISTENING',
             });
         });
