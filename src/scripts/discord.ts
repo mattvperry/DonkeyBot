@@ -27,6 +27,6 @@ export = async (robot: Robot) => {
     try {
         await bot.connect();
     } catch (e) {
-        console.error(e);
+        console.log(e);
     }
 };
