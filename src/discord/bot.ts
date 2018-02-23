@@ -74,9 +74,15 @@ export class DiscordBot {
         });
 
         this.robot.respond(/queue( me)?$/i, async resp => {
-            const list = player.queue.map(
-                (info, index) => `${index + 1}. ${info.title}${index === 0 ? ' - Now Playing' : ''}`,
+            const formatSeconds = (seconds: number) => (
+                new Date(seconds * 1000).toISOString().substr(11, 8).replace(/^[0:]+/, '')
             );
+
+            const list = player.queue.map((info, index) => {
+                const duration = formatSeconds(info.duration);
+                const time = `${index === 0 ? `${formatSeconds(player.time)}/` : ''}${duration}`;
+                return `${index + 1}. ${info.title} [${time}]`;
+            });
 
             if (list.length === 0) {
                 resp.send('Queue is currently empty.');

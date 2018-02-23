@@ -14,6 +14,14 @@ export class Player extends EventEmitter {
         super();
     }
 
+    public get time() {
+        if (!this.connection) {
+            return 0;
+        }
+
+        return this.connection.dispatcher.time;
+    }
+
     public add = async (search: string) => {
         if (!urlRegex({ exact: true }).test(search)) {
             search = `gvsearch1: ${search}`;
