@@ -84,7 +84,7 @@ export class DiscordBot {
             };
 
             const list = player.queue.map((info, index) => {
-                const length = info.duration.includes(':') ? info.duration : `00:${duration}`;
+                const length = info.duration.includes(':') ? info.duration : `00:${info.duration}`;
                 const time = `${index === 0 ? `${formatMS(player.time)}/` : ''}${length}`;
                 return `${index + 1}. ${info.title} [${time}]`;
             });
