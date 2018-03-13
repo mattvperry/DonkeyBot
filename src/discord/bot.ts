@@ -75,19 +75,13 @@ export class DiscordBot {
         });
 
         this.robot.respond(/queue( me)?$/i, async resp => {
-            const formatSeconds = (seconds: number) => {
-                if (!isNumber(seconds)) {
-                    console.log(`Tried to format seconds with an invalid number: ${seconds}`);
-                    return undefined;
-                }
+            const formatSeconds = (ms: number) => (
+                new Date(ms).toISOString().substr(11, 8).replace(/^[0:]+/, '')
+            );
 
-                return new Date(seconds * 1000).toISOString().substr(11, 8).replace(/^[0:]+/, '');
-            };
-
-            const list = player.queue.map((info, index) => {
-                const duration = formatSeconds(info.duration);
+            const list = player.queue.map(({ title, duration }, index) => {
                 const time = `${index === 0 ? `${formatSeconds(player.time)}/` : ''}${duration}`;
-                return `${index + 1}. ${info.title} [${time}]`;
+                return `${index + 1}. ${title} [${time}]`;
             });
 
             if (list.length === 0) {
