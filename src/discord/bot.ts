@@ -1,5 +1,6 @@
 import * as Discord from 'discord.js';
 import { Response, Robot } from 'hubot';
+import { isNumber } from 'util';
 
 import { Player } from './player';
 
@@ -74,9 +75,14 @@ export class DiscordBot {
         });
 
         this.robot.respond(/queue( me)?$/i, async resp => {
-            const formatSeconds = (seconds: number) => (
-                new Date(seconds * 1000).toISOString().substr(11, 8).replace(/^[0:]+/, '')
-            );
+            const formatSeconds = (seconds: number) => {
+                if (!isNumber(seconds)) {
+                    console.log(`Tried to format seconds with an invalid number: ${seconds}`);
+                    return undefined;
+                }
+
+                return new Date(seconds * 1000).toISOString().substr(11, 8).replace(/^[0:]+/, '');
+            };
 
             const list = player.queue.map((info, index) => {
                 const duration = formatSeconds(info.duration);
