@@ -1,5 +1,6 @@
 import * as Discord from 'discord.js';
 import { Response, Robot } from 'hubot';
+import { duration } from 'moment';
 import { isNumber } from 'util';
 
 import { Player } from './player';
@@ -75,13 +76,17 @@ export class DiscordBot {
         });
 
         this.robot.respond(/queue( me)?$/i, async resp => {
-            const formatSeconds = (ms: number) => (
-                new Date(ms).toISOString().substr(11, 8).replace(/^[0:]+/, '')
-            );
+            const formatMS = (ms: number) => {
+                const length = duration(ms);
+                const mmss = `${length.minutes()}:${length.seconds()}`;
+                const hours = length.asHours();
+                return hours >= 1 ? `${Math.trunc(hours)}:${mmss}` : mmss;
+            };
 
-            const list = player.queue.map(({ title, duration }, index) => {
-                const time = `${index === 0 ? `${formatSeconds(player.time)}/` : ''}${duration}`;
-                return `${index + 1}. ${title} [${time}]`;
+            const list = player.queue.map((info, index) => {
+                const length = info.duration.includes(':') ? info.duration : `00:${duration}`;
+                const time = `${index === 0 ? `${formatMS(player.time)}/` : ''}${length}`;
+                return `${index + 1}. ${info.title} [${time}]`;
             });
 
             if (list.length === 0) {
