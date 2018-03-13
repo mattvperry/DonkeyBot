@@ -76,17 +76,15 @@ export class DiscordBot {
         });
 
         this.robot.respond(/queue( me)?$/i, async resp => {
-            const formatMS = (ms: number) => {
-                const length = duration(ms);
-                const mmss = `${length.minutes()}:${length.seconds()}`;
-                const hours = length.asHours();
-                return hours >= 1 ? `${Math.trunc(hours)}:${mmss}` : mmss;
-            };
+            const formatMS = (ms: number) => duration(ms).format('h:mm:ss', {
+                forceLength: true,
+                stopTrim: 'm',
+            });
 
-            const list = player.queue.map((info, index) => {
-                const length = info.duration.includes(':') ? info.duration : `00:${info.duration}`;
-                const time = `${index === 0 ? `${formatMS(player.time)}/` : ''}${length}`;
-                return `${index + 1}. ${info.title} [${time}]`;
+            const list = player.queue.map(({ title, _duration_raw }, index) => {
+                const time = formatMS(player.time);
+                const length = formatMS(_duration_raw * 1000);
+                return `${index + 1}. ${title} [${index === 0 ? `${time}/` : ''}${length}]`;
             });
 
             if (list.length === 0) {

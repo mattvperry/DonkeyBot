@@ -8,6 +8,7 @@ declare module "youtube-dl" {
             format_id: number;
             webpage_url: string;
             duration: string;
+            _duration_raw: number;
         }
 
         function exec(url: string, args: string[], callback: Function): void;
