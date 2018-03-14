@@ -50,7 +50,7 @@ export class DiscordBot {
 
             try {
                 const info = await player.add(resp.match[2]);
-                await msg.edit(`Queued: ${info.title}`);
+                await msg.edit(`Queued: ${info.title} [${info.webpage_url}]`);
             } catch (e) {
                 await msg.edit(`Failed to queue: ${resp.match[2]}`);
             }
