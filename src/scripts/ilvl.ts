@@ -66,12 +66,13 @@ const items: Item[]     = [
     'offHand',
 ];
 const users: PlayerId[] = [
-    { name: 'Xiama', realm: 'Thrall' },
-    { name: 'TitanGrowth', realm: 'Thrall' },
-    { name: 'Imagrilirl', realm: 'Thrall' },
     { name: 'Titanburn', realm: 'Thrall' },
+    { name: 'Titansmite', realm: 'Thrall' },
     { name: 'Xzem', realm: 'Thrall' },
-    { name: 'Jow', realm: 'Thrall' },
+    { name: 'Xiala', realm: 'Thrall' },
+    { name: 'Iambushman', realm: 'Thrall' },
+    { name: 'Trudgling', realm: 'Thrall' },
+    { name: 'Avgwhiteguy', realm: 'Illidan' },
     { name: 'Starfail', realm: 'Illidan' },
 ];
 
@@ -102,7 +103,7 @@ async function getIlvl(id: PlayerId) {
 async function onResponse(res: Response) {
     const chars = (await Promise.all(users.map(getIlvl)))
         .sort((a, b) => b.ilvlEquip - a.ilvlEquip)
-        .map(char => `${char.name}: ${char.ilvlEquip}${'\\*'.repeat(char.legendaryCount)} (${char.ilvl})`);
+        .map(char => `${char.name}: ${char.ilvlEquip} (${char.ilvl})`);
     res.send(chars.join('\n'));
 }
 
