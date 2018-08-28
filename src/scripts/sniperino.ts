@@ -9,7 +9,7 @@
 // Author:
 //  Steve Shipsey
 
-import { Robot, User } from 'hubot';
+import { Response, Robot, User } from 'hubot';
 
 interface Snipers {
     [id: string]: Sniper;
@@ -47,14 +47,15 @@ class Sniper {
     }
 }
 
-export = (robot: Robot) => {
+export = (robot: Robot<any>) => {
+    const brain: any = robot.brain;
     // If the brain has no knowledge of sniperino, create it
-    if (robot.brain.get('sniperino') === null) {
-        robot.brain.set('sniperino', {});
+    if (brain.get('sniperino') === null) {
+        brain.set('sniperino', {});
     }
 
     // Create a constant sniperino
-    const sniperino: Snipers = robot.brain.get('sniperino');
+    const sniperino: Snipers = brain.get('sniperino');
 
     // Get a sniper with a given name. If one doesn't exist, create it.
     const getOrCreateSniper = (user: User, create: boolean) => {
@@ -95,7 +96,7 @@ export = (robot: Robot) => {
         }
     });
 
-    robot.on('roll', (res, roll, max) => {
+    (robot as any).on('roll', (res: Response<Robot<any>>, roll: number, max: number) => {
         // Get our currently rolling sniper
         const sniper = getOrCreateSniper(res.message.user, false);
 

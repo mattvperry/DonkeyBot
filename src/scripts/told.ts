@@ -197,6 +197,6 @@ const tolds = [
     'Tolden Caulfield',
 ];
 
-export = (robot: Robot) => robot.hear(/told/i, res => {
+export = (robot: Robot<any>) => robot.hear(/told/i, res => {
     res.send(`${unchecked} Not told\n${checked} ${res.random(tolds)}`);
 });

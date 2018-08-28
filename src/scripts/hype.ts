@@ -26,7 +26,7 @@ const resetHype = () => {
     }
 };
 
-export = (robot: Robot) => {
+export = (robot: Robot<any>) => {
     robot.hear(/hype/i, res => {
         resetHype();
         if (total < maxHype) {

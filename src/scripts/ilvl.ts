@@ -100,14 +100,14 @@ async function getIlvl(id: PlayerId) {
     };
 }
 
-async function onResponse(res: Response) {
+async function onResponse(res: Response<Robot<any>>) {
     const chars = (await Promise.all(users.map(getIlvl)))
         .sort((a, b) => b.ilvlEquip - a.ilvlEquip)
         .map(char => `${char.name}: ${char.ilvlEquip} (${char.ilvl})`);
     res.send(chars.join('\n'));
 }
 
-export = (robot: Robot) => robot.respond(/(ilvl)( me)?/i, async res => {
+export = (robot: Robot<any>) => robot.respond(/(ilvl)( me)?/i, async res => {
     try {
         await onResponse(res);
     } catch (e) {

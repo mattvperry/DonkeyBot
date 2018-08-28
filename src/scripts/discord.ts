@@ -17,12 +17,12 @@ import { Robot } from 'hubot';
 
 import { DiscordBot } from '../discord';
 
-export = async (robot: Robot) => {
+export = async (robot: Robot<any>) => {
     if ((robot as any).adapterName !== 'discord') {
         return;
     }
 
-    const client = (robot as any).adapter.client;
+    const client = robot.adapter.client;
     const bot = new DiscordBot(robot, client);
     try {
         await bot.connect();

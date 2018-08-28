@@ -10,10 +10,10 @@
 
 import { Robot } from 'hubot';
 
-export = (robot: Robot) => robot.respond(/roll( me)?( (\d+))?/i, res => {
+export = (robot: Robot<any>) => robot.respond(/roll( me)?( (\d+))?/i, res => {
     const max = Math.abs(Number(res.match[2])) || 100;
     const roll = Math.floor(Math.random() * max + 1);
 
     res.reply(`rolls a ${roll} !`);
-    robot.emit('roll', res, roll, max);
+    (robot as any).emit('roll', res, roll, max);
 });
