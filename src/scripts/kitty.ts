@@ -51,7 +51,7 @@ const parseCats = (catsXml: string) => {
         .map(c => c.replace(urlRgx, ''));
 };
 
-export = (robot: Robot) => robot.respond(/(kitty|cat|meow)( me)? ?(\d+)? ?(\w+)?/i, async res => {
+export = (robot: Robot<any>) => robot.respond(/(kitty|cat|meow)( me)? ?(\d+)? ?(\w+)?/i, async res => {
     try {
         const parsedCats = await getCats(Number(res.match[3]), res.match[4]);
         parsedCats.map(c => res.send(c));
