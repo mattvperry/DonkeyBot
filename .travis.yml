@@ -1,0 +1,23 @@
+sudo: required
+
+services:
+  - docker
+
+env:
+  global:
+    - IMAGE_NAME=donkeybot
+
+before_script:
+  - docker pull "$IMAGE_NAME" || true
+script:
+  - docker build --pull --cache-from "$IMAGE_NAME" --tag "$IMAGE_NAME" .
+after_script:
+  - docker images
+
+before_deploy:
+  - docker login -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD" suchtilt.azurecr.io
+deploy:
+  provider: script
+  script: docker push "$IMAGE_NAME"
+  on:
+    branch: master
