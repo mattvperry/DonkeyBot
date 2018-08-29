@@ -11,6 +11,7 @@ env:
   global:
     - IMAGE_NAME=donkeybot
 
+install: true
 before_script:
   - docker login -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD" suchtilt.azurecr.io
   - docker pull "$IMAGE_NAME" || true
