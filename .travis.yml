@@ -1,21 +1,21 @@
 sudo: required
 
-language: generic
+language: minimal
 
 services:
   - docker
 
 env:
   global:
-    - IMAGE_NAME=mattvperry/donkeybot
+    - IMAGE_NAME=donkeybot
     - REGISTRY=suchtilt.azurecr.io
 
 install: true
 before_script:
   - docker login -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD" "$REGISTRY"
-  - docker pull "$IMAGE_NAME" || true
+  - docker pull "$REGISTRY/$IMAGE_NAME" || true
 script:
-  - docker build --pull --cache-from "$IMAGE_NAME" --tag "$IMAGE_NAME" .
+  - docker build --pull --cache-from "$REGISTRY/$IMAGE_NAME" --tag "$REGISTRY/$IMAGE_NAME" .
 after_script:
   - docker images
 
