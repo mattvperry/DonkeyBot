@@ -30,8 +30,8 @@ declare module "hubot" {
     export interface Brain {
         new(robot: Robot): Brain;
         set(key: any): void;
-        set(key: string, value: any): void;
-        get(key: any): any;
+        set<T = any>(key: string, value: T): void;
+        get<T = any>(key: any): T | null | undefined;
         remove(key: any): void;
         save(): void;
         close(): void;
