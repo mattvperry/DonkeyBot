@@ -1,4 +1,5 @@
 [
+  "hubot-redis-brain",
   "hubot-diagnostics",
   "hubot-eyebleach",
   "hubot-help",

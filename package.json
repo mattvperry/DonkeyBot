@@ -25,6 +25,7 @@
     "hubot-jokes": "^0.0.12",
     "hubot-neige": "^1.1.1",
     "hubot-pugme": "^0.1.0",
+    "hubot-redis-brain": "^1.0.0",
     "hubot-rules": "^1.0.0",
     "hubot-shipit": "^0.2.1",
     "hubot-xkcd": "0.0.5",
