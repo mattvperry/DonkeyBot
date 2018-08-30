@@ -6,11 +6,11 @@ import { Player } from './player';
 
 export class DiscordBot {
     private readonly name = 'Donkeybot';
-    private readonly timeMap: { [name: string]: number | undefined } = {};
+    private readonly timeMap: Record<string, number | undefined> = {};
     private textChannels!: Map<string, Discord.TextChannel>;
     private voiceChannels!: Map<string, Discord.VoiceChannel>;
 
-    constructor(private robot: Robot<any>, private client: Discord.Client) {
+    constructor(private robot: Robot, private client: Discord.Client) {
     }
 
     public connect = async () => {
@@ -137,13 +137,13 @@ export class DiscordBot {
         return new Map(channels.map<[string, T]>(c => [c.name, c]));
     }
 
-    private flashError = async (response: Response<Robot<any>>, error: string) => {
+    private flashError = async (response: Response, error: string) => {
         const sent = await this.getChannel(response).send(error);
         const msg = Array.isArray(sent) ? sent[0] : sent;
         await msg.delete(2500);
     }
 
-    private getChannel = (response: Response<Robot<any>>): Discord.TextChannel => {
+    private getChannel = (response: Response): Discord.TextChannel => {
         // @ts-ignore until typings are fixed...
         const room: string | undefined = response.message.user.room;
         if (!room) {

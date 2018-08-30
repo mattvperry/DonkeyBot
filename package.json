@@ -5,9 +5,10 @@
   "author": "Matthew Perry <muffinman616@gmail.com>",
   "description": "A chatbot for Donkeys",
   "dependencies": {
-    "@types/hubot": "^2.19.2",
+    "@types/express": "^4.16.0",
     "@types/moment-duration-format": "^2.2.2",
     "@types/node": "^10.9.3",
+    "@types/scoped-http-client": "^0.11.0",
     "@types/url-regex": "^4.1.0",
     "axios": "^0.18.0",
     "coffee-script": "^1.12.7",

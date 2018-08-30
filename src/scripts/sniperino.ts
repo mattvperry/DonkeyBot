@@ -47,8 +47,8 @@ class Sniper {
     }
 }
 
-export = (robot: Robot<any>) => {
-    const brain: any = robot.brain;
+export = (robot: Robot) => {
+    const brain = robot.brain;
     // If the brain has no knowledge of sniperino, create it
     if (brain.get('sniperino') === null) {
         brain.set('sniperino', {});
@@ -96,7 +96,7 @@ export = (robot: Robot<any>) => {
         }
     });
 
-    (robot as any).on('roll', (res: Response<Robot<any>>, roll: number, max: number) => {
+    robot.on('roll', (res: Response, roll: number, max: number) => {
         // Get our currently rolling sniper
         const sniper = getOrCreateSniper(res.message.user, false);
 

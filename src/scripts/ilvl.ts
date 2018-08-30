@@ -92,22 +92,18 @@ async function getIlvl(id: PlayerId) {
     return {
         ...id,
         ilvl: data.items.averageItemLevel,
-        ilvlEquip: data.items.averageItemLevelEquipped,
-        legendaryCount: items
-            .map(itemName => data.items[itemName])
-            .filter(item => item && item.quality === 5)
-            .length,
+        ilvlEquip: data.items.averageItemLevelEquipped
     };
 }
 
-async function onResponse(res: Response<Robot<any>>) {
+async function onResponse(res: Response) {
     const chars = (await Promise.all(users.map(getIlvl)))
         .sort((a, b) => b.ilvlEquip - a.ilvlEquip)
         .map(char => `${char.name}: ${char.ilvlEquip} (${char.ilvl})`);
     res.send(chars.join('\n'));
 }
 
-export = (robot: Robot<any>) => robot.respond(/(ilvl)( me)?/i, async res => {
+export = (robot: Robot) => robot.respond(/(ilvl)( me)?/i, async res => {
     try {
         await onResponse(res);
     } catch (e) {
