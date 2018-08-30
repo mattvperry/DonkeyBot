@@ -9,7 +9,20 @@
 // Author:
 //  Steve Shipsey
 
-import { Response, Robot, User, Brain } from 'hubot';
+import { Brain, Response, Robot, User } from 'hubot';
+
+interface Game {
+    readonly userId: string;
+}
+
+interface PlayerStats {
+    readonly userId: string;
+    readonly gamesPlayed: number;
+    readonly gamesWon: number;
+}
+
+const calculateWinRate = ({ gamesPlayed, gamesWon }: PlayerStats) =>
+    gamesPlayed > 0 ? Math.round(gamesWon / gamesPlayed * 10000) / 100 : 0;
 
 class Sniper {
     public name: string;
