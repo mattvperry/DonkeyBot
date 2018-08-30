@@ -22,11 +22,6 @@ export = async (robot: Robot) => {
         return;
     }
 
-    robot.router.get("/", (req, res, next) => {
-        res.status(200);
-        res.send('Hello World!');
-    });
-
     const client = (robot.adapter as any).client;
     const bot = new DiscordBot(robot, client);
     try {
