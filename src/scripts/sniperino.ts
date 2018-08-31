@@ -92,13 +92,14 @@ export = (robot: Robot) => {
     robot.respond(/sniperino( me)?$/i, res => {
         const state = loadState(robot.brain);
         const { name, id } = res.message.user;
-        if (state.games[id] === undefined) {
-            const snipe = Math.floor(Math.random() * 99) + 1;
-            state.games[id] = snipe;
-            res.send(stringFns[GameEvent.New]({ name, snipe }));
-        } else {
+        if (state.games[id] !== undefined) {
             res.send(stringFns[GameEvent.Dupe]({ name }));
+            return;
         }
+
+        const snipe = Math.floor(Math.random() * 99) + 1;
+        state.games[id] = snipe;
+        res.send(stringFns[GameEvent.New]({ name, snipe }));
     });
 
     robot.on('roll', (res: Response, roll: number, max: number) => {
