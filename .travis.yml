@@ -12,7 +12,7 @@ env:
 
 install: true
 before_script:
-  - docker login -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD" "$REGISTRY"
+  - echo -e "$REGISTRY_PASSWORD" | docker login -u "$REGISTRY_USERNAME" --password-stdin "$REGISTRY"
   - docker pull "$REGISTRY/$IMAGE_NAME" || true
 script:
   - docker build --pull --cache-from "$REGISTRY/$IMAGE_NAME" --tag "$REGISTRY/$IMAGE_NAME" .
