@@ -45,7 +45,8 @@ const users: PlayerId[] = [
     { name: 'Trudgling', realm: 'Thrall' },
     { name: 'Avgwhiteguy', realm: 'Illidan' },
     { name: 'Starfail', realm: 'Illidan' },
-    { name: 'Imagrilirl', realm: 'Thrall'},
+    { name: 'Imagrilirl', realm: 'Thrall' },
+    { name: 'Starsucceed', realm: 'Illidan' },
 ];
 
 async function getIlvl(id: PlayerId) {
