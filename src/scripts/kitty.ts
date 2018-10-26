@@ -1,11 +1,11 @@
 // Description:
-// Get a kitty from catapi.com
+//  Get a kitty from catapi.com
 //
 // Commands:
-// hubot kitty|cat|meow me - grab a random kitty
+//  hubot kitty|cat|meow me - grab a random kitty
 //
 // Author:
-// Steve Shipsey
+//  Steve Shipsey
 
 import Axios from 'axios';
 import { Robot } from 'hubot';
