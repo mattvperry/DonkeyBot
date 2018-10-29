@@ -18,18 +18,19 @@ interface WOWData {
 }
 
 interface RaiderIO {
-    name: "string",
+    name: string;
     mythic_plus_scores: {
         all: number,
         dps: number,
         healer: number,
-        tank: number
-    }
+        tank: number,
+    };
 }
 
 interface PlayerId {
     name: string;
     realm: string;
+    region: string;
 }
 
 const key               = process.env.HUBOT_WOW_API_KEY;
@@ -37,42 +38,42 @@ const armoryUrl         = 'https://us.api.battle.net/wow';
 const raiderIOUrl       = `https://raider.io/api/v1`;
 const locale            = 'en_us';
 const users: PlayerId[] = [
-    { name: 'Titanburn', realm: 'Thrall' },
-    { name: 'Titansmite', realm: 'Thrall' },
-    { name: 'Xzem', realm: 'Thrall' },
-    { name: 'Xiala', realm: 'Thrall' },
-    { name: 'Iambushman', realm: 'Thrall' },
-    { name: 'Trudgling', realm: 'Thrall' },
-    { name: 'Avgwhiteguy', realm: 'Illidan' },
-    { name: 'Starfail', realm: 'Illidan' },
-    { name: 'Imagrilirl', realm: 'Thrall' },
-    { name: 'Starsucceed', realm: 'Illidan' },
+    { name: 'Titanburn', realm: 'Thrall', region: 'us' },
+    { name: 'Titansmite', realm: 'Thrall', region: 'us' },
+    { name: 'Xzem', realm: 'Thrall', region: 'us' },
+    { name: 'Xiala', realm: 'Thrall', region: 'us' },
+    { name: 'Iambushman', realm: 'Thrall', region: 'us' },
+    { name: 'Trudgling', realm: 'Thrall', region: 'us' },
+    { name: 'Avgwhiteguy', realm: 'Illidan', region: 'us' },
+    { name: 'Starfail', realm: 'Illidan', region: 'us' },
+    { name: 'Imagrilirl', realm: 'Thrall', region: 'us' },
+    { name: 'Starsucceed', realm: 'Illidan', region: 'us' },
 ];
 
 async function getIlvl(id: PlayerId) {
     const resp = await Axios.get<WOWData>(`${armoryUrl}/character/${id.realm}/${id.name}`, {
         params: {
-           apikey: key,
-           fields: 'items',
-           locale,
+            apikey: key,
+            fields: 'items',
+            locale,
         },
     });
 
     return {
         ...id,
         ilvl: resp.data.items.averageItemLevel,
-        ilvlEquip: resp.data.items.averageItemLevelEquipped
+        ilvlEquip: resp.data.items.averageItemLevelEquipped,
     };
 }
 
 async function getRaiderIO(id: PlayerId) {
     const resp = await Axios.get<RaiderIO>(`${raiderIOUrl}/characters/profile`, {
         params: {
-            region: 'us',
-            realm: id.realm,
+            fields: 'mythic_plus_scores',
             name: id.name,
-            fields: 'mythic_plus_scores'
-        }
+            realm: id.realm,
+            region: id.region,
+        },
     });
 
     return resp.data;
@@ -81,7 +82,7 @@ async function getRaiderIO(id: PlayerId) {
 async function makeRanking<T>(
     getter: (id: PlayerId) => Promise<T>,
     sortProp: (item: T) => number,
-    display: (item: T) => string
+    display: (item: T) => string,
 ) {
     return (await Promise.all(users.map(getter)))
         .sort((a, b) => sortProp(b) - sortProp(a))
@@ -93,7 +94,7 @@ async function ilevelList(res: Response) {
     res.send(await makeRanking(
         getIlvl,
         i => i.ilvlEquip,
-        c => `${c.name}: ${c.ilvlEquip} (${c.ilvl})`
+        c => `${c.name}: ${c.ilvlEquip} (${c.ilvl})`,
     ));
 }
 
@@ -101,13 +102,13 @@ async function raiderioScore(res: Response) {
     res.send(await makeRanking(
         getRaiderIO,
         i => i.mythic_plus_scores.all,
-        c => `${c.name}: ${c.mythic_plus_scores.all}`
+        c => `${c.name}: ${c.mythic_plus_scores.all}`,
     ));
 }
 
 async function affixes(res: Response) {
     const resp = await Axios.get<{ title: string }>(`${raiderIOUrl}/mythic-plus/affixes`, {
-        params: { region: 'us' }
+        params: { region: 'us' },
     });
 
     res.send(resp.data.title);
@@ -137,4 +138,4 @@ export = (robot: Robot) => {
             console.error(e);
         }
     });
-}
+};
