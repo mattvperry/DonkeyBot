@@ -1,4 +1,4 @@
-FROM node:10
+FROM node:11
 
 ADD package.json yarn.lock /bot/
 
@@ -10,4 +10,4 @@ WORKDIR /bot
 
 EXPOSE 8080
 
-ENTRYPOINT ["node", "./bin/donkeybot.js", "--name", "donkeybot", "-a", "discord", "-l", "db"]
+ENTRYPOINT ["node", "./bin/donkeybot.js", "--name", "donkeybot", "-a", "discord-ts", "-l", "db"]

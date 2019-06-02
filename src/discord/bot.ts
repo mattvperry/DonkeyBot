@@ -4,26 +4,32 @@ import { duration } from 'moment';
 
 import { Player } from './player';
 
+type ChannelType = Discord.Channel['type'];
+type NamedChannelType = Exclude<ChannelType, 'dm' | 'unknown'>;
+type Channel<T extends ChannelType>
+    = T extends 'dm' ? Discord.DMChannel
+    : T extends 'text' ? Discord.TextChannel
+    : T extends 'voice' ? Discord.VoiceChannel
+    : T extends 'category' ? Discord.CategoryChannel
+    : T extends 'news' ? Discord.NewsChannel
+    : T extends 'store' ? Discord.StoreChannel
+    : Discord.Channel;
+
 export class DiscordBot {
     private readonly name = 'Donkeybot';
     private readonly timeMap: Record<string, number | undefined> = {};
-    private textChannels!: Map<string, Discord.TextChannel>;
-    private voiceChannels!: Map<string, Discord.VoiceChannel>;
 
     constructor(private robot: Robot, private client: Discord.Client) {
     }
 
     public connect = async () => {
-        this.textChannels = this.groupChannels('text');
-        this.voiceChannels = this.groupChannels('voice');
-
         this.client.on('voiceStateUpdate', this.voiceStateUpdate);
 
         await this.setupMusicPlayer();
     }
 
     private setupMusicPlayer = async () => {
-        const games = this.voiceChannels.get('Games');
+        const games = this.getChannelByName('Games', 'voice');
         if (!games) {
             return;
         }
@@ -31,6 +37,9 @@ export class DiscordBot {
         const player = new Player(games);
 
         player.on('play', async info => {
+            if (!this.client.user) {
+                return;
+            }
             await this.client.user.setActivity(info.title, {
                 type: 'LISTENING',
                 url: info.webpage_url,
@@ -38,13 +47,17 @@ export class DiscordBot {
         });
 
         player.on('end', async () => {
+            if (!this.client.user) {
+                return;
+            }
             await this.client.user.setActivity('nothing', {
                 type: 'LISTENING',
             });
         });
 
         this.robot.respond(/play( me)? (.*)$/i, async resp => {
-            const sent = await this.getChannel(resp).send('Loading...');
+            const channel = await this.getResponseChannel(resp);
+            const sent = await channel.send('Loading...');
             const msg = Array.isArray(sent) ? sent[0] : sent;
 
             try {
@@ -89,7 +102,8 @@ export class DiscordBot {
             if (list.length === 0) {
                 resp.send('Queue is currently empty.');
             } else {
-                await this.getChannel(resp).send(list.join('\n'), {
+                const channel = await this.getResponseChannel(resp);
+                await channel.send(list.join('\n'), {
                     code: true,
                 });
             }
@@ -111,50 +125,59 @@ export class DiscordBot {
         });
     }
 
-    private voiceStateUpdate = (oldMember: Discord.GuildMember, newMember: Discord.GuildMember) => {
-        const games = this.voiceChannels.get('Games');
-        const general = this.textChannels.get('general');
+    private voiceStateUpdate = (oldState: Discord.VoiceState | undefined, newState: Discord.VoiceState) => {
+        const games = this.getChannelByName('Games', 'voice');
+        const general = this.getChannelByName('general', 'text');
         if (!games
             || !general
-            || newMember.displayName === this.name
-            || newMember.voiceChannelID !== games.id
-            || newMember.voiceChannelID === oldMember.voiceChannelID) {
+            || !newState.member
+            || !newState.channel
+            || newState.member.displayName === this.name
+            || newState.channel.id !== games.id
+            || (oldState && oldState.channel && newState.channel.id === oldState.channel.id)) {
             return;
         }
 
         const currentTime = Date.now();
-        const userTime = this.timeMap[newMember.displayName];
+        const userTime = this.timeMap[newState.member.displayName];
         if (!userTime || (currentTime - userTime) > 60000) {
-            this.timeMap[newMember.displayName] = currentTime;
-            general.send(`${newMember.displayName} wants to play games!`);
+            this.timeMap[newState.member.displayName] = currentTime;
+            general.send(`${newState.member.displayName} wants to play games!`);
         }
     }
 
-    private groupChannels = <T extends Discord.GuildChannel>(
-        type: 'dm' | 'group' | 'text' | 'voice' | 'category',
-    ): Map<string, T> => {
-        const channels = this.client.channels.findAll('type', type) as T[];
-        return new Map(channels.map<[string, T]>(c => [c.name, c]));
-    }
-
     private flashError = async (response: Response, error: string) => {
-        const sent = await this.getChannel(response).send(error);
+        const channel = await this.getResponseChannel(response);
+        const sent = await channel.send(error);
         const msg = Array.isArray(sent) ? sent[0] : sent;
-        await msg.delete(2500);
+        await msg.delete({ timeout: 2500 });
     }
 
-    private getChannel = (response: Response): Discord.TextChannel => {
-        // @ts-ignore until typings are fixed...
-        const room: string | undefined = response.message.user.room;
+    private getChannelByName = <T extends NamedChannelType>(name: string, type: T): Channel<T> | undefined => {
+        const channel = this.client.channels
+            .array()
+            .filter(this.channelIsType(type))
+            .find(c => c.name === name);
+
+        return channel;
+    }
+
+    private getResponseChannel = async (response: Response): Promise<Discord.TextChannel> => {
+        const room = response.message.user.room;
         if (!room) {
             throw new Error('Undefined room id');
         }
 
-        const channel = this.client.channels.get(room);
-        if (!channel || channel.type !== 'text') {
+        const channel = await this.client.channels.fetch(room);
+        if (!this.channelIsType('text')(channel)) {
             throw new Error('Text channel not found');
         }
 
-        return channel as Discord.TextChannel;
+        return channel;
     }
+
+    private channelIsType = <T extends ChannelType>(type: T) =>
+        (channel?: Discord.Channel | null): channel is Channel<T> => {
+            return !!channel && channel.type === type;
+        }
 }

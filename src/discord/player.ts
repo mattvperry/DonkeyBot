@@ -19,12 +19,12 @@ export class Player extends EventEmitter {
             return 0;
         }
 
-        return this.connection.dispatcher.time;
+        return this.connection.dispatcher.streamTime;
     }
 
     public add = async (search: string) => {
         if (!urlRegex({ exact: true }).test(search)) {
-            search = `gvsearch1: ${search}`;
+            search = `ytsearch1:${search}`;
         }
 
         const info = await this.getInfo(search, []);
@@ -97,7 +97,7 @@ export class Player extends EventEmitter {
         const video = this.queue[0];
         this.emit('play', video);
         const stream = YoutubeDL(video.url);
-        const dispatcher = this.connection.playStream(stream, {
+        const dispatcher = this.connection.play(stream, {
             seek: 0,
             volume: this.currentVolume / 100,
         });
