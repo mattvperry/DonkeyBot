@@ -18,7 +18,7 @@ import { Robot } from 'hubot';
 import { DiscordBot } from '../discord';
 
 export = async (robot: Robot) => {
-    if (robot.adapterName !== 'discord') {
+    if (robot.adapterName !== 'discord-ts') {
         return;
     }
 
