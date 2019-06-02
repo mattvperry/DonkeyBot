@@ -434,7 +434,7 @@ diff@^4.0.1:
   resolved "https://registry.yarnpkg.com/diff/-/diff-4.0.1.tgz#0c667cb467ebbb5cea7f14f135cc2dba7780a8ff"
   integrity sha512-s2+XdvhPCOF01LRQBC8hf4vhbVmI2CGS5aZnxLJlT5FtdhPCDFq80q++zK2KlrVorVDdL5BOGZ/VfLrVtYNF+Q==
 
-discord.js@discordjs/discord.js:
+discord.js@discordjs/discord.js, "discord.js@github:discordjs/discord.js":
   version "12.0.0-dev"
   resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/405bdb5b558eff478d0bde739cee1ee8e40c330b"
   dependencies:
@@ -778,9 +778,10 @@ hubot-diagnostics@^1.0.0:
   resolved "https://registry.yarnpkg.com/hubot-diagnostics/-/hubot-diagnostics-1.0.0.tgz#3a20de525901b83924b523b1244dcb726a8def69"
   integrity sha512-4kuR04lULoDDra/Z7B/rgMQMZW531Ve5hwhd8xNOKAl8e1cb5bZNqVpGFYF174eYcN54+RZuWQFHsntjvczyag==
 
-hubot-discord-ts@mattvperry/hubot-discord-ts:
-  version "1.0.0"
-  resolved "https://codeload.github.com/mattvperry/hubot-discord-ts/tar.gz/82dc7219c76dd7afd2d9cfe52c143647ce8386c9"
+hubot-discord-ts@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/hubot-discord-ts/-/hubot-discord-ts-1.0.1.tgz#2300976651b67f1d9ca266ac0de4a4b477a10f2c"
+  integrity sha512-wzGOAdM9dzeNUkf2nYK0v39Qs0pDDcnF1dTKLjq8ZdME/Dl/B/7KAYnEZE4cx1jzDtKmczYpo7sJeyBXi00hIQ==
   dependencies:
     discord.js discordjs/discord.js
 
