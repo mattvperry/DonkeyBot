@@ -38,7 +38,7 @@ async function getCats(count?: number, category?: string): Promise<string[]> {
             api_key: key,
             category,
             format: 'xml',
-            ...(count && { results_per_page: Math.max(count, 10) })
+            ...(count && { results_per_page: Math.min(count, 10) })
         }
     });
     return parseCats(res.data);
