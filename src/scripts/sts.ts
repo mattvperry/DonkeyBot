@@ -5,9 +5,11 @@ import { Robot } from 'hubot';
 export = (robot: Robot) =>
     robot.respond(/sts( me)?( (.+))/i, async res => {
         const card = res.match[2]
-            .toLowerCase()
             .trim()
-            .replace(' ', '_');
+            .split(' ')
+            .map(word => word.toLowerCase())
+            .map(word => word.replace(/^\w/, c => c.toUpperCase()))
+            .join('_');
 
         return otherCards[card]
             ? res.send(otherCards[card])
