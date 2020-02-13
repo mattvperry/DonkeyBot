@@ -25,7 +25,7 @@ const fetchCard = async (card: string) => {
     return (
         ($('.pi-image-thumbnail') &&
             $('.pi-image-thumbnail')[0] &&
-            $('.pi-image-thumbnail')[0].attribs['src']) ||
+            $('.pi-image-thumbnail')[0].attribs.src) ||
         'Card not found'
     );
 };
