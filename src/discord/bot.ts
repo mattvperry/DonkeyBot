@@ -13,7 +13,8 @@ type Channel<T extends ChannelType>
     : T extends 'category' ? Discord.CategoryChannel
     : T extends 'news' ? Discord.NewsChannel
     : T extends 'store' ? Discord.StoreChannel
-    : Discord.Channel;
+    : T extends 'unknown' ? Discord.Channel
+    : never;
 
 export class DiscordBot {
     private readonly name = 'Donkeybot';
@@ -154,12 +155,10 @@ export class DiscordBot {
     }
 
     private getChannelByName = <T extends NamedChannelType>(name: string, type: T): Channel<T> | undefined => {
-        const channel = this.client.channels
+        return this.client.channels.cache
             .array()
             .filter(this.channelIsType(type))
             .find(c => c.name === name);
-
-        return channel;
     }
 
     private getResponseChannel = async (response: Response): Promise<Discord.TextChannel> => {
