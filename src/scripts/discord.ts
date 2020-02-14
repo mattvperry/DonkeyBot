@@ -13,16 +13,27 @@
 // Author:
 //  Matt Perry
 
-import { Robot } from 'hubot';
+import { Robot, Adapter } from 'hubot';
+import { Client } from 'discord.js';
 
 import { DiscordBot } from '../discord';
 
+interface SupportedAdapter extends Adapter {
+    client: Client;
+}
+
+const supportedAdapters = [
+    'discord-ts'
+];
+
+const hasSupportedAdapter = (robot: Robot): robot is Robot<SupportedAdapter> => supportedAdapters.includes(robot.adapterName);
+
 export = async (robot: Robot) => {
-    if (robot.adapterName !== 'discord-ts') {
+    if (!hasSupportedAdapter(robot)) {
         return;
     }
 
-    const client = (robot.adapter as any).client;
+    const client = robot.adapter.client;
     const bot = new DiscordBot(robot, client);
     try {
         await bot.connect();
