@@ -75,8 +75,8 @@ export class DiscordBot {
                 return await this.flashError(resp, 'Volume out of range!');
             }
 
-            player.volume(+resp.match[2]);
-            resp.reply(`Volume set to ${volume}`);
+            player.volume(volume * 2);
+            resp.reply(`Volume set to ${volume}%`);
         });
 
         this.robot.respond(/skip( me)?$/i, async resp => {
