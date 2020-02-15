@@ -11,9 +11,9 @@
             "program": "${workspaceFolder}/bin\\donkeybot.js",
             "args": [
                 "--name",
-                "donkeybot",
+                "donkeybot2",
                 "-l",
-                "db",
+                "dbt",
                 "-a",
                 "discord-ts"
             ],

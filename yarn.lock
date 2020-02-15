@@ -1043,10 +1043,10 @@ hubot-diagnostics@^1.0.0:
   resolved "https://registry.yarnpkg.com/hubot-diagnostics/-/hubot-diagnostics-1.0.0.tgz#3a20de525901b83924b523b1244dcb726a8def69"
   integrity sha512-4kuR04lULoDDra/Z7B/rgMQMZW531Ve5hwhd8xNOKAl8e1cb5bZNqVpGFYF174eYcN54+RZuWQFHsntjvczyag==
 
-hubot-discord-ts@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/hubot-discord-ts/-/hubot-discord-ts-1.0.2.tgz#b35cdfca81054eb3e2d4e899f10af9bb6d70d17a"
-  integrity sha512-0Q0fL07giwqa8jP7q66Y8oNg0bUF/SaO4uER+bRds1h91ypLiTtpy1poDY5uvJmbBbiRVMp5GuM/3g6oRS7KoQ==
+hubot-discord-ts@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/hubot-discord-ts/-/hubot-discord-ts-1.0.3.tgz#9d06c5ae3afaccf54d9763992078fa1ff24d9f81"
+  integrity sha512-Yumqt1SfkE3DXceTj7T2+X3fAZu219naAxpnpV7MjgBk+q9QajDADLpw2p/61F8p1Wa/ZQ5NTKUXGmxicniM2g==
   dependencies:
     discord.js discordjs/discord.js
 

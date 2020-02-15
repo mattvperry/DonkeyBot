@@ -19,7 +19,7 @@
     "ffmpeg-static": "^4.0.1",
     "hubot": "3.3.2",
     "hubot-diagnostics": "^1.0.0",
-    "hubot-discord-ts": "^1.0.2",
+    "hubot-discord-ts": "^1.0.3",
     "hubot-eyebleach": "^0.0.6",
     "hubot-google-images": "^0.2.6",
     "hubot-help": "^1.0.1",

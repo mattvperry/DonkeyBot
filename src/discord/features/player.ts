@@ -4,6 +4,11 @@ import urlRegex from 'url-regex';
 import { promisify } from 'util';
 import YoutubeDL from 'youtube-dl';
 
+export declare interface Player {
+    on(event: 'play', listener: (info: YoutubeDL.VideoInfo) => void): this;
+    on(event: 'end', listener: () => void): this;
+}
+
 export class Player extends EventEmitter {
     public readonly queue: YoutubeDL.VideoInfo[] = [];
 
@@ -15,11 +20,7 @@ export class Player extends EventEmitter {
     }
 
     public get time() {
-        if (!this.connection) {
-            return 0;
-        }
-
-        return this.connection.dispatcher.streamTime;
+        return this.connection?.dispatcher?.streamTime ?? 0;
     }
 
     public add = async (search: string) => {
