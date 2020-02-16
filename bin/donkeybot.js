@@ -2,6 +2,7 @@
 
 const moment = require('moment');
 const momentDurationFormat = require('moment-duration-format');
+
 momentDurationFormat(moment);
 
 require('ts-node/register');

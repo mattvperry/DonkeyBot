@@ -17,6 +17,7 @@ export class Player extends EventEmitter {
     public readonly queue: YoutubeDL.VideoInfo[] = [];
 
     private connection?: VoiceConnection;
+
     private currentVolume = 50;
 
     constructor(private voiceChannel: VoiceChannel) {

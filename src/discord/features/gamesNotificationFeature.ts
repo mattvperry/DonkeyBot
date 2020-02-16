@@ -26,7 +26,5 @@ export class GamesNotificationFeature extends Feature {
                 general.send(`${member.displayName} wants to play games!`);
             }
         });
-
-        return;
     }
 }

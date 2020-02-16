@@ -1,16 +1,24 @@
 module.exports = {
     parser: '@typescript-eslint/parser',
+    env: { node: true },
+    plugins: [
+        '@typescript-eslint',
+    ],
     extends: [
+        'airbnb-typescript/base',
+        'plugin:@typescript-eslint/eslint-recommended',
         'plugin:@typescript-eslint/recommended',
+        'plugin:@typescript-eslint/recommended-requiring-type-checking',
         'prettier/@typescript-eslint',
         'plugin:prettier/recommended',
     ],
     parserOptions: {
         ecmaVersion: 2018,
         sourceType: 'module',
+        project: './tsconfig.json'
     },
     rules: {
-        "@typescript-eslint/explicit-function-return-type": "off",
-        "no-unused-vars": ["error", { "varsIgnorePattern": "_" }],
+        '@typescript-eslint/explicit-function-return-type': 'off',
+        '@typescript-eslint/no-unused-vars': ['error', { 'varsIgnorePattern': '_' }],
     },
 };
