@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 
-import { ChannelManagerTag } from '../tags';
 import ChannelManager from '../channelManager';
+import { ChannelManagerTag } from '../tags';
 import Feature, { Registration } from './feature';
 
 @injectable()

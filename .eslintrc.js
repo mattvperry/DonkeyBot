@@ -18,6 +18,17 @@ module.exports = {
         project: './tsconfig.json'
     },
     rules: {
+        'import/order': ['error', {
+            'newlines-between': 'always',
+            'groups': [
+                'external',
+                'internal',
+            ],
+            'alphabetize': {
+                'order': 'asc',
+                'caseInsensitive': false
+            }
+        }],
         'no-console': 'off',
         'no-restricted-syntax': ['error', 'FunctionDeclaration[generator=true]'],
         'max-classes-per-file': 'off',

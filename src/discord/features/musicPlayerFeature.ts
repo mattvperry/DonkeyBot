@@ -3,9 +3,9 @@
 import { inject, injectable } from 'inversify';
 import { duration } from 'moment';
 
-import Feature, { Registration } from './feature';
-import { PlayerFactoryTag, ActivityManagerTag } from '../tags';
 import ActivityManager from '../activityManager';
+import { PlayerFactoryTag, ActivityManagerTag } from '../tags';
+import Feature, { Registration } from './feature';
 import { PlayerFactory } from './player';
 
 @injectable()

@@ -1,5 +1,6 @@
-import { inject, injectable } from 'inversify';
 import { Client, ActivityType, Presence } from 'discord.js';
+import { inject, injectable } from 'inversify';
+
 import { ClientTag } from './tags';
 
 @injectable()

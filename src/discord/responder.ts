@@ -1,5 +1,5 @@
-import { inject, injectable } from 'inversify';
 import { MessageOptions, MessageAdditions, Message, TextChannel } from 'discord.js';
+import { inject, injectable } from 'inversify';
 
 import ChannelManager from './channelManager';
 import { ChannelManagerTag } from './tags';

@@ -2,9 +2,10 @@
 /* eslint-disable max-classes-per-file */
 
 declare module 'hubot' {
-    import { EventEmitter } from 'events';
     import { Express } from 'express';
     import * as scoped from 'scoped-http-client';
+
+    import { EventEmitter } from 'events';
 
     interface Envelope {
         message: Message;

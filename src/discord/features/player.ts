@@ -1,12 +1,12 @@
 import { VoiceChannel, VoiceConnection } from 'discord.js';
-import { EventEmitter } from 'events';
-import urlRegex from 'url-regex';
-import { promisify } from 'util';
-import YoutubeDL from 'youtube-dl';
 import { inject, injectable } from 'inversify';
+import urlRegex from 'url-regex';
+import YoutubeDL from 'youtube-dl';
 
-import { ChannelManagerTag } from '../tags';
 import ChannelManager from '../channelManager';
+import { ChannelManagerTag } from '../tags';
+import { EventEmitter } from 'events';
+import { promisify } from 'util';
 
 export declare interface Player {
     on(event: 'play', listener: (info: YoutubeDL.VideoInfo) => void): this;

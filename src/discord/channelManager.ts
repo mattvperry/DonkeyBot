@@ -1,5 +1,6 @@
 import * as Discord from 'discord.js';
 import { injectable, inject } from 'inversify';
+
 import { ClientTag } from './tags';
 
 type ChannelType = Discord.Channel['type'];
