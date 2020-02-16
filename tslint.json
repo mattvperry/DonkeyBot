@@ -9,7 +9,8 @@
         "arrow-parens": [true, "ban-single-arg-parens"],
         "no-console": false,
         "interface-name": [true, "never-prefix"],
-        "array-type": [true, "array"]
+        "array-type": [true, "array"],
+        "max-classes-per-file": false
     },
     "rulesDirectory": []
 }

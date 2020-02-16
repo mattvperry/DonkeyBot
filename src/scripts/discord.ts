@@ -14,18 +14,29 @@
 //  Matt Perry
 
 import { Robot } from 'hubot';
+import { hasDiscordAdapter } from 'hubot-discord-ts';
 
-import { DiscordBot } from '../discord';
+import { DiscordBot } from '../discord/discordBot';
+import { createContainer } from '../discord/registrar';
+import { DiscordBotTag } from '../discord/tags';
 
-export = async (robot: Robot) => {
-    if (robot.adapterName !== 'discord-ts') {
+export = (robot: Robot) => {
+    if (!hasDiscordAdapter(robot)) {
         return;
     }
 
-    const client = (robot.adapter as any).client;
-    const bot = new DiscordBot(robot, client);
     try {
-        await bot.connect();
+        const container = createContainer(robot.adapter.client);
+        const bot = container.get<DiscordBot>(DiscordBotTag);
+
+        for (const reg of bot.connect()) {
+            robot[reg.type](reg.test, async ({ message, match }) => {
+                const userId = message.user.id;
+                const channelId = message.room;
+                const resp = await bot.createResponder(userId, channelId);
+                await reg.callback(resp, match);
+            });
+        }
     } catch (e) {
         console.log(e);
     }

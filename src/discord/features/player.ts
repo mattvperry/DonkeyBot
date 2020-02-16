@@ -3,6 +3,15 @@ import { EventEmitter } from 'events';
 import urlRegex from 'url-regex';
 import { promisify } from 'util';
 import YoutubeDL from 'youtube-dl';
+import { inject, injectable } from 'inversify';
+
+import { ChannelManagerTag } from '../tags';
+import { ChannelManager } from '../channelManager';
+
+export declare interface Player {
+    on(event: 'play', listener: (info: YoutubeDL.VideoInfo) => void): this;
+    on(event: 'end', listener: () => void): this;
+}
 
 export class Player extends EventEmitter {
     public readonly queue: YoutubeDL.VideoInfo[] = [];
@@ -15,14 +24,10 @@ export class Player extends EventEmitter {
     }
 
     public get time() {
-        if (!this.connection) {
-            return 0;
-        }
-
-        return this.connection.dispatcher.streamTime;
+        return this.connection?.dispatcher?.streamTime ?? 0;
     }
 
-    public add = async (search: string) => {
+    public async add(search: string) {
         if (!urlRegex({ exact: true }).test(search)) {
             search = `ytsearch1:${search}`;
         }
@@ -31,35 +36,27 @@ export class Player extends EventEmitter {
         this.queue.push(info);
         if (this.queue.length === 1) {
             this.connection = await this.voiceChannel.join();
+            this.connection.on('error', () => this.clear());
             this.executeQueue();
         }
 
         return info;
     }
 
-    public skip = () => {
-        if (!this.connection) {
-            return;
-        }
-
-        if (this.connection.dispatcher.paused) {
+    public skip() {
+        if (this.connection?.dispatcher.paused) {
             this.connection.dispatcher.resume();
         }
 
-        this.connection.dispatcher.end();
+        this.connection?.dispatcher.end();
     }
 
-    public clear = () => {
+    public clear() {
         this.queue.length = 0;
-        if (!this.connection) {
-            return;
-        }
-
-        this.connection.dispatcher.end();
         this.end();
     }
 
-    public volume = (volume: number) => {
+    public volume(volume: number) {
         if (!this.connection) {
             return;
         }
@@ -68,7 +65,7 @@ export class Player extends EventEmitter {
         this.connection.dispatcher.setVolume(volume / 100);
     }
 
-    public pause = () => {
+    public pause() {
         if (!this.connection || this.connection.dispatcher.paused) {
             return;
         }
@@ -76,7 +73,7 @@ export class Player extends EventEmitter {
         this.connection.dispatcher.pause();
     }
 
-    public resume = () => {
+    public resume() {
         if (!this.connection || !this.connection.dispatcher.paused) {
             return;
         }
@@ -84,11 +81,7 @@ export class Player extends EventEmitter {
         this.connection.dispatcher.resume();
     }
 
-    private executeQueue = () => {
-        if (!this.connection) {
-            return;
-        }
-
+    private async executeQueue() {
         if (this.queue.length === 0) {
             this.end();
             return;
@@ -96,40 +89,38 @@ export class Player extends EventEmitter {
 
         const video = this.queue[0];
         this.emit('play', video);
-        const stream = YoutubeDL(video.url);
-        const dispatcher = this.connection.play(stream, {
-            seek: 0,
-            volume: this.currentVolume / 100,
-        });
 
-        const next = () => {
-            this.queue.shift();
-            this.executeQueue();
-        };
+        try {
+            await this.play(YoutubeDL(video.url));
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        } catch(e) {
+            console.log(e);
+        }
 
-        this.connection.on('error', error => {
-            console.log(error);
-            next();
-        });
+        this.queue.shift();
+        this.executeQueue();
+    }
 
-        dispatcher.on('error', error => {
-            console.log(error);
-            next();
-        });
-
-        dispatcher.on('end', () => setTimeout(() => {
-            if (this.queue.length > 0) {
-                next();
+    private play(stream: ReturnType<typeof YoutubeDL>) {
+        return new Promise((resolve, reject) => {
+            if (!this.connection) {
+                reject();
+                return;
             }
-        }, 1000));
+
+            const dispatcher = this.connection.play(stream, {
+                seek: 0,
+                volume: this.currentVolume / 100,
+            });
+
+            dispatcher.on('error', reject);
+            dispatcher.on('end', resolve);
+        });
     }
 
     private end() {
-        if (!this.connection) {
-            return;
-        }
-
-        this.connection.disconnect();
+        this.connection?.dispatcher?.end();
+        this.connection?.disconnect();
         this.voiceChannel.leave();
         this.emit('end');
     }
@@ -137,4 +128,15 @@ export class Player extends EventEmitter {
     private getInfo = (url: string, args: string[], opts?: any) => (
         promisify<string, string[], any, YoutubeDL.VideoInfo>(YoutubeDL.getInfo)(url, args, opts)
     )
+}
+
+@injectable()
+export class PlayerFactory {
+    constructor(@inject(ChannelManagerTag) private channels: ChannelManager) {
+    }
+
+    public createPlayer(channel: string): Player | undefined {
+        const games = this.channels.fetchByName(channel, 'voice');
+        return games && new Player(games);
+    }
 }

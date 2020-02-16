@@ -21,10 +21,12 @@ declare module "hubot" {
         (matched: boolean): void;
     }
 
-    export interface User extends Object {
+    export class User extends Object {
         id: string;
         name: string;
         room?: string;
+        [key: string]: any;
+        constructor(id: string, options?: any);
     }
 
     export interface Brain {
@@ -45,17 +47,20 @@ declare module "hubot" {
         usersForFuzzyName(fuzzyName: string): User[];
     }
 
-    export interface Robot extends EventEmitter {
+    export interface Robot<T extends Adapter = Adapter> extends EventEmitter {
+        name: string;
         adapterName: string;
-        adapter: Adapter;
+        adapter: T;
         brain: Brain;
         router: Express;
+        logger: any;
 
         new(adapterPath: string, adapter: string, http: boolean, name?: string, alias?: boolean): Robot;
         hear(regex: RegExp, callback: ResponseCallback): void;
         hear(regex: RegExp, options: any, callback: ResponseCallback): void;
         respond(regex: RegExp, callback: ResponseCallback): void;
         respond(regex: RegExp, options: any, callback: ResponseCallback): void;
+        receive(message: Message): void;
         enter(callback: ResponseCallback): void;
         enter(options: any, callback: ResponseCallback): void;
         leave(callback: ResponseCallback): void;
@@ -70,8 +75,10 @@ declare module "hubot" {
         http(url: string, options: scoped.Options): scoped.ScopedClient;
     }
 
-    export interface Adapter extends EventEmitter {
-        new(robot: Robot): Adapter;
+    export class Adapter extends EventEmitter {
+        robot: Robot;
+
+        constructor(robot: Robot);
         send(envelope: Envelope, ...strings: string[]): void;
         emote(envelope: Envelope, ...strings: string[]): void;
         reply(envelope: Envelope, ...strings: string[]): void;
@@ -115,15 +122,15 @@ declare module "hubot" {
         new(robot: Robot, regex: RegExp, options: any, callback: ResponseCallback): TextListener;
     }
 
-    export interface Message {
+    export class Message {
         user: User;
         room: string;
-        new(user: User, done?: boolean): Message;
+        constructor(user: User, done?: boolean);
         finish(): void;
     }
 
-    export interface TextMessage extends Message {
-        new(user: User, text: string, id: string): TextMessage;
+    export class TextMessage extends Message {
+        constructor(user: User, text: string, id: string);
         match(regex: RegExp): RegExpMatchArray;
         toString(): string;
     }
