@@ -12,7 +12,7 @@ export class GamesNotificationFeature extends Feature {
         super();
     }
 
-    public* setup(): Iterable<Registration> {
+    public *setup(): Iterable<Registration> {
         this.channels.onVoiceChannelEnter('Games', member => {
             const general = this.channels.fetchByName('general', 'text');
             if (!general) {
@@ -21,7 +21,7 @@ export class GamesNotificationFeature extends Feature {
 
             const currentTime = Date.now();
             const userTime = this.timeMap[member.displayName];
-            if (!userTime || (currentTime - userTime) > 60000) {
+            if (!userTime || currentTime - userTime > 60000) {
                 this.timeMap[member.displayName] = currentTime;
                 general.send(`${member.displayName} wants to play games!`);
             }

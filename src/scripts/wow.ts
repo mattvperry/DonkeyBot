@@ -20,10 +20,10 @@ interface WOWData {
 interface RaiderIO {
     name: string;
     mythic_plus_scores: {
-        all: number,
-        dps: number,
-        healer: number,
-        tank: number,
+        all: number;
+        dps: number;
+        healer: number;
+        tank: number;
     };
 }
 
@@ -33,10 +33,10 @@ interface PlayerId {
     region: string;
 }
 
-const key               = process.env.HUBOT_WOW_API_KEY;
-const armoryUrl         = 'https://us.api.battle.net/wow';
-const raiderIOUrl       = `https://raider.io/api/v1`;
-const locale            = 'en_us';
+const key = process.env.HUBOT_WOW_API_KEY;
+const armoryUrl = 'https://us.api.battle.net/wow';
+const raiderIOUrl = `https://raider.io/api/v1`;
+const locale = 'en_us';
 const users: PlayerId[] = [
     { name: 'Titanburn', realm: 'Thrall', region: 'us' },
     { name: 'Titansmite', realm: 'Thrall', region: 'us' },
@@ -91,19 +91,23 @@ async function makeRanking<T>(
 }
 
 async function ilevelList(res: Response) {
-    res.send(await makeRanking(
-        getIlvl,
-        i => i.ilvlEquip,
-        c => `${c.name}: ${c.ilvlEquip} (${c.ilvl})`,
-    ));
+    res.send(
+        await makeRanking(
+            getIlvl,
+            i => i.ilvlEquip,
+            c => `${c.name}: ${c.ilvlEquip} (${c.ilvl})`,
+        ),
+    );
 }
 
 async function raiderioScore(res: Response) {
-    res.send(await makeRanking(
-        getRaiderIO,
-        i => i.mythic_plus_scores.all,
-        c => `${c.name}: ${c.mythic_plus_scores.all}`,
-    ));
+    res.send(
+        await makeRanking(
+            getRaiderIO,
+            i => i.mythic_plus_scores.all,
+            c => `${c.name}: ${c.mythic_plus_scores.all}`,
+        ),
+    );
 }
 
 async function affixes(res: Response) {

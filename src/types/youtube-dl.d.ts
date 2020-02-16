@@ -1,5 +1,5 @@
-declare module "youtube-dl" {
-    import { Readable } from "stream";
+declare module 'youtube-dl' {
+    import { Readable } from 'stream';
 
     namespace YoutubeDL {
         interface VideoInfo {

@@ -1,7 +1,7 @@
-declare module "hubot" {
+declare module 'hubot' {
     import { EventEmitter } from 'events';
     import { Express } from 'express';
-    import * as scoped from "scoped-http-client";
+    import * as scoped from 'scoped-http-client';
 
     interface Envelope {
         message: Message;
@@ -29,8 +29,8 @@ declare module "hubot" {
         constructor(id: string, options?: any);
     }
 
-    export interface Brain {
-        new(robot: Robot): Brain;
+    export class Brain {
+        constructor(robot: Robot);
         set(key: any): void;
         set<T = any>(key: string, value: T): void;
         get<T = any>(key: any): T | null | undefined;
@@ -47,7 +47,7 @@ declare module "hubot" {
         usersForFuzzyName(fuzzyName: string): User[];
     }
 
-    export interface Robot<T extends Adapter = Adapter> extends EventEmitter {
+    export class Robot<T extends Adapter = Adapter> extends EventEmitter {
         name: string;
         adapterName: string;
         adapter: T;
@@ -55,7 +55,7 @@ declare module "hubot" {
         router: Express;
         logger: any;
 
-        new(adapterPath: string, adapter: string, http: boolean, name?: string, alias?: boolean): Robot;
+        constructor(adapterPath: string, adapter: string, http: boolean, name?: string, alias?: boolean);
         hear(regex: RegExp, callback: ResponseCallback): void;
         hear(regex: RegExp, options: any, callback: ResponseCallback): void;
         respond(regex: RegExp, callback: ResponseCallback): void;
@@ -95,11 +95,11 @@ declare module "hubot" {
         http(url: string): scoped.ScopedClient;
     }
 
-    export interface Response {
+    export class Response {
         match: RegExpMatchArray;
         message: Message;
 
-        new(robot: Robot, message: Message, match: RegExpMatchArray): Response;
+        constructor(robot: Robot, message: Message, match: RegExpMatchArray);
         send(...strings: string[]): void;
         emote(...strings: string[]): void;
         reply(...strings: string[]): void;
@@ -111,15 +111,15 @@ declare module "hubot" {
         http(url: string, options?: scoped.Options): scoped.ScopedClient;
     }
 
-    export interface Listener {
-        new(robot: Robot, matcher: Matcher, callback: ResponseCallback): Listener;
-        new(robot: Robot, matcher: Matcher, options: any, callback: ResponseCallback): Listener;
+    export class Listener {
+        constructor(robot: Robot, matcher: Matcher, callback: ResponseCallback);
+        constructor(robot: Robot, matcher: Matcher, options: any, callback: ResponseCallback);
         call(message: Message, callback: ListenerCallback): boolean;
     }
 
-    export interface TextListener extends Listener {
-        new(robot: Robot, regex: RegExp, callback: ResponseCallback): TextListener;
-        new(robot: Robot, regex: RegExp, options: any, callback: ResponseCallback): TextListener;
+    export class TextListener extends Listener {
+        constructor(robot: Robot, regex: RegExp, callback: ResponseCallback);
+        constructor(robot: Robot, regex: RegExp, options: any, callback: ResponseCallback);
     }
 
     export class Message {
@@ -135,16 +135,13 @@ declare module "hubot" {
         toString(): string;
     }
 
-    export interface EnterMessage extends Message {
-    }
+    export type EnterMessage = Message;
 
-    export interface LeaveMessage extends Message {
-    }
+    export type LeaveMessage = Message;
 
-    export interface TopicMessage extends Message {
-    }
+    export type TopicMessage = Message;
 
-    export interface CatchAllMessage extends Message {
-        new(message: Message): CatchAllMessage;
+    export class CatchAllMessage extends Message {
+        constructor(message: Message);
     }
 }

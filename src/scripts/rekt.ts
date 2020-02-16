@@ -31,7 +31,7 @@ const rekts = [
     'Rekt markes the spot',
     'Caught rekt handed',
     'The Rekt Side Story',
-    'Singin\' In The Rekt',
+    "Singin' In The Rekt",
     'Painting The Roses Rekt',
     'Rekt Van Winkle',
     'Parks and Rekt',
@@ -40,7 +40,7 @@ const rekts = [
     'The Rekt Prince of Bel-Air',
     'A Game of Rekt',
     'Rektflix',
-    'Rekt it like it\'s hot',
+    "Rekt it like it's hot",
     'RektBox 360',
     'The Rekt-men',
     'School Of Rekt',
@@ -83,7 +83,7 @@ const rekts = [
     'Batrekt Begins',
     '2001: A Rekt Odyssey',
     'The Wolf of Rekt Street',
-    'Rekt\'s Labyrinth',
+    "Rekt's Labyrinth",
     '12 Years a Rekt',
     'Gravirekt',
     'Finding Rekt',
@@ -99,6 +99,7 @@ const rekts = [
     'Erektile Dysfunction',
 ];
 
-export = (robot: Robot) => robot.hear(/rekt/i, res => {
-    res.send(`${unchecked} Not rekt\n${checked} ${res.random(rekts)}`);
-});
+export = (robot: Robot) =>
+    robot.hear(/rekt/i, res => {
+        res.send(`${unchecked} Not rekt\n${checked} ${res.random(rekts)}`);
+    });

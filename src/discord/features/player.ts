@@ -93,7 +93,7 @@ export class Player extends EventEmitter {
         try {
             await this.play(YoutubeDL(video.url));
             await new Promise(resolve => setTimeout(resolve, 1000));
-        } catch(e) {
+        } catch (e) {
             console.log(e);
         }
 
@@ -125,15 +125,13 @@ export class Player extends EventEmitter {
         this.emit('end');
     }
 
-    private getInfo = (url: string, args: string[], opts?: any) => (
-        promisify<string, string[], any, YoutubeDL.VideoInfo>(YoutubeDL.getInfo)(url, args, opts)
-    )
+    private getInfo = (url: string, args: string[], opts?: any) =>
+        promisify<string, string[], any, YoutubeDL.VideoInfo>(YoutubeDL.getInfo)(url, args, opts);
 }
 
 @injectable()
 export class PlayerFactory {
-    constructor(@inject(ChannelManagerTag) private channels: ChannelManager) {
-    }
+    constructor(@inject(ChannelManagerTag) private channels: ChannelManager) {}
 
     public createPlayer(channel: string): Player | undefined {
         const games = this.channels.fetchByName(channel, 'voice');

@@ -61,7 +61,7 @@ const playGame = (roll: number, snipe: number) => {
 };
 
 const calculateWinRate = ({ gamesPlayed, gamesWon }: PlayerStats) =>
-    gamesPlayed > 0 ? Math.round(gamesWon / gamesPlayed * 10000) / 100 : 0;
+    gamesPlayed > 0 ? Math.round((gamesWon / gamesPlayed) * 10000) / 100 : 0;
 
 const stringFns: Record<GameEvent, (c: GameContext) => string> = {
     [GameEvent.New]: ({ name, snipe }) =>
@@ -72,8 +72,7 @@ const stringFns: Record<GameEvent, (c: GameContext) => string> = {
         `(◠‿◠✿) ${name}, you roll a ${roll} and the donger lives! The donger thanks you (◠‿◠✿)`,
     [GameEvent.Draw]: ({ name, roll }) =>
         `ヽ༼ຈل͜ຈ༽/ ${name}, you roll a ${roll} and tie! The donger is merely wounded. He will recover! ヽ༼ຈل͜ຈ༽/`,
-    [GameEvent.Lose]: ({ name }) =>
-        `༼ つ x_x ༽つThe donger is dead. ${name}, you did this! You MONSTER! ༼ つ x_x ༽ つ`,
+    [GameEvent.Lose]: ({ name }) => `༼ つ x_x ༽つThe donger is dead. ${name}, you did this! You MONSTER! ༼ つ x_x ༽ つ`,
 };
 
 export = (robot: Robot) => {
@@ -117,16 +116,13 @@ export = (robot: Robot) => {
             return;
         }
 
-        const {
-            gamesPlayed = 0,
-            gamesWon = 0
-        } = state.stats[id] || {};
+        const { gamesPlayed = 0, gamesWon = 0 } = state.stats[id] || {};
 
         // Play game
         const event = playGame(roll, snipe);
         state.stats[id] = {
-            gamesPlayed: (event !== GameEvent.Draw ? gamesPlayed + 1 : gamesPlayed),
-            gamesWon: (event === GameEvent.Win ? gamesWon + 1 : gamesWon),
+            gamesPlayed: event !== GameEvent.Draw ? gamesPlayed + 1 : gamesPlayed,
+            gamesWon: event === GameEvent.Win ? gamesWon + 1 : gamesWon,
             userId: id,
         };
 

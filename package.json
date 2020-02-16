@@ -6,10 +6,6 @@
   "description": "A chatbot for Donkeys",
   "dependencies": {
     "@discordjs/opus": "^0.1.0",
-    "@types/express": "^4.17.1",
-    "@types/moment-duration-format": "^2.2.2",
-    "@types/node": "^13.7.1",
-    "@types/scoped-http-client": "^0.11.0",
     "axios": "^0.19.0",
     "bufferutil": "^4.0.1",
     "cheerio": "^1.0.0-rc.3",
@@ -38,7 +34,6 @@
     "moment-duration-format": "^2.3.2",
     "reflect-metadata": "^0.1.13",
     "ts-node": "^8.3.0",
-    "tslint": "^6.0.0",
     "typescript": "^3.5.3",
     "url-regex": "^5.0.0",
     "utf-8-validate": "^5.0.2",
@@ -46,6 +41,16 @@
     "zlib-sync": "^0.1.6"
   },
   "devDependencies": {
-    "@types/cheerio": "^0.22.13"
+    "@types/express": "^4.17.1",
+    "@types/moment-duration-format": "^2.2.2",
+    "@types/node": "^13.7.1",
+    "@types/scoped-http-client": "^0.11.0",
+    "@types/cheerio": "^0.22.13",
+    "@typescript-eslint/eslint-plugin": "^2.19.2",
+    "@typescript-eslint/parser": "^2.19.2",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "prettier": "^1.19.1"
   }
 }

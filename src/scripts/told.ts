@@ -15,7 +15,7 @@ const tolds = [
     '24 carat told',
     '2001: A Space Toldyssey',
     '3D Dot Told Heroes',
-    'Assassin\'s Creed: Tolderhood',
+    "Assassin's Creed: Tolderhood",
     'Avatold: The Last Airbender',
     'Battconstolds',
     'Battoldfield: Bad Company 2',
@@ -23,9 +23,9 @@ const tolds = [
     'Castlevania: RonTold of Blood',
     'Countold Strike',
     'Command & Conquer: Toldberian Sun',
-    'Conker\'s Bad Fur Day: Live and Retolded',
+    "Conker's Bad Fur Day: Live and Retolded",
     'Cyndaquil, Chicorita, and Toldodile',
-    'demon\'s told',
+    "demon's told",
     'Dragon Told Z: Toldkaichi Budokai',
     'Fear and Tolding in Las Vegas',
     'Gran Toldrismo 5',
@@ -34,7 +34,7 @@ const tolds = [
     'Half Life 2: Episode Told',
     'Ice-told',
     'http://cash4told.com',
-    'J.R.R Toldkien\'s Lord of the Told',
+    "J.R.R Toldkien's Lord of the Told",
     'Knights of the Told Republic',
     'Lead and Told: Gangs of the Wild West',
     'Left 4 Told',
@@ -45,7 +45,7 @@ const tolds = [
     'Metal Gear Toldid 3: Snake Eater',
     'Nintentold',
     'My Neighbor Toldtoro',
-    'My Little Sister can\'t be this Told',
+    "My Little Sister can't be this Told",
     'No country for told men',
     'Olympic Told Medal',
     'Pokemon Told and Silver',
@@ -57,7 +57,7 @@ const tolds = [
     'Super Mario SunTold',
     'Super Told Boy',
     'Stone-told Steve Austin',
-    'Texas Told \'em',
+    "Texas Told 'em",
     'The Elder Tolds IV: Oblivious',
     'The Legend of Eldorado : The Lost City of Told',
     'The Good, The Bad, and The Told',
@@ -173,12 +173,12 @@ const tolds = [
     'All Told Everything',
     'JRR Toldkien',
     'Reddit Told',
-    'Told\'s spaghetti',
+    "Told's spaghetti",
     'The Toldman Show',
     'Mementold',
     'Toldega Nights: The Ballad of Ricky Toldy',
     'Battold Royale',
-    'I\'ll have the toldalini Alfredo, please',
+    "I'll have the toldalini Alfredo, please",
     'The Big Letoldski',
     'Tolddock Saints',
     'Legend of Total Toldage',
@@ -196,6 +196,7 @@ const tolds = [
     'Tolden Caulfield',
 ];
 
-export = (robot: Robot) => robot.hear(/told/i, res => {
-    res.send(`${unchecked} Not told\n${checked} ${res.random(tolds)}`);
-});
+export = (robot: Robot) =>
+    robot.hear(/told/i, res => {
+        res.send(`${unchecked} Not told\n${checked} ${res.random(tolds)}`);
+    });

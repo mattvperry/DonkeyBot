@@ -8,11 +8,10 @@ import { Responder, ResponderFactory } from './responder';
 export class DiscordBot {
     constructor(
         @inject(ResponderFactoryTag) private responderFactory: ResponderFactory,
-        @multiInject(FeatureTag) private features: Feature[]
-    ) {
-    }
+        @multiInject(FeatureTag) private features: Feature[],
+    ) {}
 
-    public* connect() {
+    public *connect() {
         for (const feature of this.features) {
             yield* feature.setup();
         }

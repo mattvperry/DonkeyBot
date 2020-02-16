@@ -14,13 +14,13 @@ interface RedditResult {
     data: {
         children: {
             data: {
-                permalink: string,
-                title: string,
-                domain: string,
-                selftext: string,
-                url: string,
+                permalink: string;
+                title: string;
+                domain: string;
+                selftext: string;
+                url: string;
             };
-        }[],
+        }[];
     };
 }
 
@@ -44,10 +44,11 @@ async function onResponse(res: Response): Promise<void> {
     res.send(...messages);
 }
 
-export = (robot: Robot) => robot.respond(/(jerk)( me)?/i, async res => {
-    try {
-        await onResponse(res);
-    } catch (e) {
-        console.error(e);
-    }
-});
+export = (robot: Robot) =>
+    robot.respond(/(jerk)( me)?/i, async res => {
+        try {
+            await onResponse(res);
+        } catch (e) {
+            console.error(e);
+        }
+    });

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/camelcase */
+
 import { inject, injectable } from 'inversify';
 import { duration } from 'moment';
 
@@ -10,30 +12,26 @@ import { PlayerFactory } from './player';
 export class MusicPlayerFeature extends Feature {
     constructor(
         @inject(ActivityManagerTag) private activity: ActivityManager,
-        @inject(PlayerFactoryTag) private playerFactory: PlayerFactory
+        @inject(PlayerFactoryTag) private playerFactory: PlayerFactory,
     ) {
         super();
     }
 
-    public* setup(): Iterable<Registration> {
+    public *setup(): Iterable<Registration> {
         const player = this.playerFactory.createPlayer('Games');
         if (!player) {
             return;
         }
 
-        player.on('play', ({ title, webpage_url }) => (
-            this.activity.setActivity(title, 'LISTENING', webpage_url)
-        ));
+        player.on('play', ({ title, webpage_url }) => this.activity.setActivity(title, 'LISTENING', webpage_url));
 
-        player.on('end', () => (
-            this.activity.setActivity('nothing', 'LISTENING')
-        ));
+        player.on('end', () => this.activity.setActivity('nothing', 'LISTENING'));
 
         yield this.respond(/play( me)? (.*)$/i, async (resp, match) => {
             resp.operation(
                 () => player.add(match[2]),
                 ({ title, webpage_url }) => `Queued: ${title} ${webpage_url}`,
-                _ => `Failed to queue: ${match[2]}`
+                _ => `Failed to queue: ${match[2]}`,
             );
         });
 
@@ -57,10 +55,11 @@ export class MusicPlayerFeature extends Feature {
         });
 
         yield this.respond(/queue( me)?$/i, async resp => {
-            const formatMS = (ms: number) => duration(ms).format('h:mm:ss', {
-                forceLength: true,
-                stopTrim: 'm',
-            });
+            const formatMS = (ms: number) =>
+                duration(ms).format('h:mm:ss', {
+                    forceLength: true,
+                    stopTrim: 'm',
+                });
 
             const list = player.queue.map(({ title, _duration_raw }, index) => {
                 const time = formatMS(player.time);
