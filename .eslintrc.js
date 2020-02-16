@@ -18,7 +18,12 @@ module.exports = {
         project: './tsconfig.json'
     },
     rules: {
+        'no-console': 'off',
+        'no-restricted-syntax': ['error', 'FunctionDeclaration[generator=true]'],
+        'max-classes-per-file': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-misused-promises': ['error', { 'checksVoidReturn': false }],
         '@typescript-eslint/explicit-function-return-type': 'off',
-        '@typescript-eslint/no-unused-vars': ['error', { 'varsIgnorePattern': '_' }],
+        '@typescript-eslint/no-unused-vars': 'off',
     },
 };

@@ -21,7 +21,7 @@ type Channel<T extends ChannelType> = T extends 'dm'
     : never;
 
 @injectable()
-export class ChannelManager {
+export default class ChannelManager {
     constructor(@inject(ClientTag) private client: Discord.Client) {}
 
     public async fetchById<T extends ChannelType = ChannelType>(

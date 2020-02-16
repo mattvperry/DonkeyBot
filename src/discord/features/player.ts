@@ -6,7 +6,7 @@ import YoutubeDL from 'youtube-dl';
 import { inject, injectable } from 'inversify';
 
 import { ChannelManagerTag } from '../tags';
-import { ChannelManager } from '../channelManager';
+import ChannelManager from '../channelManager';
 
 export declare interface Player {
     on(event: 'play', listener: (info: YoutubeDL.VideoInfo) => void): this;
@@ -30,6 +30,7 @@ export class Player extends EventEmitter {
 
     public async add(search: string) {
         if (!urlRegex({ exact: true }).test(search)) {
+            // eslint-disable-next-line no-param-reassign
             search = `ytsearch1:${search}`;
         }
 

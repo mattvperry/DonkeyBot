@@ -4,15 +4,15 @@ import { Container } from 'inversify';
 import { Client } from 'discord.js';
 
 import * as tags from './tags';
-import { ActivityManager } from './activityManager';
-import { ChannelManager } from './channelManager';
+import ActivityManager from './activityManager';
+import ChannelManager from './channelManager';
 import { ResponderFactory } from './responder';
-import { DiscordBot } from './discordBot';
-import { Feature } from './features/feature';
-import { features } from './features';
+import DiscordBot from './discordBot';
+import Feature from './features/feature';
+import features from './features';
 import { PlayerFactory } from './features/player';
 
-export function createContainer(client: Client) {
+export default function createContainer(client: Client) {
     const container = new Container();
     container.bind<Client>(tags.ClientTag).toConstantValue(client);
 

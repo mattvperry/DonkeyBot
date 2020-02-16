@@ -1,3 +1,6 @@
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable max-classes-per-file */
+
 declare module 'hubot' {
     import { EventEmitter } from 'events';
     import { Express } from 'express';
