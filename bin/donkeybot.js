@@ -1,5 +1,7 @@
-var moment = require('moment');
-var momentDurationFormat = require("moment-duration-format");
+/* eslint-disable @typescript-eslint/no-var-requires */
+
+const moment = require('moment');
+const momentDurationFormat = require('moment-duration-format');
 momentDurationFormat(moment);
 
 require('ts-node/register');
