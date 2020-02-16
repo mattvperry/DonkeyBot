@@ -2,29 +2,32 @@ import { inject, injectable } from 'inversify';
 import { duration } from 'moment';
 
 import { Feature, Registration } from './feature';
-import { ChannelManagerTag, ActivityManagerTag } from '../tags';
+import { PlayerFactoryTag, ActivityManagerTag } from '../tags';
 import { ActivityManager } from '../activityManager';
-import { ChannelManager } from '../channelManager';
-import { Player } from './player';
+import { PlayerFactory } from './player';
 
 @injectable()
 export class MusicPlayerFeature extends Feature {
     constructor(
         @inject(ActivityManagerTag) private activity: ActivityManager,
-        @inject(ChannelManagerTag) private channels: ChannelManager
+        @inject(PlayerFactoryTag) private playerFactory: PlayerFactory
     ) {
         super();
     }
 
     public* setup(): Iterable<Registration> {
-        const games = this.channels.fetchByName('Games', 'voice');
-        if (!games) {
+        const player = this.playerFactory.createPlayer('Games');
+        if (!player) {
             return;
         }
 
-        const player = new Player(games);
-        player.on('play', ({ title, webpage_url }) => this.activity.setActivity(title, 'LISTENING', webpage_url));
-        player.on('end', () => this.activity.setActivity('nothing', 'LISTENING'));
+        player.on('play', ({ title, webpage_url }) => (
+            this.activity.setActivity(title, 'LISTENING', webpage_url)
+        ));
+
+        player.on('end', () => (
+            this.activity.setActivity('nothing', 'LISTENING')
+        ));
 
         yield this.respond(/play( me)? (.*)$/i, async (resp, match) => {
             resp.operation(

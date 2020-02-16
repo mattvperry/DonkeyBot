@@ -10,6 +10,7 @@ import { ResponderFactory } from './responder';
 import { DiscordBot } from './discordBot';
 import { Feature } from './features/feature';
 import { features } from './features';
+import { PlayerFactory } from './features/player';
 
 export function createContainer(client: Client) {
     const container = new Container();
@@ -19,6 +20,7 @@ export function createContainer(client: Client) {
     container.bind<ActivityManager>(tags.ActivityManagerTag).to(ActivityManager);
     container.bind<ResponderFactory>(tags.ResponderFactoryTag).to(ResponderFactory);
 
+    container.bind<PlayerFactory>(tags.PlayerFactoryTag).to(PlayerFactory);
     for (const feature of features) {
         container.bind<Feature>(tags.FeatureTag).to(feature);
     }
