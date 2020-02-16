@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/camelcase */
 
 import { inject, injectable } from 'inversify';
-import { duration } from 'moment';
 
+import msToTimestamp from '../../lib/duration';
 import ActivityManager from '../activityManager';
 import { PlayerFactoryTag, ActivityManagerTag } from '../tags';
 import Feature, { Registration } from './feature';
@@ -57,15 +57,9 @@ export default class MusicPlayerFeature extends Feature {
         });
 
         yield this.respond(/queue( me)?$/i, async resp => {
-            const formatMS = (ms: number) =>
-                duration(ms).format('h:mm:ss', {
-                    forceLength: true,
-                    stopTrim: 'm',
-                });
-
             const list = player.queue.map(({ title, _duration_raw }, index) => {
-                const time = formatMS(player.time);
-                const length = formatMS(_duration_raw * 1000);
+                const time = msToTimestamp(player.time);
+                const length = msToTimestamp(_duration_raw * 1000);
                 return `${index + 1}. ${title} [${index === 0 ? `${time}/` : ''}${length}]`;
             });
 
