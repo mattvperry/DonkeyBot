@@ -1,0 +1,17 @@
+name: Run ESLint on Pull Requests
+
+on: [pull_request]
+
+jobs:
+  build:
+    name: Run ESLint
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 13
+    - name: Install deps
+      run: yarn --frozen-lockfile
+    - name: Run ESLint
+      run: eslint . --ext .js,.ts
