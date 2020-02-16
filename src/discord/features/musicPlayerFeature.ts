@@ -1,71 +1,59 @@
 import { inject, injectable } from 'inversify';
-import { Robot } from 'hubot';
 import { duration } from 'moment';
 
-import { Feature } from '.';
-import { ResponderTag, ChannelManagerTag, RobotTag, ActivityManagerTag } from '../tags';
+import { Feature, Registration } from './feature';
+import { ChannelManagerTag, ActivityManagerTag } from '../tags';
 import { ActivityManager } from '../activityManager';
-import { Responder } from '../responder';
 import { ChannelManager } from '../channelManager';
 import { Player } from './player';
 
 @injectable()
-export class MusicPlayerFeature implements Feature {
+export class MusicPlayerFeature extends Feature {
     constructor(
-        @inject(RobotTag) private robot: Robot,
         @inject(ActivityManagerTag) private activity: ActivityManager,
-        @inject(ChannelManagerTag) private channels: ChannelManager,
-        @inject(ResponderTag) private responder: Responder) {
+        @inject(ChannelManagerTag) private channels: ChannelManager
+    ) {
+        super();
     }
 
-    public setup(): void {
-        const games = this.channels.getChannelByName('Games', 'voice');
+    public* setup(): Iterable<Registration> {
+        const games = this.channels.fetchByName('Games', 'voice');
         if (!games) {
             return;
         }
 
         const player = new Player(games);
+        player.on('play', ({ title, webpage_url }) => this.activity.setActivity(title, 'LISTENING', webpage_url));
+        player.on('end', () => this.activity.setActivity('nothing', 'LISTENING'));
 
-        player.on('play', async info => {
-            await this.activity.setActivity(info.title, 'LISTENING', info.webpage_url);
+        yield this.respond(/play( me)? (.*)$/i, async (resp, match) => {
+            resp.operation(
+                () => player.add(match[2]),
+                ({ title, webpage_url }) => `Queued: ${title} ${webpage_url}`,
+                _ => `Failed to queue: ${match[2]}`
+            );
         });
 
-        player.on('end', async () => {
-            await this.activity.setActivity('nothing', 'LISTENING');
-        });
-
-        this.robot.respond(/play( me)? (.*)$/i, async resp => {
-            const sent = await this.responder.send(resp, 'Loading...');
-            const msg = Array.isArray(sent) ? sent[0] : sent;
-
-            try {
-                const info = await player.add(resp.match[2]);
-                await msg.edit(`Queued: ${info.title} [${info.webpage_url}]`);
-            } catch (e) {
-                await msg.edit(`Failed to queue: ${resp.match[2]}`);
-            }
-        });
-
-        this.robot.respond(/volume( me)? (\d*)$/i, async resp => {
-            const volume = +resp.match[2];
+        yield this.respond(/volume( me)? (\d*)$/i, async (resp, match) => {
+            const volume = +match[2];
             if (volume > 200 || volume < 0) {
-                return await this.responder.flashMessage(resp, 'Volume out of range!');
+                return await resp.flashMessage('Volume out of range!');
             }
 
-            player.volume(+resp.match[2]);
+            player.volume(volume);
             resp.reply(`Volume set to ${volume}`);
         });
 
-        this.robot.respond(/skip( me)?$/i, async resp => {
+        yield this.respond(/skip( me)?$/i, async resp => {
             if (player.queue.length === 0) {
-                return await this.responder.flashMessage(resp, 'Nothing to skip');
+                return await resp.flashMessage('Nothing to skip');
             }
 
             player.skip();
             resp.reply('Skipped current song.');
         });
 
-        this.robot.respond(/queue( me)?$/i, async resp => {
+        yield this.respond(/queue( me)?$/i, async resp => {
             const formatMS = (ms: number) => duration(ms).format('h:mm:ss', {
                 forceLength: true,
                 stopTrim: 'm',
@@ -78,25 +66,23 @@ export class MusicPlayerFeature implements Feature {
             });
 
             if (list.length === 0) {
-                resp.send('Queue is currently empty.');
+                await resp.send('Queue is currently empty.');
             } else {
-                await this.responder.send(resp, list.join('\n'), {
-                    code: true,
-                });
+                await resp.send(list.join('\n'), { code: true });
             }
         });
 
-        this.robot.respond(/pause( me)?$/i, resp => {
+        yield this.respond(/pause( me)?$/i, async resp => {
             player.pause();
             resp.reply('Playback paused.');
         });
 
-        this.robot.respond(/resume( me)?$/i, resp => {
+        yield this.respond(/resume( me)?$/i, async resp => {
             player.resume();
             resp.reply('Playback resumed.');
         });
 
-        this.robot.respond(/clear( me)?$/i, resp => {
+        yield this.respond(/clear( me)?$/i, async resp => {
             player.clear();
             resp.reply('Queue cleared!');
         });

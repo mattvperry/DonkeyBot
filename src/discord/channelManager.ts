@@ -19,11 +19,20 @@ export class ChannelManager {
     constructor(@inject(ClientTag) private client: Discord.Client) {
     }
 
-    public fetchById(id: string, cache?: boolean): Promise<Discord.Channel> {
-        return this.client.channels.fetch(id, cache);
+    public async fetchById<T extends ChannelType = ChannelType>(
+        id: string,
+        type: T,
+        cache?: boolean
+    ): Promise<Channel<T>> {
+        const channel = await this.client.channels.fetch(id, cache);
+        if (!this.channelIsType<T>(type)(channel)) {
+            throw new Error(`Channel with id ${id} and type ${type} not found.`);
+        }
+
+        return channel;
     }
 
-    public getChannelByName = <T extends NamedChannelType>(name: string, type: T): Channel<T> | undefined => {
+    public fetchByName = <T extends NamedChannelType>(name: string, type: T): Channel<T> | undefined => {
         return this.client.channels.cache
             .array()
             .filter(this.channelIsType(type))
@@ -32,7 +41,7 @@ export class ChannelManager {
 
     public onVoiceChannelEnter(name: string, cb: (member: Discord.GuildMember) => void) {
         this.client.on('voiceStateUpdate', (oldState, newState) => {
-            const channel = this.getChannelByName(name, 'voice');
+            const channel = this.fetchByName(name, 'voice');
             if (!channel
                 || !newState.member
                 || newState.member.id === this.client.user?.id
@@ -45,7 +54,7 @@ export class ChannelManager {
         });
     }
 
-    public channelIsType = <T extends ChannelType>(type: T) =>
+    private channelIsType = <T extends ChannelType>(type: T) =>
         (channel?: Discord.Channel | null): channel is Channel<T> => {
             return channel?.type === type;
         }

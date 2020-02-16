@@ -1,25 +1,23 @@
 import 'reflect-metadata';
 
-import { Robot } from 'hubot';
-import { DiscordAdapter } from 'hubot-discord-ts';
 import { Container } from 'inversify';
 import { Client } from 'discord.js';
 
 import * as tags from './tags';
 import { ActivityManager } from './activityManager';
 import { ChannelManager } from './channelManager';
-import { Responder } from './responder';
+import { ResponderFactory } from './responder';
 import { DiscordBot } from './discordBot';
-import { features, Feature } from './features';
+import { Feature } from './features/feature';
+import { features } from './features';
 
-export function createContainer(robot: Robot<DiscordAdapter>) {
+export function createContainer(client: Client) {
     const container = new Container();
-    container.bind<Robot>(tags.RobotTag).toConstantValue(robot);
-    container.bind<Client>(tags.ClientTag).toConstantValue(robot.adapter.client);
+    container.bind<Client>(tags.ClientTag).toConstantValue(client);
 
     container.bind<ChannelManager>(tags.ChannelManagerTag).to(ChannelManager);
     container.bind<ActivityManager>(tags.ActivityManagerTag).to(ActivityManager);
-    container.bind<Responder>(tags.ResponderTag).to(Responder);
+    container.bind<ResponderFactory>(tags.ResponderFactoryTag).to(ResponderFactory);
 
     for (const feature of features) {
         container.bind<Feature>(tags.FeatureTag).to(feature);

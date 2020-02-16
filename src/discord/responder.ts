@@ -1,41 +1,65 @@
 import { inject, injectable } from 'inversify';
-import { TextChannel, MessageOptions, MessageAdditions, Message } from 'discord.js';
-import { Response } from 'hubot';
+import { MessageOptions, MessageAdditions, Message, TextChannel } from 'discord.js';
 
 import { ChannelManager } from './channelManager';
 import { ChannelManagerTag } from './tags';
 
-@injectable()
 export class Responder {
-    constructor(@inject(ChannelManagerTag) private channels: ChannelManager) {
+    constructor(private userId: string, private channel: TextChannel) {
     }
 
-    public async send(
-        resp: Response,
-        content: string | string[],
-        options?: MessageOptions | MessageAdditions
-    ): Promise<Message> {
-        const channel = await this.getResponseChannel(resp);
-        return await channel.send(content, options);
+    public send(content: string | string[], options?: MessageOptions | MessageAdditions): Promise<Message> {
+        return this.channel.send(content, options);
     }
 
-    public flashMessage = async (response: Response, text: string) => {
-        const sent = await this.send(response, text);
-        const msg = Array.isArray(sent) ? sent[0] : sent;
+    public async reply(content: string | string[], options?: MessageOptions | MessageAdditions): Promise<Message> {
+        if (!Array.isArray(content)) {
+            return await this.send(this.prependMention(content), options);
+        }
+
+        const [first, ...rest] = content;
+        return await this.send(
+            [this.prependMention(first), ...rest],
+            options
+        );
+    }
+
+    public async operation<T>(
+        op: () => Promise<T>,
+        success: (ret: T) => string,
+        error: (e: Error) => string,
+        loading: string = 'Loading...'
+    ): Promise<void> {
+        const msg = await this.send(loading);
+        try {
+            const ret = await op();
+            await msg.edit(success(ret));
+        } catch (e) {
+            await msg.edit(error(e));
+        }
+    }
+
+    public flashMessage = async (text: string) => {
+        const msg = await this.send(text);
         await msg.delete({ timeout: 2500 });
     }
 
-    private getResponseChannel = async (response: Response): Promise<TextChannel> => {
-        const room = response.message.user.room;
-        if (!room) {
+    private prependMention = (text: string) => {
+        return `<@${this.userId}> ${text}`;
+    }
+}
+
+@injectable()
+export class ResponderFactory {
+    constructor(@inject(ChannelManagerTag) private channels: ChannelManager) {
+    }
+
+    public async createForRoom(userId: string, channelId?: string): Promise<Responder> {
+        if (!channelId) {
             throw new Error('Undefined room id');
         }
 
-        const channel = await this.channels.fetchById(room);
-        if (!this.channels.channelIsType('text')(channel)) {
-            throw new Error('Text channel not found');
-        }
-
-        return channel;
+        const channel = await this.channels.fetchById(channelId, 'text');
+        return new Responder(userId, channel);
     }
 }

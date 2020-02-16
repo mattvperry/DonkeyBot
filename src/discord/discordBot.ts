@@ -1,16 +1,24 @@
-import { injectable, multiInject } from 'inversify';
+import { injectable, multiInject, inject } from 'inversify';
 
-import { Feature } from './features';
-import { FeatureTag } from './tags';
+import { Feature } from './features/feature';
+import { FeatureTag, ResponderFactoryTag } from './tags';
+import { Responder, ResponderFactory } from './responder';
 
 @injectable()
 export class DiscordBot {
-    constructor(@multiInject(FeatureTag) private features: Feature[]) {
+    constructor(
+        @inject(ResponderFactoryTag) private responderFactory: ResponderFactory,
+        @multiInject(FeatureTag) private features: Feature[]
+    ) {
     }
 
-    public connect = async () => {
+    public* connect() {
         for (const feature of this.features) {
-            feature.setup();
+            yield* feature.setup();
         }
+    }
+
+    public createResponder(userId: string, channelId?: string): Promise<Responder> {
+        return this.responderFactory.createForRoom(userId, channelId);
     }
 }
