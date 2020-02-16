@@ -16,8 +16,8 @@
 import { Robot } from 'hubot';
 import { hasDiscordAdapter } from 'hubot-discord-ts';
 
-import { DiscordBot } from '../discord/discordBot';
-import { createContainer } from '../discord/registrar';
+import DiscordBot from '../discord/discordBot';
+import createContainer from '../discord/registrar';
 import { DiscordBotTag } from '../discord/tags';
 
 export = (robot: Robot) => {

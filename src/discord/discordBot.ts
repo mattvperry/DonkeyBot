@@ -1,11 +1,11 @@
 import { injectable, multiInject, inject } from 'inversify';
 
-import { Feature } from './features/feature';
-import { FeatureTag, ResponderFactoryTag } from './tags';
+import Feature from './features/feature';
 import { Responder, ResponderFactory } from './responder';
+import { FeatureTag, ResponderFactoryTag } from './tags';
 
 @injectable()
-export class DiscordBot {
+export default class DiscordBot {
     constructor(
         @inject(ResponderFactoryTag) private responderFactory: ResponderFactory,
         @multiInject(FeatureTag) private features: Feature[],

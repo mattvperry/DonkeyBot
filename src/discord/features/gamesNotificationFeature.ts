@@ -1,17 +1,18 @@
 import { inject, injectable } from 'inversify';
 
+import ChannelManager from '../channelManager';
 import { ChannelManagerTag } from '../tags';
-import { ChannelManager } from '../channelManager';
-import { Feature, Registration } from './feature';
+import Feature, { Registration } from './feature';
 
 @injectable()
-export class GamesNotificationFeature extends Feature {
+export default class GamesNotificationFeature extends Feature {
     private readonly timeMap: Record<string, number | undefined> = {};
 
     constructor(@inject(ChannelManagerTag) private channels: ChannelManager) {
         super();
     }
 
+    // eslint-disable-next-line require-yield
     public *setup(): Iterable<Registration> {
         this.channels.onVoiceChannelEnter('Games', member => {
             const general = this.channels.fetchByName('general', 'text');
@@ -26,7 +27,5 @@ export class GamesNotificationFeature extends Feature {
                 general.send(`${member.displayName} wants to play games!`);
             }
         });
-
-        return;
     }
 }

@@ -34,6 +34,7 @@ const parseCats = (catsXml: string) => {
 
 async function getCats(count?: number, category?: string): Promise<string[]> {
     if (category && !categories.includes(category)) {
+        // eslint-disable-next-line no-param-reassign
         category = undefined;
     }
 

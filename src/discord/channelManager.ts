@@ -1,5 +1,6 @@
 import * as Discord from 'discord.js';
 import { injectable, inject } from 'inversify';
+
 import { ClientTag } from './tags';
 
 type ChannelType = Discord.Channel['type'];
@@ -21,7 +22,7 @@ type Channel<T extends ChannelType> = T extends 'dm'
     : never;
 
 @injectable()
-export class ChannelManager {
+export default class ChannelManager {
     constructor(@inject(ClientTag) private client: Discord.Client) {}
 
     public async fetchById<T extends ChannelType = ChannelType>(

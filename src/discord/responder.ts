@@ -1,7 +1,7 @@
-import { inject, injectable } from 'inversify';
 import { MessageOptions, MessageAdditions, Message, TextChannel } from 'discord.js';
+import { inject, injectable } from 'inversify';
 
-import { ChannelManager } from './channelManager';
+import ChannelManager from './channelManager';
 import { ChannelManagerTag } from './tags';
 
 export class Responder {
@@ -11,13 +11,13 @@ export class Responder {
         return this.channel.send(content, options);
     }
 
-    public async reply(content: string | string[], options?: MessageOptions | MessageAdditions): Promise<Message> {
+    public reply(content: string | string[], options?: MessageOptions | MessageAdditions): Promise<Message> {
         if (!Array.isArray(content)) {
-            return await this.send(this.prependMention(content), options);
+            return this.send(this.prependMention(content), options);
         }
 
         const [first, ...rest] = content;
-        return await this.send([this.prependMention(first), ...rest], options);
+        return this.send([this.prependMention(first), ...rest], options);
     }
 
     public async operation<T>(

@@ -19,7 +19,7 @@ let total = 0;
 let lastTime = Date.now();
 const resetHype = () => {
     const curTime: number = Date.now();
-    total = total - Math.floor((curTime - lastTime) / timeDecay) * hypeIncrement;
+    total -= Math.floor((curTime - lastTime) / timeDecay) * hypeIncrement;
     lastTime = curTime;
     if (total < 0) {
         total = 0;

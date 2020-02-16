@@ -1,18 +1,18 @@
 import 'reflect-metadata';
 
-import { Container } from 'inversify';
 import { Client } from 'discord.js';
+import { Container } from 'inversify';
 
-import * as tags from './tags';
-import { ActivityManager } from './activityManager';
-import { ChannelManager } from './channelManager';
-import { ResponderFactory } from './responder';
-import { DiscordBot } from './discordBot';
-import { Feature } from './features/feature';
-import { features } from './features';
+import ActivityManager from './activityManager';
+import ChannelManager from './channelManager';
+import DiscordBot from './discordBot';
+import features from './features';
+import Feature from './features/feature';
 import { PlayerFactory } from './features/player';
+import { ResponderFactory } from './responder';
+import * as tags from './tags';
 
-export function createContainer(client: Client) {
+export default function createContainer(client: Client) {
     const container = new Container();
     container.bind<Client>(tags.ClientTag).toConstantValue(client);
 
