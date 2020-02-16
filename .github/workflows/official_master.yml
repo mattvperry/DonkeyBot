@@ -1,0 +1,28 @@
+name: Official Build CI
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  IMAGE_NAME: donkeybot
+  REGISTRY: suchtilt.azurecr.io
+  
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Login to docker
+      env:
+        REGISTRY_PW: ${{ secrets.CONTAINER_REGISTRY_PW }}
+      run: echo -e "$REGISTRY_PW" | docker login -u suchtilt --password-stdin "$REGISTRY"
+    - name: Docker actions
+      run: |
+        docker pull "$REGISTRY/$IMAGE_NAME" || true
+        docker build --pull --cache-from "$REGISTRY/$IMAGE_NAME" --tag "$REGISTRY/$IMAGE_NAME" .
+        docker images
+        docker push "$REGISTRY/$IMAGE_NAME"
