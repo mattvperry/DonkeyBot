@@ -6,7 +6,7 @@
   "description": "A chatbot for Donkeys",
   "scripts": {
     "lint": "yarn eslint . --ext .js,.ts",
-    "typeCheck": "yarn tsc --noEmit",
+    "typeCheck": "yarn tsc --noEmit"
   },
   "dependencies": {
     "@discordjs/opus": "^0.1.0",
