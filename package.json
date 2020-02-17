@@ -39,6 +39,7 @@
     "typescript": "^3.5.3",
     "url-regex": "^5.0.0",
     "utf-8-validate": "^5.0.2",
+    "vm2": "^3.8.4",
     "youtube-dl": "^3.0.2",
     "zlib-sync": "^0.1.6"
   },
