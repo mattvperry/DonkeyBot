@@ -9,7 +9,7 @@
 
 import { Robot } from 'hubot';
 import { create } from 'ts-node';
-import { NodeVM } from 'vm2';
+import { VM } from 'vm2';
 
 import crypto from 'crypto';
 
@@ -18,9 +18,6 @@ const md5 = (input: string) =>
         .createHash('md5')
         .update(input)
         .digest('hex');
-
-type SupportedConsoleFns = 'log' | 'warn' | 'error';
-const consoleFns: SupportedConsoleFns[] = ['log', 'warn', 'error'];
 
 function repr(obj: any): string {
     if (obj == null || typeof obj === 'string' || typeof obj === 'number') {
@@ -38,30 +35,33 @@ function repr(obj: any): string {
     return String(obj);
 }
 
+const makeConsole = (output: string[]) => ({
+    log: (...args: any[]) => output.push(args.map(repr).join(' ')),
+});
+
 export = (robot: Robot) => {
     const compiler = create({
         transpileOnly: true,
     });
 
-    robot.respond(/run(?:.*?)`(?:``)?(.*)`(?:``)?/is, resp => {
+    robot.respond(/run(?:.*?)`(?:``(?:ts|js)?)?(.*)`(?:``)?/is, resp => {
+        const output: string[] = [];
         const code = resp.match[1].trim();
 
-        const vm = new NodeVM({
-            compiler: (c, f) => compiler.compile(c, f),
-            console: 'redirect',
+        const vm = new VM({
+            compiler: c => compiler.compile(c, `VM:${md5(c)}`),
             timeout: 5000,
-            sandbox: {},
+            sandbox: {
+                console: makeConsole(output),
+            },
         });
 
-        const msgs: string[][] = [];
-        for (const fn of consoleFns) {
-            vm.on(`console.${fn}`, (...args: Parameters<Console[SupportedConsoleFns]>) => {
-                msgs.push(args.map(repr));
-            });
+        vm.run(code);
+
+        if (output.length > 0) {
+            resp.send(`\`\`\`${output.join('\n')}\`\`\``);
+        } else {
+            resp.send('Script executed with no output.');
         }
-
-        vm.run(code, `VM:${md5(code)}`);
-
-        resp.send(...msgs.map(m => m.join(' ')));
     });
 };
