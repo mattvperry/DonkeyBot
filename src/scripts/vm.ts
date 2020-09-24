@@ -13,11 +13,7 @@ import { VM } from 'vm2';
 
 import crypto from 'crypto';
 
-const md5 = (input: string) =>
-    crypto
-        .createHash('md5')
-        .update(input)
-        .digest('hex');
+const md5 = (input: string) => crypto.createHash('md5').update(input).digest('hex');
 
 function repr(obj: any): string {
     if (obj == null || typeof obj === 'string' || typeof obj === 'number') {
@@ -28,7 +24,8 @@ function repr(obj: any): string {
         return `[${Array.prototype.map.call(obj, repr).join(', ')}]`;
     }
 
-    if (obj.toString) {
+    if ('toString' in obj) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
         return obj.toString();
     }
 
@@ -39,17 +36,17 @@ const makeConsole = (output: string[]) => ({
     log: (...args: any[]) => output.push(args.map(repr).join(' ')),
 });
 
-export = (robot: Robot) => {
+export = (robot: Robot): void => {
     const compiler = create({
         transpileOnly: true,
     });
 
-    robot.respond(/run(?:.*?)`(?:``(?:ts|js)?)?(.*)`(?:``)?/is, resp => {
+    robot.respond(/run(?:.*?)`(?:``(?:ts|js)?)?(.*)`(?:``)?/is, (resp) => {
         const output: string[] = [];
         const code = resp.match[1].trim();
 
         const vm = new VM({
-            compiler: c => compiler.compile(c, `VM:${md5(c)}`),
+            compiler: (c) => compiler.compile(c, `VM:${md5(c)}`),
             timeout: 5000,
             sandbox: {
                 console: makeConsole(output),

@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
-
 import { inject, injectable } from 'inversify';
 
 import msToTimestamp from '../../lib/duration';
@@ -31,32 +29,32 @@ export default class MusicPlayerFeature extends Feature {
             return resp.operation(
                 () => player.add(match[2]),
                 ({ title, webpage_url }) => `Queued: ${title} ${webpage_url}`,
-                _ => `Failed to queue: ${match[2]}`,
+                (_) => `Failed to queue: ${match[2]}`,
             );
         });
 
-        yield this.respond(/volume( me)? (\d*)$/i, (resp, match) => {
+        yield this.respond(/volume( me)? (\d*)$/i, async (resp, match) => {
             const volume = +match[2];
             if (volume > 200 || volume < 0) {
                 return resp.flashMessage('Volume out of range!');
             }
 
             player.volume(volume);
-            resp.reply(`Volume set to ${volume}`);
+            await resp.reply(`Volume set to ${volume}`);
             return Promise.resolve();
         });
 
-        yield this.respond(/skip( me)?$/i, resp => {
+        yield this.respond(/skip( me)?$/i, async (resp) => {
             if (player.queue.length === 0) {
                 return resp.flashMessage('Nothing to skip');
             }
 
             player.skip();
-            resp.reply('Skipped current song.');
+            await resp.reply('Skipped current song.');
             return Promise.resolve();
         });
 
-        yield this.respond(/queue( me)?$/i, async resp => {
+        yield this.respond(/queue( me)?$/i, async (resp) => {
             const list = player.queue.map(({ title, _duration_raw }, index) => {
                 const time = msToTimestamp(player.time);
                 const length = msToTimestamp(_duration_raw * 1000);
@@ -70,17 +68,17 @@ export default class MusicPlayerFeature extends Feature {
             }
         });
 
-        yield this.respond(/pause( me)?$/i, async resp => {
+        yield this.respond(/pause( me)?$/i, async (resp) => {
             player.pause();
             await resp.reply('Playback paused.');
         });
 
-        yield this.respond(/resume( me)?$/i, async resp => {
+        yield this.respond(/resume( me)?$/i, async (resp) => {
             player.resume();
             await resp.reply('Playback resumed.');
         });
 
-        yield this.respond(/clear( me)?$/i, async resp => {
+        yield this.respond(/clear( me)?$/i, async (resp) => {
             player.clear();
             await resp.reply('Queue cleared!');
         });

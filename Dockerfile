@@ -1,4 +1,4 @@
-FROM node:13
+FROM node:14
 
 ADD package.json yarn.lock /bot/
 

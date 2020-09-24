@@ -14,7 +14,7 @@ export default class GamesNotificationFeature extends Feature {
 
     // eslint-disable-next-line require-yield
     public *setup(): Iterable<Registration> {
-        this.channels.onVoiceChannelEnter('Games', member => {
+        this.channels.onVoiceChannelEnter('Games', async (member) => {
             const general = this.channels.fetchByName('general', 'text');
             if (!general) {
                 return;
@@ -24,7 +24,7 @@ export default class GamesNotificationFeature extends Feature {
             const userTime = this.timeMap[member.displayName];
             if (!userTime || currentTime - userTime > 60000) {
                 this.timeMap[member.displayName] = currentTime;
-                general.send(`${member.displayName} wants to play games!`);
+                await general.send(`${member.displayName} wants to play games!`);
             }
         });
     }

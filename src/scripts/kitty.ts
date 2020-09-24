@@ -29,7 +29,7 @@ const categories = [
 ];
 
 const parseCats = (catsXml: string) => {
-    return (catsXml.match(imageRgx) || []).map(c => c.replace(urlRgx, ''));
+    return (catsXml.match(imageRgx) || []).map((c) => c.replace(urlRgx, ''));
 };
 
 async function getCats(count?: number, category?: string): Promise<string[]> {
@@ -40,22 +40,20 @@ async function getCats(count?: number, category?: string): Promise<string[]> {
 
     const res = await Axios.get<string>('http://thecatapi.com/api/images/get', {
         params: {
-            // eslint-disable-next-line @typescript-eslint/camelcase
             api_key: key,
             category,
             format: 'xml',
-            // eslint-disable-next-line @typescript-eslint/camelcase
             ...(count && { results_per_page: Math.min(count, 10) }),
         },
     });
     return parseCats(res.data);
 }
 
-export = (robot: Robot) =>
-    robot.respond(/(kitty|cat|meow)( me)? ?(\d+)? ?(\w+)?/i, async res => {
+export = (robot: Robot): void =>
+    robot.respond(/(kitty|cat|meow)( me)? ?(\d+)? ?(\w+)?/i, async (res) => {
         try {
             const parsedCats = await getCats(Number(res.match[3]), res.match[4]);
-            parsedCats.map(c => res.send(c));
+            parsedCats.map((c) => res.send(c));
         } catch (e) {
             console.error(e);
         }

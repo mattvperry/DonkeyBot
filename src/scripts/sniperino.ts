@@ -65,22 +65,22 @@ const calculateWinRate = ({ gamesPlayed, gamesWon }: PlayerStats) =>
 
 const stringFns: Record<GameEvent, (c: GameContext) => string> = {
     [GameEvent.New]: ({ name, snipe }) =>
-        `ヽ༼ຈل͜ຈ༽_•︻̷̿┻̿═━一 ༼ つ ಥ_ಥ ༽つ ${name}, roll higher than a ${snipe} or the donger gets it!`,
+        `ヽ༼ຈل͜ຈ༽_•︻̷̿┻̿═━一 ༼ つ ಥ_ಥ ༽つ ${name}, roll higher than a ${snipe ?? 0} or the donger gets it!`,
     [GameEvent.Dupe]: ({ name }) =>
         `(ノಠ益ಠ)ノ彡┻━┻ YOU ARE ALREADY PLAYING SNIPERINO, ${name}. I oughtta sniperino YOU! ༼ຈل͜ຈ༽_•︻̷̿┻̿═━一`,
     [GameEvent.Win]: ({ name, roll }) =>
-        `(◠‿◠✿) ${name}, you roll a ${roll} and the donger lives! The donger thanks you (◠‿◠✿)`,
+        `(◠‿◠✿) ${name}, you roll a ${roll ?? 0} and the donger lives! The donger thanks you (◠‿◠✿)`,
     [GameEvent.Draw]: ({ name, roll }) =>
-        `ヽ༼ຈل͜ຈ༽/ ${name}, you roll a ${roll} and tie! The donger is merely wounded. He will recover! ヽ༼ຈل͜ຈ༽/`,
+        `ヽ༼ຈل͜ຈ༽/ ${name}, you roll a ${roll ?? 0} and tie! The donger is merely wounded. He will recover! ヽ༼ຈل͜ຈ༽/`,
     [GameEvent.Lose]: ({ name }) => `༼ つ x_x ༽つThe donger is dead. ${name}, you did this! You MONSTER! ༼ つ x_x ༽ つ`,
 };
 
-export = (robot: Robot) => {
-    robot.respond(/sniperino stats( me)?/i, res => {
+export = (robot: Robot): void => {
+    robot.respond(/sniperino stats( me)?/i, (res) => {
         const { stats } = loadState(robot.brain);
         const message = Object.values(stats)
             .filter(<T>(x?: T): x is T => x !== undefined)
-            .map(stat => ({ ...stat, winRate: calculateWinRate(stat) }))
+            .map((stat) => ({ ...stat, winRate: calculateWinRate(stat) }))
             .sort((a, b) => b.winRate - a.winRate)
             .map(({ userId, winRate }) => `${robot.brain.userForId(userId).name}: ${winRate}%`)
             .join('\n');
@@ -88,7 +88,7 @@ export = (robot: Robot) => {
         res.send(message);
     });
 
-    robot.respond(/sniperino( me)?$/i, res => {
+    robot.respond(/sniperino( me)?$/i, (res) => {
         const state = loadState(robot.brain);
         const { name, id } = res.message.user;
         if (state.games[id] !== undefined) {

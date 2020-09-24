@@ -24,11 +24,11 @@ export class Player extends EventEmitter {
         super();
     }
 
-    public get time() {
+    public get time(): number {
         return this.connection?.dispatcher?.streamTime ?? 0;
     }
 
-    public async add(search: string) {
+    public async add(search: string): Promise<YoutubeDL.VideoInfo> {
         if (!urlRegex({ exact: true }).test(search)) {
             // eslint-disable-next-line no-param-reassign
             search = `ytsearch1:${search}`;
@@ -39,13 +39,13 @@ export class Player extends EventEmitter {
         if (this.queue.length === 1) {
             this.connection = await this.voiceChannel.join();
             this.connection.on('error', () => this.clear());
-            this.executeQueue();
+            void this.executeQueue();
         }
 
         return info;
     }
 
-    public skip() {
+    public skip(): void {
         if (this.connection?.dispatcher.paused) {
             this.connection.dispatcher.resume();
         }
@@ -53,12 +53,12 @@ export class Player extends EventEmitter {
         this.connection?.dispatcher.end();
     }
 
-    public clear() {
+    public clear(): void {
         this.queue.length = 0;
         this.end();
     }
 
-    public volume(volume: number) {
+    public volume(volume: number): void {
         if (!this.connection) {
             return;
         }
@@ -67,7 +67,7 @@ export class Player extends EventEmitter {
         this.connection.dispatcher.setVolume(volume / 100);
     }
 
-    public pause() {
+    public pause(): void {
         if (!this.connection || this.connection.dispatcher.paused) {
             return;
         }
@@ -75,7 +75,7 @@ export class Player extends EventEmitter {
         this.connection.dispatcher.pause();
     }
 
-    public resume() {
+    public resume(): void {
         if (!this.connection || !this.connection.dispatcher.paused) {
             return;
         }
@@ -94,13 +94,13 @@ export class Player extends EventEmitter {
 
         try {
             await this.play(YoutubeDL(video.url));
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise((resolve) => setTimeout(resolve, 1000));
         } catch (e) {
             console.log(e);
         }
 
         this.queue.shift();
-        this.executeQueue();
+        void this.executeQueue();
     }
 
     private play(stream: ReturnType<typeof YoutubeDL>) {

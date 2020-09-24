@@ -44,8 +44,8 @@ async function onResponse(res: Response): Promise<void> {
     res.send(...messages);
 }
 
-export = (robot: Robot) =>
-    robot.respond(/(jerk)( me)?/i, async res => {
+export = (robot: Robot): void =>
+    robot.respond(/(jerk)( me)?/i, async (res) => {
         try {
             await onResponse(res);
         } catch (e) {

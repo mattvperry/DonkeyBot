@@ -9,7 +9,7 @@ const getGoatLink = (): string => {
     return `https://placegoat.com/400/400?cachebust=${random() * random()}`;
 };
 
-export = (robot: Robot) =>
-    robot.respond(/(goat)( me)?/i, res => {
+export = (robot: Robot): void =>
+    robot.respond(/(goat)( me)?/i, (res) => {
         res.send(getGoatLink());
     });

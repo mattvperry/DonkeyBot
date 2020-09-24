@@ -12,8 +12,8 @@ import { Robot } from 'hubot';
 
 const is = ['', ' not'];
 
-export = (robot: Robot) => {
-    robot.hear(/\bmei\b/i, res => {
+export = (robot: Robot): void => {
+    robot.hear(/\bmei\b/i, (res) => {
         res.send(`Mei is${res.random(is)} bae.`);
     });
 };

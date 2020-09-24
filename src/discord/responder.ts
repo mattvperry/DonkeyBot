@@ -7,11 +7,17 @@ import { ChannelManagerTag } from './tags';
 export class Responder {
     constructor(private userId: string, private channel: TextChannel) {}
 
-    public send(content: string | string[], options?: MessageOptions | MessageAdditions): Promise<Message> {
+    public send(
+        content: string | string[],
+        options: (MessageOptions & { split?: false }) | MessageAdditions = {},
+    ): Promise<Message> {
         return this.channel.send(content, options);
     }
 
-    public reply(content: string | string[], options?: MessageOptions | MessageAdditions): Promise<Message> {
+    public reply(
+        content: string | string[],
+        options: (MessageOptions & { split?: false }) | MessageAdditions = {},
+    ): Promise<Message> {
         if (!Array.isArray(content)) {
             return this.send(this.prependMention(content), options);
         }
@@ -35,7 +41,7 @@ export class Responder {
         }
     }
 
-    public flashMessage = async (text: string) => {
+    public flashMessage = async (text: string): Promise<void> => {
         const msg = await this.send(text);
         await msg.delete({ timeout: 2500 });
     };
