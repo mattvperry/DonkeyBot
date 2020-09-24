@@ -12,7 +12,7 @@ import { PlayerFactory } from './features/player';
 import { ResponderFactory } from './responder';
 import * as tags from './tags';
 
-export default function createContainer(client: Client) {
+export default function createContainer(client: Client): Container {
     const container = new Container();
     container.bind<Client>(tags.ClientTag).toConstantValue(client);
 

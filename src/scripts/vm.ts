@@ -24,7 +24,8 @@ function repr(obj: any): string {
         return `[${Array.prototype.map.call(obj, repr).join(', ')}]`;
     }
 
-    if (obj.toString) {
+    if ('toString' in obj) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
         return obj.toString();
     }
 
@@ -35,7 +36,7 @@ const makeConsole = (output: string[]) => ({
     log: (...args: any[]) => output.push(args.map(repr).join(' ')),
 });
 
-export = (robot: Robot) => {
+export = (robot: Robot): void => {
     const compiler = create({
         transpileOnly: true,
     });

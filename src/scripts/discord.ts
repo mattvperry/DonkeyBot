@@ -20,7 +20,7 @@ import DiscordBot from '../discord/discordBot';
 import createContainer from '../discord/registrar';
 import { DiscordBotTag } from '../discord/tags';
 
-export = (robot: Robot) => {
+export = (robot: Robot): void => {
     if (!hasDiscordAdapter(robot)) {
         return;
     }

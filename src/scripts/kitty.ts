@@ -40,18 +40,16 @@ async function getCats(count?: number, category?: string): Promise<string[]> {
 
     const res = await Axios.get<string>('http://thecatapi.com/api/images/get', {
         params: {
-            // eslint-disable-next-line @typescript-eslint/camelcase
             api_key: key,
             category,
             format: 'xml',
-            // eslint-disable-next-line @typescript-eslint/camelcase
             ...(count && { results_per_page: Math.min(count, 10) }),
         },
     });
     return parseCats(res.data);
 }
 
-export = (robot: Robot) =>
+export = (robot: Robot): void =>
     robot.respond(/(kitty|cat|meow)( me)? ?(\d+)? ?(\w+)?/i, async (res) => {
         try {
             const parsedCats = await getCats(Number(res.match[3]), res.match[4]);

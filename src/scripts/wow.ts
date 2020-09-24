@@ -118,7 +118,7 @@ async function affixes(res: Response) {
     res.send(resp.data.title);
 }
 
-export = (robot: Robot) => {
+export = (robot: Robot): void => {
     robot.respond(/(ilvl)( me)?/i, async (res) => {
         try {
             await ilevelList(res);

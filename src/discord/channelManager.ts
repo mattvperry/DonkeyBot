@@ -45,7 +45,7 @@ export default class ChannelManager {
             .find((c) => c.name === name);
     };
 
-    public onVoiceChannelEnter(name: string, cb: (member: Discord.GuildMember) => void) {
+    public onVoiceChannelEnter(name: string, cb: (member: Discord.GuildMember) => void): void {
         this.client.on('voiceStateUpdate', (oldState, newState) => {
             const channel = this.fetchByName(name, 'voice');
             if (

@@ -1,6 +1,6 @@
 import { injectable, multiInject, inject } from 'inversify';
 
-import Feature from './features/feature';
+import Feature, { Registration } from './features/feature';
 import { Responder, ResponderFactory } from './responder';
 import { FeatureTag, ResponderFactoryTag } from './tags';
 
@@ -11,7 +11,7 @@ export default class DiscordBot {
         @multiInject(FeatureTag) private features: Feature[],
     ) {}
 
-    public *connect() {
+    public *connect(): IterableIterator<Registration> {
         for (const feature of this.features) {
             yield* feature.setup();
         }

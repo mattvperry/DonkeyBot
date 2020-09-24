@@ -19,7 +19,7 @@ const fetchCard = async (card: string) => {
     );
 };
 
-export = (robot: Robot) =>
+export = (robot: Robot): void =>
     robot.respond(/sts( me)?( (.+))/i, async (res) => {
         const card = res.match[2].trim().replace(' ', '_');
 

@@ -99,7 +99,7 @@ const rekts = [
     'Erektile Dysfunction',
 ];
 
-export = (robot: Robot) =>
+export = (robot: Robot): void =>
     robot.hear(/rekt/i, (res) => {
         res.send(`${unchecked} Not rekt\n${checked} ${res.random(rekts)}`);
     });

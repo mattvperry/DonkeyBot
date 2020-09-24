@@ -5,12 +5,12 @@
   "author": "Matthew Perry <muffinman616@gmail.com>",
   "description": "A chatbot for Donkeys",
   "scripts": {
-    "lint": "yarn eslint . --ext .js,.ts",
+    "lint": "yarn eslint src --ext .js,.ts",
     "typeCheck": "yarn tsc --noEmit"
   },
   "dependencies": {
     "@discordjs/opus": "^0.3.2",
-    "axios": "^0.20.0",
+    "axios": "^0.19.0",
     "bufferutil": "^4.0.1",
     "cheerio": "^1.0.0-rc.3",
     "coffee-script": "^1.12.7",

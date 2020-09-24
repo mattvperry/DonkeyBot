@@ -29,6 +29,7 @@ module.exports = {
                 'caseInsensitive': false
             }
         }],
+        'no-void': ["error", { "allowAsStatement": true }],
         'no-console': 'off',
         'no-restricted-syntax': ['error', 'FunctionDeclaration[generator=true]'],
         'max-classes-per-file': 'off',

@@ -12,7 +12,7 @@ import { Robot } from 'hubot';
 
 const is = ['', ' not'];
 
-export = (robot: Robot) => {
+export = (robot: Robot): void => {
     robot.hear(/\bmei\b/i, (res) => {
         res.send(`Mei is${res.random(is)} bae.`);
     });

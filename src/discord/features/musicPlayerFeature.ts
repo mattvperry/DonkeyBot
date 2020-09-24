@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
-
 import { inject, injectable } from 'inversify';
 
 import msToTimestamp from '../../lib/duration';
@@ -35,24 +33,24 @@ export default class MusicPlayerFeature extends Feature {
             );
         });
 
-        yield this.respond(/volume( me)? (\d*)$/i, (resp, match) => {
+        yield this.respond(/volume( me)? (\d*)$/i, async (resp, match) => {
             const volume = +match[2];
             if (volume > 200 || volume < 0) {
                 return resp.flashMessage('Volume out of range!');
             }
 
             player.volume(volume);
-            resp.reply(`Volume set to ${volume}`);
+            await resp.reply(`Volume set to ${volume}`);
             return Promise.resolve();
         });
 
-        yield this.respond(/skip( me)?$/i, (resp) => {
+        yield this.respond(/skip( me)?$/i, async (resp) => {
             if (player.queue.length === 0) {
                 return resp.flashMessage('Nothing to skip');
             }
 
             player.skip();
-            resp.reply('Skipped current song.');
+            await resp.reply('Skipped current song.');
             return Promise.resolve();
         });
 
