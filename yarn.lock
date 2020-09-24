@@ -1677,10 +1677,10 @@ hubot-diagnostics@^1.0.0:
   resolved "https://registry.yarnpkg.com/hubot-diagnostics/-/hubot-diagnostics-1.0.0.tgz#3a20de525901b83924b523b1244dcb726a8def69"
   integrity sha512-4kuR04lULoDDra/Z7B/rgMQMZW531Ve5hwhd8xNOKAl8e1cb5bZNqVpGFYF174eYcN54+RZuWQFHsntjvczyag==
 
-hubot-discord-ts@^1.0.8:
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/hubot-discord-ts/-/hubot-discord-ts-1.0.8.tgz#9460304809d25001d45ba0a0c2f44b955e9514d3"
-  integrity sha512-w+uy0QTpFm3z+9oAq0o1oXqC1OQ9plL8hGZeskUHmW33qrlRowWzD++XSFZjIfVva8zCvX1m5H+qtu2kd51lHg==
+hubot-discord-ts@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/hubot-discord-ts/-/hubot-discord-ts-1.0.9.tgz#833c17d16f145310c9625bfdbf1047d3a5a8709c"
+  integrity sha512-N7NvW+tN4Bz+NhwaYD9ImkdFYQOfxCPe5h867OJK8+IEUkaiBygk1D8F9VTXV8vx+hyhNWQboydo0EHfFi0ADw==
 
 hubot-eyebleach@^0.0.6:
   version "0.0.6"
