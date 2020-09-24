@@ -14,7 +14,7 @@ export default class GamesNotificationFeature extends Feature {
 
     // eslint-disable-next-line require-yield
     public *setup(): Iterable<Registration> {
-        this.channels.onVoiceChannelEnter('Games', member => {
+        this.channels.onVoiceChannelEnter('Games', (member) => {
             const general = this.channels.fetchByName('general', 'text');
             if (!general) {
                 return;

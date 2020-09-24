@@ -100,6 +100,6 @@ const rekts = [
 ];
 
 export = (robot: Robot) =>
-    robot.hear(/rekt/i, res => {
+    robot.hear(/rekt/i, (res) => {
         res.send(`${unchecked} Not rekt\n${checked} ${res.random(rekts)}`);
     });

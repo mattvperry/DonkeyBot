@@ -10,6 +10,6 @@ const getGoatLink = (): string => {
 };
 
 export = (robot: Robot) =>
-    robot.respond(/(goat)( me)?/i, res => {
+    robot.respond(/(goat)( me)?/i, (res) => {
         res.send(getGoatLink());
     });

@@ -94,8 +94,8 @@ async function ilevelList(res: Response) {
     res.send(
         await makeRanking(
             getIlvl,
-            i => i.ilvlEquip,
-            c => `${c.name}: ${c.ilvlEquip} (${c.ilvl})`,
+            (i) => i.ilvlEquip,
+            (c) => `${c.name}: ${c.ilvlEquip} (${c.ilvl})`,
         ),
     );
 }
@@ -104,8 +104,8 @@ async function raiderioScore(res: Response) {
     res.send(
         await makeRanking(
             getRaiderIO,
-            i => i.mythic_plus_scores.all,
-            c => `${c.name}: ${c.mythic_plus_scores.all}`,
+            (i) => i.mythic_plus_scores.all,
+            (c) => `${c.name}: ${c.mythic_plus_scores.all}`,
         ),
     );
 }
@@ -119,7 +119,7 @@ async function affixes(res: Response) {
 }
 
 export = (robot: Robot) => {
-    robot.respond(/(ilvl)( me)?/i, async res => {
+    robot.respond(/(ilvl)( me)?/i, async (res) => {
         try {
             await ilevelList(res);
         } catch (e) {
@@ -127,7 +127,7 @@ export = (robot: Robot) => {
         }
     });
 
-    robot.respond(/(raider)?(io)( me)?/i, async res => {
+    robot.respond(/(raider)?(io)( me)?/i, async (res) => {
         try {
             await raiderioScore(res);
         } catch (e) {
@@ -135,7 +135,7 @@ export = (robot: Robot) => {
         }
     });
 
-    robot.respond(/(affixes)( me)?/i, async res => {
+    robot.respond(/(affixes)( me)?/i, async (res) => {
         try {
             await affixes(res);
         } catch (e) {

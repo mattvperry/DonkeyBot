@@ -45,7 +45,7 @@ async function onResponse(res: Response): Promise<void> {
 }
 
 export = (robot: Robot) =>
-    robot.respond(/(jerk)( me)?/i, async res => {
+    robot.respond(/(jerk)( me)?/i, async (res) => {
         try {
             await onResponse(res);
         } catch (e) {

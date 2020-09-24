@@ -94,7 +94,7 @@ export class Player extends EventEmitter {
 
         try {
             await this.play(YoutubeDL(video.url));
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise((resolve) => setTimeout(resolve, 1000));
         } catch (e) {
             console.log(e);
         }

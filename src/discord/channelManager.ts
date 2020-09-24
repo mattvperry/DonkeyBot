@@ -42,7 +42,7 @@ export default class ChannelManager {
         return this.client.channels.cache
             .array()
             .filter(this.channelIsType(type))
-            .find(c => c.name === name);
+            .find((c) => c.name === name);
     };
 
     public onVoiceChannelEnter(name: string, cb: (member: Discord.GuildMember) => void) {

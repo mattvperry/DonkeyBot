@@ -76,11 +76,11 @@ const stringFns: Record<GameEvent, (c: GameContext) => string> = {
 };
 
 export = (robot: Robot) => {
-    robot.respond(/sniperino stats( me)?/i, res => {
+    robot.respond(/sniperino stats( me)?/i, (res) => {
         const { stats } = loadState(robot.brain);
         const message = Object.values(stats)
             .filter(<T>(x?: T): x is T => x !== undefined)
-            .map(stat => ({ ...stat, winRate: calculateWinRate(stat) }))
+            .map((stat) => ({ ...stat, winRate: calculateWinRate(stat) }))
             .sort((a, b) => b.winRate - a.winRate)
             .map(({ userId, winRate }) => `${robot.brain.userForId(userId).name}: ${winRate}%`)
             .join('\n');
@@ -88,7 +88,7 @@ export = (robot: Robot) => {
         res.send(message);
     });
 
-    robot.respond(/sniperino( me)?$/i, res => {
+    robot.respond(/sniperino( me)?$/i, (res) => {
         const state = loadState(robot.brain);
         const { name, id } = res.message.user;
         if (state.games[id] !== undefined) {

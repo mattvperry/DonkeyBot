@@ -197,6 +197,6 @@ const tolds = [
 ];
 
 export = (robot: Robot) =>
-    robot.hear(/told/i, res => {
+    robot.hear(/told/i, (res) => {
         res.send(`${unchecked} Not told\n${checked} ${res.random(tolds)}`);
     });

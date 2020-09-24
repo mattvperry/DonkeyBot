@@ -20,7 +20,7 @@ const fetchCard = async (card: string) => {
 };
 
 export = (robot: Robot) =>
-    robot.respond(/sts( me)?( (.+))/i, async res => {
+    robot.respond(/sts( me)?( (.+))/i, async (res) => {
         const card = res.match[2].trim().replace(' ', '_');
 
         return otherCards[card] ? res.send(otherCards[card]) : res.send(await fetchCard(card));

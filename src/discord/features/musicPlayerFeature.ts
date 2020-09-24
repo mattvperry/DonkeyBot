@@ -31,7 +31,7 @@ export default class MusicPlayerFeature extends Feature {
             return resp.operation(
                 () => player.add(match[2]),
                 ({ title, webpage_url }) => `Queued: ${title} ${webpage_url}`,
-                _ => `Failed to queue: ${match[2]}`,
+                (_) => `Failed to queue: ${match[2]}`,
             );
         });
 
@@ -46,7 +46,7 @@ export default class MusicPlayerFeature extends Feature {
             return Promise.resolve();
         });
 
-        yield this.respond(/skip( me)?$/i, resp => {
+        yield this.respond(/skip( me)?$/i, (resp) => {
             if (player.queue.length === 0) {
                 return resp.flashMessage('Nothing to skip');
             }
@@ -56,7 +56,7 @@ export default class MusicPlayerFeature extends Feature {
             return Promise.resolve();
         });
 
-        yield this.respond(/queue( me)?$/i, async resp => {
+        yield this.respond(/queue( me)?$/i, async (resp) => {
             const list = player.queue.map(({ title, _duration_raw }, index) => {
                 const time = msToTimestamp(player.time);
                 const length = msToTimestamp(_duration_raw * 1000);
@@ -70,17 +70,17 @@ export default class MusicPlayerFeature extends Feature {
             }
         });
 
-        yield this.respond(/pause( me)?$/i, async resp => {
+        yield this.respond(/pause( me)?$/i, async (resp) => {
             player.pause();
             await resp.reply('Playback paused.');
         });
 
-        yield this.respond(/resume( me)?$/i, async resp => {
+        yield this.respond(/resume( me)?$/i, async (resp) => {
             player.resume();
             await resp.reply('Playback resumed.');
         });
 
-        yield this.respond(/clear( me)?$/i, async resp => {
+        yield this.respond(/clear( me)?$/i, async (resp) => {
             player.clear();
             await resp.reply('Queue cleared!');
         });
