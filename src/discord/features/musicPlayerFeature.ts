@@ -16,7 +16,7 @@ export default class MusicPlayerFeature extends Feature {
     }
 
     public *setup(): Iterable<Registration> {
-        const player = this.playerFactory.createPlayer('General');
+        const player = this.playerFactory.createPlayer('Games');
         if (!player) {
             return;
         }
