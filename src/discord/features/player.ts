@@ -1,20 +1,37 @@
 import { VoiceChannel, VoiceConnection } from 'discord.js';
 import { inject, injectable } from 'inversify';
 import urlRegex from 'url-regex';
-import YoutubeDL from 'youtube-dl';
+import ytdl from 'ytdl-core-discord';
+import ytsr, { Video } from 'ytsr';
 
 import ChannelManager from '../channelManager';
 import { ChannelManagerTag } from '../tags';
 import { EventEmitter } from 'events';
-import { promisify } from 'util';
+import { Readable } from 'stream';
+
+type VideoInfo = (ReturnType<typeof ytdl.getInfo> extends Promise<infer T> ? T : never)['videoDetails'];
+
+async function getUrl(search: string): Promise<string> {
+    if (urlRegex({ exact: true }).test(search)) {
+        return search;
+    }
+
+    const results = await ytsr(search);
+    const first = results.items.find((i): i is Video => i.type === 'video');
+    if (first === undefined) {
+        throw new Error(`No results for ${search}`);
+    }
+
+    return first.link;
+}
 
 export declare interface Player {
-    on(event: 'play', listener: (info: YoutubeDL.VideoInfo) => void): this;
+    on(event: 'play', listener: (info: VideoInfo) => void): this;
     on(event: 'end', listener: () => void): this;
 }
 
 export class Player extends EventEmitter {
-    public readonly queue: YoutubeDL.VideoInfo[] = [];
+    public readonly queue: VideoInfo[] = [];
 
     private connection?: VoiceConnection;
 
@@ -28,21 +45,17 @@ export class Player extends EventEmitter {
         return this.connection?.dispatcher?.streamTime ?? 0;
     }
 
-    public async add(search: string): Promise<YoutubeDL.VideoInfo> {
-        if (!urlRegex({ exact: true }).test(search)) {
-            // eslint-disable-next-line no-param-reassign
-            search = `ytsearch1:${search}`;
-        }
-
-        const info = await this.getInfo(search, []);
-        this.queue.push(info);
+    public async add(search: string): Promise<VideoInfo> {
+        const url = await getUrl(search);
+        const info = await ytdl.getInfo(url);
+        this.queue.push(info.videoDetails);
         if (this.queue.length === 1) {
             this.connection = await this.voiceChannel.join();
             this.connection.on('error', () => this.clear());
             void this.executeQueue();
         }
 
-        return info;
+        return info.videoDetails;
     }
 
     public skip(): void {
@@ -93,7 +106,8 @@ export class Player extends EventEmitter {
         this.emit('play', video);
 
         try {
-            await this.play(YoutubeDL(video.url));
+            const stream = await ytdl(video.video_url);
+            await this.play(stream);
             await new Promise((resolve) => setTimeout(resolve, 1000));
         } catch (e) {
             console.log(e);
@@ -103,7 +117,7 @@ export class Player extends EventEmitter {
         void this.executeQueue();
     }
 
-    private play(stream: ReturnType<typeof YoutubeDL>) {
+    private play(stream: Readable) {
         return new Promise((resolve, reject) => {
             if (!this.connection) {
                 reject();
@@ -111,12 +125,13 @@ export class Player extends EventEmitter {
             }
 
             const dispatcher = this.connection.play(stream, {
+                type: 'opus',
                 seek: 0,
                 volume: this.currentVolume / 100,
             });
 
             dispatcher.on('error', reject);
-            dispatcher.on('end', resolve);
+            dispatcher.on('finish', resolve);
         });
     }
 
@@ -126,9 +141,6 @@ export class Player extends EventEmitter {
         this.voiceChannel.leave();
         this.emit('end');
     }
-
-    private getInfo = (url: string, args: string[], opts?: any) =>
-        promisify<string, string[], any, YoutubeDL.VideoInfo>(YoutubeDL.getInfo)(url, args, opts);
 }
 
 @injectable()
