@@ -13,13 +13,13 @@
                 "--name",
                 "donkeybot",
                 "-l",
-                "db",
+                "db_test",
                 "-a",
                 "discord-ts"
             ],
             "console": "integratedTerminal",
             "env": {
-                "HUBOT_DISCORD_TOKEN": ""
+                "HUBOT_DISCORD_TOKEN": "NDM4ODkzMTYyODA3ODIwMzA5.WuE9HA.GVaabxmFgHn4OCpylPLcEMnMG3s"
             }
         }
     ]

@@ -16,19 +16,19 @@ export default class MusicPlayerFeature extends Feature {
     }
 
     public *setup(): Iterable<Registration> {
-        const player = this.playerFactory.createPlayer('Games');
+        const player = this.playerFactory.createPlayer('General');
         if (!player) {
             return;
         }
 
-        player.on('play', ({ title, webpage_url }) => this.activity.setActivity(title, 'LISTENING', webpage_url));
+        player.on('play', ({ title, video_url }) => this.activity.setActivity(title, 'LISTENING', video_url));
 
         player.on('end', () => this.activity.setActivity('nothing', 'LISTENING'));
 
         yield this.respond(/play( me)? (.*)$/i, async (resp, match) => {
             return resp.operation(
                 () => player.add(match[2]),
-                ({ title, webpage_url }) => `Queued: ${title} ${webpage_url}`,
+                ({ title, video_url }) => `Queued: ${title} ${video_url}`,
                 (_) => `Failed to queue: ${match[2]}`,
             );
         });
@@ -55,9 +55,9 @@ export default class MusicPlayerFeature extends Feature {
         });
 
         yield this.respond(/queue( me)?$/i, async (resp) => {
-            const list = player.queue.map(({ title, _duration_raw }, index) => {
+            const list = player.queue.map(({ title, lengthSeconds }, index) => {
                 const time = msToTimestamp(player.time);
-                const length = msToTimestamp(_duration_raw * 1000);
+                const length = msToTimestamp(parseInt(lengthSeconds, 10) * 1000);
                 return `${index + 1}. ${title} [${index === 0 ? `${time}/` : ''}${length}]`;
             });
 
