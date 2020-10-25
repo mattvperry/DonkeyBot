@@ -19,7 +19,7 @@
             ],
             "console": "integratedTerminal",
             "env": {
-                "HUBOT_DISCORD_TOKEN": "NDE0NjAyODEyOTA3ODQ3Njgx.Woje9Q.2RXf0SmZGkBV_TtP3Z5n43_utpI",
+                "HUBOT_DISCORD_TOKEN": "",
                 "GOOGLE_APPLICATION_CREDENTIALS": "gcp-credentials.json"
             }
         }
