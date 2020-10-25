@@ -22,7 +22,8 @@ export default class DictateFeature extends Feature {
       resp.operation(
         () => listener.listen(),
         (message) => message,
-        (err) => `Failed to start listener - ${err}`
+        (err) => `Failed to start listener - ${err}`,
+        `Listening to voice...`
       )
     )
   }
