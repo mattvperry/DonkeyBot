@@ -20,7 +20,8 @@ export class Listener {
     voice.play(new Silence(), { type: 'opus' });
    
     let buffer: any[] = [];
-    const p = new Promise<string>((resolve, reject) => {
+    
+    return new Promise<string>((resolve, reject) => {
       voice.on('speaking', (user, speaking) => {
         if (speaking) {
           const audio = voice.receiver.createStream(user,  { mode: 'pcm' });
@@ -44,8 +45,6 @@ export class Listener {
         }
       }); 
     });
-
-    return p;
   } 
 }
 
