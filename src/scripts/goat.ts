@@ -3,12 +3,12 @@
 //
 // Commands:
 //  hubot goat me - return an image of a goat
-//  
-//  
-//  
-//  
-//  
-//  
+//
+//
+//
+//
+//
+//
 //
 // Author:
 //  Steve Shipsey

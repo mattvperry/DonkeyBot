@@ -3,12 +3,12 @@
 //
 // Commands:
 //  hubot sts me <card> - return an image of a card
-//  
-//  
-//  
-//  
-//  
-//  
+//
+//
+//
+//
+//
+//
 //
 // Author:
 //  Steve Shipsey
