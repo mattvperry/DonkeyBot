@@ -6,5 +6,6 @@ export const ActivityManagerTag = Symbol('ActivityManager');
 export const ResponderFactoryTag = Symbol('ResponderFactoryTag');
 
 export const PlayerFactoryTag = Symbol('PlayerFactory');
+export const ListenerFactoryTag = Symbol('ListenerFactory');
 export const FeatureTag = Symbol('Feature');
 export const DiscordBotTag = Symbol('DiscordBot');

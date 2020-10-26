@@ -1,3 +1,18 @@
+// Description:
+//  Shows various images of goats
+//
+// Commands:
+//  hubot goat me - return an image of a goat
+//
+//
+//
+//
+//
+//
+//
+// Author:
+//  Steve Shipsey
+
 import { Robot } from 'hubot';
 
 const getGoatLink = (): string => {

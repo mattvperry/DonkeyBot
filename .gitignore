@@ -31,3 +31,6 @@ env.cfg
 
 # Hubot history
 .hubot_history
+
+# GCM Credentials
+gcp-credentials.json

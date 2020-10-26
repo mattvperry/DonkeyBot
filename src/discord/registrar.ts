@@ -8,6 +8,7 @@ import ChannelManager from './channelManager';
 import DiscordBot from './discordBot';
 import features from './features';
 import Feature from './features/feature';
+import { ListenerFactory } from './features/listener';
 import { PlayerFactory } from './features/player';
 import { ResponderFactory } from './responder';
 import * as tags from './tags';
@@ -18,9 +19,11 @@ export default function createContainer(client: Client): Container {
 
     container.bind<ChannelManager>(tags.ChannelManagerTag).to(ChannelManager);
     container.bind<ActivityManager>(tags.ActivityManagerTag).to(ActivityManager);
-    container.bind<ResponderFactory>(tags.ResponderFactoryTag).to(ResponderFactory);
 
+    container.bind<ResponderFactory>(tags.ResponderFactoryTag).to(ResponderFactory);
     container.bind<PlayerFactory>(tags.PlayerFactoryTag).to(PlayerFactory);
+    container.bind<ListenerFactory>(tags.ListenerFactoryTag).to(ListenerFactory);
+
     for (const feature of features) {
         container.bind<Feature>(tags.FeatureTag).to(feature);
     }

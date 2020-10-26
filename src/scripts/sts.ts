@@ -1,3 +1,18 @@
+// Description:
+//  Search the Slay the Spire wiki for image of a card
+//
+// Commands:
+//  hubot sts me <card> - return an image of a card
+//
+//
+//
+//
+//
+//
+//
+// Author:
+//  Steve Shipsey
+
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { Robot } from 'hubot';
