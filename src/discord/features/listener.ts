@@ -59,8 +59,18 @@ export class Listener {
         // Only works if we pipe in initial silence
         voice.play(new Silence(), { type: 'opus' });
 
+        /* eslint-disable consistent-return */
         return new Promise<string>((resolve, reject) => {
-            const client = new SpeechClient();
+            if (!process.env.GOOGLE_CLIENT_EMAIL || !process.env.GOOGLE_PRIVATE_KEY) {
+                return reject(new Error(`Google keys not setup for speech recognition`));
+            }
+
+            const client = new SpeechClient({
+                credentials: {
+                    client_email: process.env.GOOGLE_CLIENT_EMAIL,
+                    private_key: process.env.GOOGLE_PRIVATE_KEY,
+                },
+            });
             const request = {
                 config: {
                     encoding: AudioEncoding.LINEAR16,
