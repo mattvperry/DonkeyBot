@@ -18,11 +18,7 @@
                 "discord-ts"
             ],
             "console": "integratedTerminal",
-            "env": {
-                "HUBOT_DISCORD_TOKEN": "",
-                "GOOGLE_CLIENT_EMAIL": "",
-                "GOOGLE_PRIVATE_KEY": ""
-            }
+            "env": {}
         }
     ]
 }

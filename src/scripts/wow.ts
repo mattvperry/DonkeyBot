@@ -10,11 +10,16 @@
 import Axios from 'axios';
 import { Response, Robot } from 'hubot';
 
+interface TokenResponse {
+    access_token: string;
+    token_type: string;
+    expires_in: number;
+    scope: string;
+}
+
 interface WOWData {
-    items: {
-        averageItemLevel: number;
-        averageItemLevelEquipped: number;
-    };
+    average_item_level: number;
+    equipped_item_level: number;
 }
 
 interface RaiderIO {
@@ -30,39 +35,49 @@ interface RaiderIO {
 interface PlayerId {
     name: string;
     realm: string;
-    region: string;
 }
 
-const key = process.env.HUBOT_WOW_API_KEY;
-const armoryUrl = 'https://us.api.battle.net/wow';
-const raiderIOUrl = `https://raider.io/api/v1`;
-const locale = 'en_us';
+const clientId = '623be047103444b7b2953c1100546be5';
+const secret = process.env.HUBOT_WOW_API_KEY ?? '';
+const battenetUrl = 'https://us.api.blizzard.com';
+const raiderIOUrl = 'https://raider.io/api/v1';
 const users: PlayerId[] = [
-    { name: 'Titanburn', realm: 'Thrall', region: 'us' },
-    { name: 'Titansmite', realm: 'Thrall', region: 'us' },
-    { name: 'Xzem', realm: 'Thrall', region: 'us' },
-    { name: 'Xiala', realm: 'Thrall', region: 'us' },
-    { name: 'Iambushman', realm: 'Thrall', region: 'us' },
-    { name: 'Trudgling', realm: 'Thrall', region: 'us' },
-    { name: 'Avgwhiteguy', realm: 'Illidan', region: 'us' },
-    { name: 'Starfail', realm: 'Illidan', region: 'us' },
-    { name: 'Imagrilirl', realm: 'Thrall', region: 'us' },
-    { name: 'Starsucceed', realm: 'Illidan', region: 'us' },
+    { name: 'titansmite', realm: 'thrall' },
+    // { name: 'xiala', realm: 'thrall' },
+    // { name: 'iambushman', realm: 'thrall' },
+    { name: 'yva', realm: 'thrall' },
+    { name: 'starfail', realm: 'illidan' },
 ];
 
-async function getIlvl(id: PlayerId) {
-    const resp = await Axios.get<WOWData>(`${armoryUrl}/character/${id.realm}/${id.name}`, {
+async function getToken(): Promise<string> {
+    const resp = await Axios.get<TokenResponse>('https://us.battle.net/oauth/token', {
+        auth: {
+            username: clientId,
+            password: secret,
+        },
         params: {
-            apikey: key,
-            fields: 'items',
-            locale,
+            grant_type: 'client_credentials',
+        },
+    });
+
+    return resp.data.access_token;
+}
+
+async function getIlvl(id: PlayerId, token: string) {
+    const resp = await Axios.get<WOWData>(`${battenetUrl}/profile/wow/character/${id.realm}/${id.name}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+        params: {
+            namespace: 'profile-us',
+            locale: 'en-US',
         },
     });
 
     return {
         ...id,
-        ilvl: resp.data.items.averageItemLevel,
-        ilvlEquip: resp.data.items.averageItemLevelEquipped,
+        ilvl: resp.data.average_item_level,
+        ilvlEquip: resp.data.equipped_item_level,
     };
 }
 
@@ -72,7 +87,7 @@ async function getRaiderIO(id: PlayerId) {
             fields: 'mythic_plus_scores',
             name: id.name,
             realm: id.realm,
-            region: id.region,
+            region: 'us',
         },
     });
 
@@ -91,9 +106,10 @@ async function makeRanking<T>(
 }
 
 async function ilevelList(res: Response) {
+    const token = await getToken();
     res.send(
         await makeRanking(
-            getIlvl,
+            (id) => getIlvl(id, token),
             (i) => i.ilvlEquip,
             (c) => `${c.name}: ${c.ilvlEquip} (${c.ilvl})`,
         ),
