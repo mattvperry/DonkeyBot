@@ -43,7 +43,8 @@ export class Responder {
 
     public flashMessage = async (text: string): Promise<void> => {
         const msg = await this.send(text);
-        await msg.delete({ timeout: 2500 });
+        await new Promise(resolve => setTimeout(resolve, 2500));
+        await msg.delete();
     };
 
     private prependMention = (text: string) => {

@@ -38,6 +38,9 @@
     "paths": { /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
       "hubot": [
         "./src/types/hubot.d.ts"
+      ],
+      "chess-web-api": [
+        "./src/types/chess-web-api.d.ts"
       ]
     },
     // "rootDirs": [],                        /* List of root folders whose combined content represents the structure of the project at runtime. */

@@ -15,7 +15,7 @@
                 "-l",
                 "db",
                 "-a",
-                "discord-ts"
+                "shell"
             ],
             "console": "integratedTerminal",
             "env": {}

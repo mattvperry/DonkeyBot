@@ -22,7 +22,7 @@ async function getUrl(search: string): Promise<string> {
         throw new Error(`No results for ${search}`);
     }
 
-    return first.link;
+    return first.url;
 }
 
 export declare interface Player {

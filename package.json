@@ -14,6 +14,7 @@
     "axios": "^0.21.1",
     "bufferutil": "^4.0.2",
     "cheerio": "^1.0.0-rc.5",
+    "chess-web-api": "^1.0.14",
     "coffee-script": "^1.12.7",
     "discord.js": "discordjs/discord.js",
     "erlpack": "discordapp/erlpack",

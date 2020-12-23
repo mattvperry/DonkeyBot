@@ -28,10 +28,10 @@ const fetchCard = async (card: string) => {
     const BASE_URL = 'https://slay-the-spire.fandom.com/wiki';
     const result = await axios.get(`${BASE_URL}/${card}`);
     const $ = cheerio.load(result.data);
-    return (
-        ($('.pi-image-thumbnail') && $('.pi-image-thumbnail')[0] && $('.pi-image-thumbnail')[0].attribs.src) ||
-        'Card not found'
-    );
+    const element = $('.pi-image-thumbnail')?.[0];
+    return element?.type === 'tag'
+        ? element?.attribs?.src ?? 'Card not found'
+        : 'Card not found';
 };
 
 export = (robot: Robot): void =>
