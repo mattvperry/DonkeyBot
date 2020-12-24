@@ -9,29 +9,82 @@
 // Author:
 //  Matt Perry
 
-import { Robot } from 'hubot';
+import { Robot, Brain } from 'hubot';
 import ChessWebAPI, { Response, PlayerStats } from 'chess-web-api';
+import Table from 'cli-table3';
 import { promisify } from 'util';
+
+interface ChessState {
+    players: string[];
+};
 
 const chessApi = new ChessWebAPI({
     queue: true
 });
 
 const categories = ['daily', 'rapid', 'bullet', 'blitz'] as const;
-const players = ['sshipsey', 'heartless_xandra'];
+
+const loadState = (brain: Brain): ChessState => {
+    const state = brain.get<ChessState>('chess');
+    if (state) {
+        return state;
+    }
+
+    const newState = { players: [] };
+    brain.set('chess', newState);
+    return newState;
+};
 
 const getStats = promisify<string, Response<PlayerStats>>(
     (username, cb) => chessApi.dispatch(chessApi.getPlayerStats, (res, err) => cb(err, res), [username])
 );
 
 export = (robot: Robot): void => {
-    robot.respond(/(elo)( me)?/i, async res => {
-        const results = await Promise.all(players.map(async p => [p, await getStats(p)] as const));
+    robot.respond(/elo me/i, async res => {
+        const state = loadState(robot.brain);
+        if (state.players.length === 0) {
+            res.send('```No chess players are currently tracked.```');
+            return;
+        }
+
+        const results = await Promise.all(state.players.map(async p => [p, await getStats(p)] as const));
         const stats = results.map(([name, { body }]) => ({
             name,
             ...Object.fromEntries(categories.map(c => [c, body[`chess_${c}` as const]?.last?.rating ?? 'N/A']))
         }));
 
-        res.send(`\`\`\`${stats}\`\`\``);
+        const table = new Table({
+            head: Object.keys(stats[0]),
+        });
+
+        table.push(...stats.map(Object.values));
+
+        res.send(`\`\`\`${table}\`\`\``);
+    });
+
+    robot.respond(/elo add (.*)/i, async res => {
+        const name = res.match[1];
+        const state = loadState(robot.brain);
+        if (state.players.includes(name)) {
+            return;
+        }
+
+        try {
+            await getStats(name);
+            state.players.push(name);
+        } catch {
+            res.reply(`Failed to add: ${name}`);
+        }
+    });
+
+    robot.respond(/elo remove (.*)/i, async res => {
+        const name = res.match[1];
+        const state = loadState(robot.brain);
+        const idx = state.players.indexOf(name);
+        if (idx === -1) {
+            return;
+        }
+
+        state.players.splice(idx, 1);
     });
 }
