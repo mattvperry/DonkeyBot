@@ -38,7 +38,7 @@ declare module 'chess-web-api' {
     }
 
     interface ChessWebAPIOptions {
-        queue: boolean,
+        queue: boolean;
     }
 
     interface ChessWebAPIConstructor {
@@ -52,7 +52,8 @@ declare module 'chess-web-api' {
         dispatch<T extends ChessWebAPI[Exclude<keyof ChessWebAPI, 'dispatch'>]>(
             method: T,
             cb: (res: Unwrap<ReturnType<T>>, err?: any) => void,
-            params: Parameters<T>): void;
+            params: Parameters<T>,
+        ): void;
     }
 
     const ChessWebAPI: ChessWebAPIConstructor;

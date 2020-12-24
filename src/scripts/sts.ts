@@ -29,9 +29,7 @@ const fetchCard = async (card: string) => {
     const result = await axios.get(`${BASE_URL}/${card}`);
     const $ = cheerio.load(result.data);
     const element = $('.pi-image-thumbnail')?.[0];
-    return element?.type === 'tag'
-        ? element?.attribs?.src ?? 'Card not found'
-        : 'Card not found';
+    return element?.type === 'tag' ? element?.attribs?.src ?? 'Card not found' : 'Card not found';
 };
 
 export = (robot: Robot): void =>
