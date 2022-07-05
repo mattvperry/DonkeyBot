@@ -9,7 +9,7 @@
     "typeCheck": "yarn tsc --noEmit"
   },
   "dependencies": {
-    "@discordjs/opus": "^0.3.3",
+    "@discordjs/opus": "^0.8.0",
     "@google-cloud/speech": "^4.1.5",
     "axios": "^0.21.1",
     "bufferutil": "^4.0.2",
