@@ -2,7 +2,7 @@ FROM node:22
 
 ADD package.json package-lock.json /bot/
 
-RUN cd /bot && yarn
+RUN cd /bot && npm install
 
 ADD . /bot/
 
@@ -10,4 +10,4 @@ WORKDIR /bot
 
 EXPOSE 8080
 
-ENTRYPOINT ["node", "./bin/donkeybot.js", "--name", "donkeybot", "-a", "discord", "-l", "db"]
+ENTRYPOINT ["node", "--loader", "ts-node/esm", "./bin/donkeybot.mjs", "--name", "donkeybot", "-a", "discord", "-l", "db"]
