@@ -22,9 +22,7 @@
                 "Shell"
             ],
             "console": "integratedTerminal",
-            "env": {
-                "HUBOT_PTERO_KEY": "ptlc_pf2hnpHUXYkVpWULlfS6bdGRt76NfPVDEfvsrYBr93R"
-            }
+            "env": {}
         }
     ]
 }
