@@ -1,14 +1,5 @@
 [
-  "hubot-redis-brain",
-  "hubot-diagnostics",
-  "hubot-eyebleach",
   "hubot-help",
-  "hubot-humanity",
-  "hubot-google-images",
-  "hubot-pugme",
   "hubot-rules",
-  "hubot-shipit",
-  "hubot-xkcd",
-  "hubot-youtube",
-  "hubot-jokes"
+  "hubot-diagnostics"
 ]
