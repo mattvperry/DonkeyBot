@@ -8,17 +8,23 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/bin\\donkeybot.js",
+            "runtimeArgs": [
+                "--loader",
+                "ts-node/esm"
+            ],
+            "program": "${workspaceFolder}/bin\\donkeybot.mjs",
             "args": [
                 "--name",
                 "donkeybot",
                 "-l",
                 "db",
                 "-a",
-                "shell"
+                "Shell"
             ],
             "console": "integratedTerminal",
-            "env": {}
+            "env": {
+                "HUBOT_PTERO_KEY": "ptlc_pf2hnpHUXYkVpWULlfS6bdGRt76NfPVDEfvsrYBr93R"
+            }
         }
     ]
 }

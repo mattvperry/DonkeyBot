@@ -1,0 +1,12 @@
+diff --git a/node_modules/@devnote-dev/pterojs/package.json b/node_modules/@devnote-dev/pterojs/package.json
+index 18fde3b..9587e9e 100644
+--- a/node_modules/@devnote-dev/pterojs/package.json
++++ b/node_modules/@devnote-dev/pterojs/package.json
+@@ -20,6 +20,7 @@
+   "types": "./dist/index.d.ts",
+   "exports": {
+     "require": "./dist/index.js",
++    "types": "./dist/index.d.ts",
+     "import": "./dist/index.mjs",
+     "default": "./dist/index.mjs"
+   },

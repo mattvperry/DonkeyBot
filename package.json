@@ -1,20 +1,36 @@
 {
-  "name": "donkeybot3",
-  "version": "1.0.0",
+  "name": "donkeybot",
+  "version": "3.0.0",
   "main": "index.js",
   "scripts": {
+    "lint": "npx eslint scripts --ext .js,.ts",
     "start": "hubot --adapter @hubot-friends/hubot-discord",
-    "test": "node --test"
+    "test": "node --test",
+    "postinstall": "patch-package"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "description": "A simple helpful robot for your Company",
   "dependencies": {
+    "@devnote-dev/pterojs": "^2.2.2",
     "@hubot-friends/hubot-discord": "^4.0.4",
     "hubot": "^11.2.2",
     "hubot-diagnostics": "^2.1.3",
     "hubot-help": "^2.1.5",
-    "hubot-rules": "^2.1.1"
+    "hubot-rules": "^2.1.1",
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "@types/hubot": "^11.1.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb-typescript": "^18.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-prettier": "^5.2.1",
+    "patch-package": "^8.0.0",
+    "typescript": "^5.5.4"
   }
 }
