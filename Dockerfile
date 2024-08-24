@@ -2,7 +2,7 @@ FROM node:22
 
 ADD package.json package-lock.json /bot/
 
-ADD patches /bot/
+ADD patches /bot/patches
 
 RUN cd /bot && npm install
 
