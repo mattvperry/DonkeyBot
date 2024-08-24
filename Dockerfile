@@ -2,6 +2,8 @@ FROM node:22
 
 ADD package.json package-lock.json /bot/
 
+ADD patches /bot/
+
 RUN cd /bot && npm install
 
 ADD . /bot/
