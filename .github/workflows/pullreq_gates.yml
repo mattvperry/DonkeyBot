@@ -12,8 +12,8 @@ jobs:
       with:
         node-version: 14
     - name: Install deps
-      run: yarn --frozen-lockfile
+      run: npm install
     - name: Typescript type check
-      run: yarn typeCheck
+      run: npm run typeCheck
     - name: Run ESLint
-      run: yarn lint
+      run: npm run lint
