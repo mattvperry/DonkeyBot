@@ -8,8 +8,8 @@
 //   This is a script to assist with managing a hardcore minecraft world
 //
 
-import { Robot } from 'hubot';
 import { PteroClient } from '@devnote-dev/pterojs';
+import { Robot } from 'hubot';
 
 const key = process.env.HUBOT_PTERO_KEY ?? '';
 
@@ -19,7 +19,7 @@ async function restart(): Promise<string> {
 
     const files = await server.files.fetch('./');
     if (!files.has('world')) {
-        return "Unable to find world file to delete.";
+        return 'Unable to find world file to delete.';
     }
 
     await server.setPowerState('stop');

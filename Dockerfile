@@ -12,4 +12,4 @@ WORKDIR /bot
 
 EXPOSE 8080
 
-ENTRYPOINT ["node", "--loader", "ts-node/esm", "./bin/donkeybot.mjs", "--name", "donkeybot", "-a", "@hubot-friends/hubot-discord", "-l", "db"]
+ENTRYPOINT ["node", "--loader", "ts-node/esm", "./bin/donkeybot.mjs", "--name", "donkeybot", "-a", "@hubot-friends/hubot-discord"]

@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "main": "index.js",
   "scripts": {
-    "lint": "npx eslint scripts --ext .js,.ts",
+    "lint": "npx eslint scripts --ext .js,.ts,.mts",
     "start": "hubot --adapter @hubot-friends/hubot-discord",
     "test": "node --test",
     "postinstall": "patch-package"
