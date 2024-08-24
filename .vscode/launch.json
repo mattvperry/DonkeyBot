@@ -19,7 +19,7 @@
                 "-l",
                 "db",
                 "-a",
-                "@hubot-friends/hubot-discord"
+                "Shell"
             ],
             "console": "integratedTerminal",
             "env": {}
