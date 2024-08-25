@@ -3,7 +3,7 @@
 //  max default to 100
 //
 // Commands:
-//  roll( \d+)? - roll a number
+//  hubot roll( \d+)? - roll a number
 //
 // Author:
 //  Steve Shipsey

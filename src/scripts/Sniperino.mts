@@ -3,7 +3,7 @@
 //
 //
 // Commands:
-//  sniperino( me)? - start a new game of sniperino
+//  hubot sniperino( me)? - start a new game of sniperino
 //
 //
 // Author:
